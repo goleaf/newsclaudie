@@ -73,6 +73,28 @@
                         @if(config('blog.withTags'))
                         <livewire:tag-manager :currenttags="$post->tags" />
                         @endif
+
+                        <div class="mt-3">
+                            <x-label for="categories" :value="__('Categories')" />
+                            <div class="mt-2 space-y-2">
+                                @foreach($categories as $category)
+                                <div class="flex items-center">
+                                    <input 
+                                        type="checkbox" 
+                                        name="categories[]" 
+                                        value="{{ $category->id }}" 
+                                        id="category_{{ $category->id }}"
+                                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                        {{ in_array($category->id, old('categories', $post->categories->pluck('id')->toArray())) ? 'checked' : '' }}
+                                    >
+                                    <label for="category_{{ $category->id }}" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                                        {{ $category->name }}
+                                    </label>
+                                </div>
+                                @endforeach
+                            </div>
+                            @error('categories') <span class="text-red-500">{{ $message }}</span> @enderror
+                        </div>
                     </fieldset>
 
                     <div class="flex items-center justify-end mt-4 mb-2">
