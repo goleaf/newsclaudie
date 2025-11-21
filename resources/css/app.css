@@ -1,0 +1,91 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+[x-cloak] {
+	display: none;
+}
+
+.featured-post-image {
+	display: block;
+	height: 240px;
+	width: 100%;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.post-header-image {
+	display: block;
+	height: 320px;
+	width: 100%;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+@media screen and (max-width: 375px) {
+	.featured-post-image {
+		height: 180px;
+	}
+	.post-header-image {
+		max-height: 240px;
+	}
+}
+
+/* Class to disable scrolling on the body when a modal is active */
+body.disable-scroll {
+	height: 100vh;
+	overflow: hidden;
+}
+/* And hide the theme toggle button to prevent flickering */
+body.disable-scroll #theme-toggle {
+	display: none;
+}
+
+/* Torchlight Extension Styles for TailwindCSS */
+
+/*
+ Margin and rounding are personal preferences,
+ overflow-x-auto is recommended.
+*/
+pre {
+    @apply my-4 rounded overflow-x-auto;
+}
+
+/* Remove default padding */
+pre.torchlight {
+    @apply p-0;
+}
+
+/*
+ Add some vertical padding and expand the width
+ to fill its container. The horizontal padding
+ comes at the line level so that background
+ colors extend edge to edge.
+*/
+pre code.torchlight {
+    @apply block py-4 min-w-max;
+}
+ 
+/*
+ Horizontal line padding.
+*/
+pre code.torchlight .line {
+    @apply px-4;
+}
+ 
+/*
+ Push the code away from the line numbers and
+ summary caret indicators.
+*/
+pre code.torchlight .line-number,
+pre code.torchlight .summary-caret {
+    @apply mr-4;
+}
+
+/* Markdown Editor Styles */
+.editor-toolbar {
+	background-color: #fff;
+	opacity: 0.9;
+}
