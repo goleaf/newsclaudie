@@ -22,9 +22,21 @@ final class CommentFactory extends Factory
      */
     public function definition()
     {
+        $userId = User::query()->inRandomOrder()->value('id');
+
+        if (! $userId) {
+            $userId = User::factory()->create()->id;
+        }
+
+        $postId = Post::query()->inRandomOrder()->value('id');
+
+        if (! $postId) {
+            $postId = Post::factory()->create()->id;
+        }
+
         return [
-            'user_id' => User::pluck('id')->random(),
-            'post_id' => Post::pluck('id')->random(),
+            'user_id' => $userId,
+            'post_id' => $postId,
             'content' => $this->faker->sentence(),
             'status' => CommentStatus::Pending,
         ];

@@ -129,6 +129,11 @@ Comprehensive documentation is available in the `docs/` directory:
 - **[Optimistic UI](docs/OPTIMISTIC_UI.md)** - Optimistic UI implementation guide
 - **[Admin Accessibility](docs/ADMIN_ACCESSIBILITY.md)** - Accessibility features and guidelines
 - **[Accessibility Testing Guide](docs/ACCESSIBILITY_TESTING_GUIDE.md)** - Testing accessibility features
+- **[News Controller Usage](docs/NEWS_CONTROLLER_USAGE.md)** - News page filtering and sorting guide
+- **[News Controller Refactoring](docs/NEWS_CONTROLLER_REFACTORING.md)** - Refactoring notes and service layer
+
+### API Documentation
+- **[News API](docs/api/NEWS_API.md)** - News endpoint API reference
 
 ### Architecture
 - **[Interface Architecture](docs/INTERFACE_ARCHITECTURE.md)** - System architecture overview

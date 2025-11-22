@@ -8,6 +8,8 @@ use App\Livewire\Concerns\ManagesSorting;
 use App\Models\Comment;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Validation\Rule;
+use Livewire\Attributes\Url;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use function Livewire\Volt\layout;
@@ -24,12 +26,16 @@ new class extends Component {
     use ManagesSorting;
     use WithPagination;
 
+    #[Url(except: 1)]
+    public int $page = 1;
     public ?string $status = null;
     public ?array $bulkFeedback = null;
+    public ?int $editingCommentId = null;
+    public string $editingContent = '';
+    public ?string $editingStatus = null;
 
     protected $queryString = [
         'status' => ['except' => null],
-        'page' => ['except' => 1],
     ];
 
     public function mount(): void
@@ -99,6 +105,10 @@ new class extends Component {
 
         $this->authorize('access-admin');
 
+        if ($this->editingCommentId === $commentId) {
+            $this->resetEditingState();
+        }
+
         $post = $comment->post;
         $comment->delete();
 
@@ -120,6 +130,52 @@ new class extends Component {
     public function rejectComment(int $commentId): void
     {
         $this->changeCommentStatus($commentId, CommentStatus::Rejected);
+    }
+
+    public function startEditing(int $commentId): void
+    {
+        $this->authorize('access-admin');
+
+        $comment = $this->findComment($commentId);
+
+        $this->resetErrorBag();
+        $this->resetValidation();
+
+        $this->editingCommentId = $comment->id;
+        $this->editingContent = $comment->content;
+        $this->editingStatus = $comment->status?->value;
+    }
+
+    public function cancelEditing(): void
+    {
+        $this->resetEditingState();
+    }
+
+    public function updateComment(): void
+    {
+        if (! $this->editingCommentId) {
+            return;
+        }
+
+        $this->authorize('access-admin');
+
+        $this->editingStatus = $this->sanitizeStatus($this->editingStatus);
+
+        $validated = $this->validate([
+            'editingContent' => ['required', 'string', 'max:1024'],
+            'editingStatus' => ['required', Rule::in(array_column(CommentStatus::cases(), 'value'))],
+        ]);
+
+        $comment = $this->findComment($this->editingCommentId);
+
+        $comment->forceFill([
+            'content' => trim($validated['editingContent']),
+            'status' => CommentStatus::from($validated['editingStatus']),
+        ])->save();
+
+        session()->flash('status', __('admin.comments.updated'));
+
+        $this->resetEditingState();
     }
 
     private function changeCommentStatus(int $commentId, CommentStatus $status): void
@@ -344,6 +400,13 @@ new class extends Component {
             'search' => $this->getSearchTerm(),
             'status' => $this->sanitizeStatus($this->status),
         ];
+    }
+
+    private function resetEditingState(): void
+    {
+        $this->reset(['editingCommentId', 'editingContent', 'editingStatus']);
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     private function hasSearch(): bool
@@ -608,19 +671,44 @@ new class extends Component {
                     </div>
                 </td>
                 <td class="px-4 py-4">
-                    <div class="max-w-md">
-                        <p class="text-sm text-slate-700 dark:text-slate-300">
-                            {{ \Illuminate\Support\Str::limit($comment->content, 100) }}
-                        </p>
-                    </div>
+                    @if ($editingCommentId === $comment->id)
+                        <div class="space-y-2">
+                            <label for="comment-content-{{ $comment->id }}" class="sr-only">{{ __('admin.comments.table.comment') }}</label>
+                            <textarea
+                                id="comment-content-{{ $comment->id }}"
+                                wire:model.defer="editingContent"
+                                rows="3"
+                                class="w-full rounded-xl border border-slate-200 bg-white/80 px-3 py-2 text-sm text-slate-900 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+                            ></textarea>
+                        </div>
+                    @else
+                        <div class="max-w-md">
+                            <p class="text-sm text-slate-700 dark:text-slate-300">
+                                {{ \Illuminate\Support\Str::limit($comment->content, 100) }}
+                            </p>
+                        </div>
+                    @endif
                 </td>
                 <td class="px-4 py-4">
-                    @if ($comment->status === \App\Enums\CommentStatus::Approved)
-                        <flux:badge color="green">{{ __('admin.comments.status.approved') }}</flux:badge>
-                    @elseif ($comment->status === \App\Enums\CommentStatus::Rejected)
-                        <flux:badge color="red">{{ __('admin.comments.status.rejected') }}</flux:badge>
+                    @if ($editingCommentId === $comment->id)
+                        <label for="comment-status-{{ $comment->id }}" class="sr-only">{{ __('admin.comments.table.status') }}</label>
+                        <select
+                            id="comment-status-{{ $comment->id }}"
+                            wire:model="editingStatus"
+                            class="w-full rounded-xl border border-slate-200 bg-white/80 px-3 py-2 text-sm text-slate-900 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+                        >
+                            <option value="{{ CommentStatus::Pending->value }}">{{ __('admin.comments.status.pending') }}</option>
+                            <option value="{{ CommentStatus::Approved->value }}">{{ __('admin.comments.status.approved') }}</option>
+                            <option value="{{ CommentStatus::Rejected->value }}">{{ __('admin.comments.status.rejected') }}</option>
+                        </select>
                     @else
-                        <flux:badge color="amber">{{ __('admin.comments.status.pending') }}</flux:badge>
+                        @if ($comment->status === \App\Enums\CommentStatus::Approved)
+                            <flux:badge color="green">{{ __('admin.comments.status.approved') }}</flux:badge>
+                        @elseif ($comment->status === \App\Enums\CommentStatus::Rejected)
+                            <flux:badge color="red">{{ __('admin.comments.status.rejected') }}</flux:badge>
+                        @else
+                            <flux:badge color="amber">{{ __('admin.comments.status.pending') }}</flux:badge>
+                        @endif
                     @endif
                 </td>
                 <td class="px-4 py-4">
@@ -628,17 +716,93 @@ new class extends Component {
                 </td>
                 <td class="px-4 py-4 text-right">
                     <div class="inline-flex items-center gap-2">
-                        @if ($comment->status !== \App\Enums\CommentStatus::Approved)
+                        @if ($editingCommentId === $comment->id)
                             <flux:button
                                 type="button"
                                 size="sm"
-                                color="green"
-                                wire:click="approveComment({{ $comment->id }})"
+                                color="indigo"
+                                wire:click="updateComment"
                                 wire:loading.attr="disabled"
-                                wire:target="approveComment"
+                                wire:target="updateComment"
                             >
-                                <span wire:loading.remove wire:target="approveComment">{{ __('admin.comments.status.approved') }}</span>
-                                <span wire:loading wire:target="approveComment" class="inline-flex items-center gap-1">
+                                <span wire:loading.remove wire:target="updateComment">{{ __('admin.inline.save') }}</span>
+                                <span wire:loading wire:target="updateComment" class="inline-flex items-center gap-1">
+                                    <svg class="h-3 w-3 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </span>
+                            </flux:button>
+                            <flux:button
+                                type="button"
+                                size="sm"
+                                variant="ghost"
+                                wire:click="cancelEditing"
+                            >
+                                {{ __('admin.inline.cancel') }}
+                            </flux:button>
+                        @else
+                            <flux:button
+                                type="button"
+                                size="sm"
+                                variant="ghost"
+                                wire:click="startEditing({{ $comment->id }})"
+                                wire:loading.attr="disabled"
+                                wire:target="startEditing"
+                            >
+                                {{ __('admin.comments.action_edit') }}
+                            </flux:button>
+
+                            @if ($comment->status !== \App\Enums\CommentStatus::Approved)
+                                <flux:button
+                                    type="button"
+                                    size="sm"
+                                    color="green"
+                                    wire:click="approveComment({{ $comment->id }})"
+                                    wire:loading.attr="disabled"
+                                    wire:target="approveComment"
+                                >
+                                    <span wire:loading.remove wire:target="approveComment">{{ __('admin.comments.status.approved') }}</span>
+                                    <span wire:loading wire:target="approveComment" class="inline-flex items-center gap-1">
+                                        <svg class="h-3 w-3 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                    </span>
+                                </flux:button>
+                            @endif
+
+                            @if ($comment->status !== \App\Enums\CommentStatus::Rejected)
+                                <flux:button
+                                    type="button"
+                                    size="sm"
+                                    color="amber"
+                                    wire:click="rejectComment({{ $comment->id }})"
+                                    wire:loading.attr="disabled"
+                                    wire:target="rejectComment"
+                                >
+                                    <span wire:loading.remove wire:target="rejectComment">{{ __('admin.comments.status.rejected') }}</span>
+                                    <span wire:loading wire:target="rejectComment" class="inline-flex items-center gap-1">
+                                        <svg class="h-3 w-3 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                    </span>
+                                </flux:button>
+                            @endif
+
+                            <flux:button
+                                type="button"
+                                size="sm"
+                                color="red"
+                                icon="trash"
+                                wire:click="deleteComment({{ $comment->id }})"
+                                wire:confirm="{{ __('admin.comments.confirm_delete') }}"
+                                wire:loading.attr="disabled"
+                                wire:target="deleteComment"
+                            >
+                                <span wire:loading.remove wire:target="deleteComment">{{ __('admin.comments.action_delete') }}</span>
+                                <span wire:loading.delay.500ms wire:target="deleteComment" class="inline-flex items-center gap-1">
                                     <svg class="h-3 w-3 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -646,44 +810,6 @@ new class extends Component {
                                 </span>
                             </flux:button>
                         @endif
-
-                        @if ($comment->status !== \App\Enums\CommentStatus::Rejected)
-                            <flux:button
-                                type="button"
-                                size="sm"
-                                color="amber"
-                                wire:click="rejectComment({{ $comment->id }})"
-                                wire:loading.attr="disabled"
-                                wire:target="rejectComment"
-                            >
-                                <span wire:loading.remove wire:target="rejectComment">{{ __('admin.comments.status.rejected') }}</span>
-                                <span wire:loading wire:target="rejectComment" class="inline-flex items-center gap-1">
-                                    <svg class="h-3 w-3 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                </span>
-                            </flux:button>
-                        @endif
-
-                        <flux:button
-                            type="button"
-                            size="sm"
-                            color="red"
-                            icon="trash"
-                            wire:click="deleteComment({{ $comment->id }})"
-                            wire:confirm="{{ __('admin.comments.confirm_delete') }}"
-                            wire:loading.attr="disabled"
-                            wire:target="deleteComment"
-                        >
-                            <span wire:loading.remove wire:target="deleteComment">{{ __('admin.comments.action_delete') }}</span>
-                            <span wire:loading.delay.500ms wire:target="deleteComment" class="inline-flex items-center gap-1">
-                                <svg class="h-3 w-3 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                            </span>
-                        </flux:button>
                     </div>
                 </td>
             </x-admin.table-row>

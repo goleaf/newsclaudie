@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "name": "Laravel Code Review",
+  "description": "Automatically performs comprehensive code review on Laravel PHP files when they are edited, checking for code quality, security vulnerabilities, performance issues, and adherence to Laravel best practices",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "app/**/*.php",
+      "routes/*.php",
+      "database/**/*.php",
+      "tests/**/*.php",
+      "config/*.php"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": ""
+  }
+}

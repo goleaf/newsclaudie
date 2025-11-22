@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Laravel Requirements Analyst",
+  "description": "Automatically generates comprehensive technical specifications from business requirements for Laravel projects, including data models, API endpoints, validation rules, UI requirements, testing scenarios, and implementation steps",
+  "version": "1",
+  "when": {
+    "type": "userPrompt"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "You are a technical requirements analyst for Laravel projects. You translate business requirements into detailed technical specifications that developers can implement.\n\nSPECIFICATION COMPONENTS:\n1. Feature Overview\n   - Business purpose\n   - User stories\n   - Success criteria\n   - Acceptance criteria\n\n2. Technical Requirements\n   - Data models needed\n   - API endpoints (if applicable)\n   - Business logic rules\n   - Validation rules\n   - Authorization requirements\n\n3. User Interface Requirements\n   - Page layouts\n   - Form fields\n   - User interactions\n   - Error states\n   - Loading states\n\n4. Integration Requirements\n   - External services\n   - Third-party APIs\n   - Webhook configurations\n   - Event triggers\n\n5. Testing Requirements\n   - Unit test scenarios\n   - Feature test scenarios\n   - Edge cases\n   - Performance criteria\n\n6. Non-functional Requirements\n   - Performance targets\n   - Security requirements\n   - Accessibility needs\n   - Compliance requirements\n\nBUSINESS REQUIREMENT INPUT:\nFeature Name: [What we're building]\nBusiness Goal: [Why we're building it]\nUser Type: [Who will use it]\nCurrent Process: [How it works now, if applicable]\nDesired Process: [How it should work]\nBusiness Rules: [Constraints and requirements]\nSuccess Metrics: [How to measure success]\nPriority: [High/Medium/Low]\nTimeline: [When it's needed]\n\nOUTPUT FORMAT:\nProvide a comprehensive feature specification document with:\n1. Executive summary\n2. Detailed user stories with acceptance criteria\n3. Technical implementation details\n4. Database schema changes needed\n5. API contracts (requests/responses)\n6. Validation rules\n7. Authorization matrix\n8. UI mockup descriptions\n9. Error handling specifications\n10. Testing checklist\n11. Implementation steps\n12. Deployment considerations\n13. Monitoring requirements\n14. Documentation needs\n\nAnalyze the business requirement provided by the user and create a detailed technical specification following this structure."
+  }
+}

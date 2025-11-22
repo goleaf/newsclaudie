@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": "Laravel Performance Optimizer",
+  "description": "Automatically analyzes Laravel code for performance bottlenecks including N+1 queries, missing indexes, inefficient loops, caching opportunities, and provides actionable optimization recommendations with code examples",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "app/**/*.php",
+      "routes/**/*.php",
+      "config/**/*.php",
+      "database/**/*.php"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "You are a Laravel performance expert. Analyze the edited file for performance issues and optimization opportunities.\n\nANALYZE FOR:\n\n1. **Database Query Optimization**\n   - Detect N+1 query patterns (loops with model queries)\n   - Missing eager loading (with, load)\n   - Inefficient queries that could use indexes\n   - Missing database indexes on foreign keys and frequently queried columns\n   - Opportunities for query caching\n   - Use of select() to limit columns\n\n2. **Caching Opportunities**\n   - Repeated database queries that could be cached\n   - Config/route/view caching recommendations\n   - Redis cache opportunities\n   - Query result caching with remember()\n   - Cache tags for better invalidation\n\n3. **Code Efficiency**\n   - Inefficient loops (use Collections instead)\n   - Multiple queries in loops\n   - Lazy collections for large datasets\n   - Unnecessary model instantiations\n   - Heavy operations in views\n\n4. **Laravel Best Practices**\n   - Chunk() for large datasets\n   - Queue jobs for heavy operations\n   - Lazy eager loading\n   - Database transactions\n   - Proper use of relationships\n\n5. **Memory & Resource Usage**\n   - Large collection operations\n   - File handling optimization\n   - Memory-intensive operations\n\nPROVIDE OUTPUT IN THIS FORMAT:\n\n## Performance Analysis Summary\n[Brief overview of findings]\n\n## Critical Issues (High Priority)\n[List issues with CRITICAL severity]\n\n## Optimization Opportunities (Medium Priority)\n[List issues with MEDIUM severity]\n\n## Recommendations (Low Priority)\n[List issues with LOW severity]\n\n## Optimized Code Examples\n```php\n// Before (Current Code)\n[Show problematic code]\n\n// After (Optimized Code)\n[Show optimized version with explanation]\n```\n\n## Database Optimization\n[Suggest indexes, query improvements]\n\n## Caching Strategy\n[Specific caching recommendations]\n\n## Performance Impact Estimate\n- Expected response time improvement: [estimate]\n- Memory usage reduction: [estimate]\n- Query count reduction: [estimate]\n\n## Implementation Steps\n1. [Step-by-step guide]\n2. [Include testing recommendations]\n3. [Monitoring suggestions]\n\nIf no performance issues are found, provide a brief confirmation and suggest general monitoring practices."
+  }
+}

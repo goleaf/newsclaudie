@@ -197,4 +197,72 @@ final class Post extends Model
 
         return $slug;
     }
+
+    /**
+     * Scope a query to filter posts by categories (OR logic).
+     *
+     * Filters posts that belong to ANY of the specified categories.
+     * Uses whereHas with whereIn for efficient querying.
+     *
+     * @param Builder $query The query builder instance
+     * @param array<int> $categoryIds Array of category IDs to filter by
+     * @return void
+     */
+    public function scopeFilterByCategories(Builder $query, array $categoryIds): void
+    {
+        $query->whereHas('categories', function (Builder $q) use ($categoryIds) {
+            $q->whereIn('categories.id', $categoryIds);
+        });
+    }
+
+    /**
+     * Scope a query to filter posts by authors (OR logic).
+     *
+     * Filters posts authored by ANY of the specified users.
+     * Uses whereIn for efficient querying.
+     *
+     * @param Builder $query The query builder instance
+     * @param array<int> $authorIds Array of user IDs to filter by
+     * @return void
+     */
+    public function scopeFilterByAuthors(Builder $query, array $authorIds): void
+    {
+        $query->whereIn('user_id', $authorIds);
+    }
+
+    /**
+     * Scope a query to filter posts by date range.
+     *
+     * Filters posts published within the specified date range.
+     * Both from_date and to_date are optional and inclusive.
+     *
+     * @param Builder $query The query builder instance
+     * @param string|null $fromDate Start date (Y-m-d format), null for no lower bound
+     * @param string|null $toDate End date (Y-m-d format), null for no upper bound
+     * @return void
+     */
+    public function scopeFilterByDateRange(Builder $query, ?string $fromDate, ?string $toDate): void
+    {
+        if ($fromDate !== null) {
+            $query->where('published_at', '>=', $fromDate);
+        }
+
+        if ($toDate !== null) {
+            $query->where('published_at', '<=', $toDate);
+        }
+    }
+
+    /**
+     * Scope a query to sort posts by publication date.
+     *
+     * Sorts posts by their published_at timestamp in the specified direction.
+     *
+     * @param Builder $query The query builder instance
+     * @param string $direction Sort direction ('asc' or 'desc')
+     * @return void
+     */
+    public function scopeSortByPublishedDate(Builder $query, string $direction = 'desc'): void
+    {
+        $query->orderBy('published_at', $direction);
+    }
 }

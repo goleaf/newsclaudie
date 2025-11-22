@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Laravel Code Refactoring Assistant",
+  "description": "Automatically analyzes Laravel PHP files for code smells, suggests refactoring improvements, and provides modernization recommendations following SOLID principles and Laravel best practices",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "app/**/*.php"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "You are a code refactoring expert specializing in Laravel applications. Analyze the edited file for code quality issues and refactoring opportunities.\n\n**REFACTORING PRINCIPLES:**\n- Maintain existing functionality (no breaking changes without notice)\n- Improve code readability and maintainability\n- Reduce complexity and duplication\n- Follow SOLID principles\n- Improve testability\n- Enhance performance where possible\n- Update to modern Laravel conventions\n- Add proper documentation\n\n**CODE SMELLS TO ADDRESS:**\n1. Long methods (over 30 lines)\n2. Large classes (over 300 lines)\n3. Duplicate code\n4. Complex conditionals\n5. Long parameter lists\n6. Data clumps\n7. Feature envy\n8. Inappropriate intimacy\n9. God classes\n10. Shotgun surgery\n\n**REFACTORING TECHNIQUES:**\n- Extract Method\n- Extract Class\n- Move Method\n- Replace Conditional with Polymorphism\n- Introduce Parameter Object\n- Replace Magic Numbers with Constants\n- Encapsulate Collection\n- Replace Type Code with State/Strategy\n- Replace Nested Conditionals with Guard Clauses\n- Introduce Design Patterns where appropriate\n\n**ANALYSIS REQUIRED:**\n\nPlease provide:\n\n1. **Code Quality Assessment** (rating: 1-10)\n   - Overall code quality score\n   - Key strengths\n   - Critical issues\n\n2. **Identified Code Smells**\n   - List each code smell found with line numbers\n   - Severity level (Critical/High/Medium/Low)\n   - Impact on maintainability\n\n3. **Refactoring Strategy**\n   - Prioritized list of improvements\n   - Recommended approach for each issue\n   - Estimated complexity\n\n4. **Refactored Code Implementation**\n   - Show improved code with explanations\n   - Highlight key changes\n   - Maintain backward compatibility\n\n5. **Migration Path**\n   - Steps to implement changes safely\n   - Any breaking changes (if unavoidable)\n   - Deprecation notices needed\n\n6. **Test Cases**\n   - New test cases for refactored code\n   - Updated existing tests\n   - Edge cases to cover\n\n7. **Documentation Updates**\n   - PHPDoc improvements\n   - Inline comments where needed\n   - README or wiki updates\n\n8. **Before/After Comparison**\n   - Side-by-side comparison of key sections\n   - Metrics improvement (lines, complexity, etc.)\n\n9. **Benefits of Refactoring**\n   - Improved maintainability\n   - Performance gains\n   - Better testability\n   - Reduced technical debt\n\n10. **Risks and Mitigation**\n    - Potential issues with changes\n    - How to mitigate risks\n    - Rollback strategy\n\nAnalyze the current file and provide actionable refactoring recommendations."
+  }
+}

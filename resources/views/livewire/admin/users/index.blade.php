@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Livewire\Volt\Component;
+use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 use function Livewire\Volt\layout;
 use function Livewire\Volt\title;
@@ -23,6 +24,8 @@ new class extends Component {
     use ManagesSearch;
     use WithPagination;
 
+    #[Url(except: 1)]
+    public int $page = 1;
     public bool $showCreateModal = false;
     public bool $showDeleteModal = false;
     public array $createForm = [
@@ -48,8 +51,13 @@ new class extends Component {
     protected $queryString = [
         'perPage' => ['except' => 20],
         'search' => ['except' => ''],
-        'page' => ['except' => 1],
     ];
+
+    public function mount(int $page = 1): void
+    {
+        $requestedPage = request()->query('page', $page);
+        $this->setPage(max(1, (int) $requestedPage));
+    }
 
     public function applySearchShortcut(): void
     {

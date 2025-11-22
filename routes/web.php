@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PostExportController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReadmeController;
@@ -39,6 +40,8 @@ Route::get('/', function () {
 })->name('home');
 
 Route::post('/locale', [LocaleController::class, 'update'])->name('locale.update');
+
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 
 Volt::route('posts', 'posts.index')->name('posts.index');
 Route::resource('posts', PostController::class)->except(['index']);

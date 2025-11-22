@@ -15,6 +15,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Livewire\Volt\Component;
+use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 use function Livewire\Volt\layout;
 use function Livewire\Volt\title;
@@ -33,6 +34,7 @@ new class extends Component {
         setPage as baseSetPage;
     }
 
+    #[Url(except: 1)]
     public int $page = 1;
     public ?string $status = null;
     public ?int $author = null;
@@ -66,11 +68,12 @@ new class extends Component {
     protected $queryString = [
         'status' => ['except' => null],
         'author' => ['except' => null],
-        'page' => ['except' => 1],
     ];
 
-    public function mount(): void
+    public function mount(int $page = 1): void
     {
+        $requestedPage = request()->query('page', $page);
+        $this->setPage(max(1, (int) $requestedPage));
         $this->queryString = array_merge(
             $this->queryString,
             $this->queryStringManagesSorting()
@@ -723,7 +726,7 @@ new class extends Component {
 
     <x-admin.table
         :pagination="$posts"
-        per-page-mode="livewire"
+        per-page-mode="http"
         per-page-field="perPage"
         :per-page-options="$this->perPageOptions"
         :per-page-value="$perPage"

@@ -31,7 +31,7 @@ trait ManagesBulkActions
      *
      * @var array<int>
      */
-    protected array $currentPageIds = [];
+    public array $currentPageIds = [];
 
     /**
      * Called when selectAll is updated.

@@ -17,8 +17,19 @@ trait ManagesPerPage
 
     public function bootManagesPerPage(): void
     {
+        $requested = $this->perPage;
+
+        foreach (['perPage', PageSize::queryParam()] as $param) {
+            $value = request()->query($param);
+
+            if ($value !== null && $value !== '') {
+                $requested = $value;
+                break;
+            }
+        }
+
         $this->perPage = $this->sanitizePerPage(
-            $this->perPage ?: $this->defaultPerPage()
+            is_numeric($requested) ? (int) $requested : $this->defaultPerPage()
         );
     }
 
@@ -95,5 +106,4 @@ trait ManagesPerPage
         return 'admin';
     }
 }
-
 

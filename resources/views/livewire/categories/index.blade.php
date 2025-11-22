@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Support\Pagination\PageSize;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Livewire\Attributes\Url;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use function Livewire\Volt\layout;
@@ -19,20 +20,22 @@ new class extends Component {
     use ManagesPerPage;
     use ManagesSearch;
 
+    #[Url(except: 1)]
+    public int $page = 1;
     public ?string $statusMessage = null;
     public bool $canManage = false;
 
-    protected array $queryString = [
-        'page' => ['except' => 1],
-    ];
+    protected array $queryString = [];
 
     protected function perPageContext(): string
     {
         return 'categories';
     }
 
-    public function mount(): void
+    public function mount(int $page = 1): void
     {
+        $requestedPage = request()->query('page', $page);
+        $this->setPage(max(1, (int) $requestedPage));
         $this->canManage = auth()->user()?->can('access-admin') ?? false;
         $this->statusMessage = session('success');
         $this->queryString['perPage'] = ['as' => PageSize::queryParam(), 'except' => null];
