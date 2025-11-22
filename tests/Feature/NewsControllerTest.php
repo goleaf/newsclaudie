@@ -20,6 +20,17 @@ final class NewsControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        // Disable rate limiting for tests
+        $this->withoutMiddleware(\Illuminate\Routing\Middleware\ThrottleRequests::class);
+        
+        // Clear cache before each test to avoid stale filter options
+        \Illuminate\Support\Facades\Cache::flush();
+    }
+
     // ========================================
     // BASIC FUNCTIONALITY TESTS
     // ========================================
@@ -531,8 +542,8 @@ final class NewsControllerTest extends TestCase
         $response = $this->get(route('news.index', [
             'categories' => [$category->id],
             'authors' => [$author->id],
-            'from_date' => '2025-01-01',
-            'to_date' => '2025-12-31',
+            'from_date' => '2024-01-01',
+            'to_date' => '2024-12-31',
             'sort' => 'oldest',
         ]));
 
@@ -541,8 +552,8 @@ final class NewsControllerTest extends TestCase
         $appliedFilters = $response->viewData('appliedFilters');
         $this->assertEquals([$category->id], $appliedFilters['categories']);
         $this->assertEquals([$author->id], $appliedFilters['authors']);
-        $this->assertEquals('2025-01-01', $appliedFilters['from_date']);
-        $this->assertEquals('2025-12-31', $appliedFilters['to_date']);
+        $this->assertEquals('2024-01-01', $appliedFilters['from_date']);
+        $this->assertEquals('2024-12-31', $appliedFilters['to_date']);
         $this->assertEquals('oldest', $appliedFilters['sort']);
     }
 

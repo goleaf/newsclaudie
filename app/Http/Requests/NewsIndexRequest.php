@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 
 final class NewsIndexRequest extends FormRequest
 {
@@ -28,8 +30,16 @@ final class NewsIndexRequest extends FormRequest
             'categories.*' => ['integer', 'exists:categories,id'],
             'authors' => ['nullable', 'array', 'max:10'],
             'authors.*' => ['integer', 'exists:users,id'],
-            'from_date' => ['nullable', 'date', 'before_or_equal:today', 'before_or_equal:to_date'],
-            'to_date' => ['nullable', 'date', 'before_or_equal:today', 'after_or_equal:from_date'],
+            'from_date' => [
+                'nullable',
+                'date',
+                Rule::when(fn ($input): bool => ! empty(data_get($input, 'to_date')), 'before_or_equal:to_date'),
+            ],
+            'to_date' => [
+                'nullable',
+                'date',
+                Rule::when(fn ($input): bool => ! empty(data_get($input, 'from_date')), 'after_or_equal:from_date'),
+            ],
             'sort' => ['nullable', 'string', 'in:newest,oldest'],
             'page' => ['nullable', 'integer', 'min:1', 'max:1000'],
         ];
@@ -52,14 +62,26 @@ final class NewsIndexRequest extends FormRequest
             'authors.*.integer' => 'Each author must be a valid ID.',
             'authors.*.exists' => 'One or more selected authors do not exist.',
             'from_date.date' => 'The from date must be a valid date.',
-            'from_date.before_or_equal' => 'The from date must be before or equal to the to date and not in the future.',
+            'from_date.before_or_equal' => 'The from date must be before or equal to the to date.',
             'to_date.date' => 'The to date must be a valid date.',
-            'to_date.before_or_equal' => 'The to date must not be in the future.',
             'to_date.after_or_equal' => 'The to date must be after or equal to the from date.',
             'sort.in' => 'Sort must be either "newest" or "oldest".',
             'page.integer' => 'Page must be a valid number.',
             'page.min' => 'Page must be at least 1.',
             'page.max' => 'Page number too high.',
         ];
+    }
+
+    protected function passedValidation(): void
+    {
+        $from = $this->input('from_date');
+        $to = $this->input('to_date');
+
+        if ($from && $to && Carbon::parse($from)->gt(Carbon::parse($to))) {
+            $this->getValidatorInstance()->errors()->add(
+                'from_date',
+                'The from date must be before or equal to the to date.'
+            );
+        }
     }
 }

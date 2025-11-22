@@ -1,132 +1,78 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('News') }}
-        </h2>
+    <x-slot name="title">
+        {{ __('News') }}
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            {{-- Filter Section --}}
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <form method="GET" action="{{ route('news.index') }}">
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            {{-- Categories Filter --}}
-                            <div>
-                                <label for="categories" class="block text-sm font-medium text-gray-700">Categories</label>
-                                <select name="categories[]" id="categories" multiple class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                                    @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" 
-                                            {{ in_array($category->id, $appliedFilters['categories'] ?? []) ? 'selected' : '' }}>
-                                            {{ $category->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+    <x-ui.page-header
+        :title="__('News')"
+        :subtitle="__('Browse our latest news and updates')"
+        kicker="{{ config('app.name') }}"
+    />
 
-                            {{-- Authors Filter --}}
-                            <div>
-                                <label for="authors" class="block text-sm font-medium text-gray-700">Authors</label>
-                                <select name="authors[]" id="authors" multiple class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                                    @foreach($authors as $author)
-                                        <option value="{{ $author->id }}"
-                                            {{ in_array($author->id, $appliedFilters['authors'] ?? []) ? 'selected' : '' }}>
-                                            {{ $author->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div class="lg:grid lg:grid-cols-12 lg:gap-8">
+            <!-- Filter Panel (Sidebar on desktop) -->
+            <aside class="lg:col-span-3">
+                <x-news.filter-panel
+                    :categories="$categories"
+                    :authors="$authors"
+                    :appliedFilters="$appliedFilters"
+                />
+            </aside>
 
-                            {{-- Date Range --}}
-                            <div>
-                                <label for="from_date" class="block text-sm font-medium text-gray-700">From Date</label>
-                                <input type="date" name="from_date" id="from_date" 
-                                    value="{{ $appliedFilters['from_date'] ?? '' }}"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                            </div>
-
-                            <div>
-                                <label for="to_date" class="block text-sm font-medium text-gray-700">To Date</label>
-                                <input type="date" name="to_date" id="to_date"
-                                    value="{{ $appliedFilters['to_date'] ?? '' }}"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                            </div>
-                        </div>
-
-                        <div class="mt-4 flex items-center justify-between">
-                            <div>
-                                <label for="sort" class="block text-sm font-medium text-gray-700">Sort By</label>
-                                <select name="sort" id="sort" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                                    <option value="newest" {{ ($appliedFilters['sort'] ?? 'newest') === 'newest' ? 'selected' : '' }}>
-                                        Newest First
-                                    </option>
-                                    <option value="oldest" {{ ($appliedFilters['sort'] ?? 'newest') === 'oldest' ? 'selected' : '' }}>
-                                        Oldest First
-                                    </option>
-                                </select>
-                            </div>
-
-                            <div class="flex gap-2">
-                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
-                                    Apply Filters
-                                </button>
-                                <a href="{{ route('news.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-50">
-                                    Clear
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            {{-- Results Count --}}
-            <div class="mb-4 text-sm text-gray-600">
-                Showing {{ $posts->count() }} of {{ $totalCount }} posts
-            </div>
-
-            {{-- Posts Grid --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @forelse($posts as $post)
-                    <article class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6">
-                            <h3 class="text-lg font-semibold mb-2">
-                                <a href="{{ route('posts.show', $post) }}" class="hover:text-blue-600">
-                                    {{ $post->title }}
-                                </a>
-                            </h3>
-
-                            <div class="text-sm text-gray-600 mb-2">
-                                By {{ $post->author->name }} on {{ $post->published_at->format('M d, Y') }}
-                            </div>
-
-                            @if($post->categories->isNotEmpty())
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    @foreach($post->categories as $category)
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                            {{ $category->name }}
-                                        </span>
-                                    @endforeach
-                                </div>
+            <!-- Main Content -->
+            <div class="mt-8 lg:col-span-9 lg:mt-0">
+                <!-- Results Count -->
+                <div class="mb-6 flex items-center justify-between">
+                    <p class="text-sm text-slate-600 dark:text-slate-400">
+                        @if ($totalCount === 0)
+                            {{ __('0 results found') }}
+                        @elseif ($posts->total() === 1)
+                            {{ __('1 result found') }}
+                        @else
+                            @if ($posts->hasPages())
+                                {{ __('Showing :from-:to of :total results', [
+                                    'from' => $posts->firstItem(),
+                                    'to' => $posts->lastItem(),
+                                    'total' => number_format($posts->total())
+                                ]) }}
+                            @else
+                                {{ __(':total results found', ['total' => number_format($posts->total())]) }}
                             @endif
+                        @endif
+                    </p>
+                </div>
 
-                            <p class="text-gray-700 text-sm">
-                                {{ Str::limit($post->description, 150) }}
+                @if ($posts->isEmpty())
+                    <!-- Empty State -->
+                    <x-ui.card class="text-center">
+                        <div class="py-12">
+                            <svg class="mx-auto h-12 w-12 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <h3 class="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
+                                {{ __('No results found') }}
+                            </h3>
+                            <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
+                                {{ __('Try adjusting your filters to find what you\'re looking for.') }}
                             </p>
                         </div>
-                    </article>
-                @empty
-                    <div class="col-span-full bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6 text-center text-gray-500">
-                            No posts found matching your filters.
-                        </div>
+                    </x-ui.card>
+                @else
+                    <!-- News Items Grid -->
+                    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+                        @foreach ($posts as $post)
+                            <x-news.news-card :post="$post" />
+                        @endforeach
                     </div>
-                @endforelse
-            </div>
 
-            {{-- Pagination --}}
-            <div class="mt-6">
-                {{ $posts->links() }}
+                    <!-- Pagination -->
+                    @if ($posts->hasPages())
+                        <div class="mt-8">
+                            {{ $posts->links() }}
+                        </div>
+                    @endif
+                @endif
             </div>
         </div>
     </div>

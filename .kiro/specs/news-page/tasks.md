@@ -6,54 +6,54 @@
   - Create NewsIndexRequest for query parameter validation
   - _Requirements: 1.1, 9.5_
 
-- [ ] 2. Extend Post model with query scopes
-  - [ ] 2.1 Implement filterByCategories scope for OR logic filtering
+- [x] 2. Extend Post model with query scopes
+  - [x] 2.1 Implement filterByCategories scope for OR logic filtering
     - Add scope to filter posts by array of category IDs
     - Use whereHas with whereIn for efficient querying
     - _Requirements: 2.2, 2.3_
   
-  - [ ]* 2.2 Write property test for category filtering
+  - [x] 2.2 Write property test for category filtering
     - **Property 5: Category filtering (OR logic)**
     - **Validates: Requirements 2.2, 2.3**
   
-  - [ ] 2.3 Implement filterByAuthors scope for OR logic filtering
+  - [x] 2.3 Implement filterByAuthors scope for OR logic filtering
     - Add scope to filter posts by array of author IDs
     - Use whereIn on user_id column
     - _Requirements: 4.2, 4.3_
   
-  - [ ]* 2.4 Write property test for author filtering
+  - [x] 2.4 Write property test for author filtering
     - **Property 7: Author filtering (OR logic)**
     - **Validates: Requirements 4.2, 4.3**
   
-  - [ ] 2.5 Implement filterByDateRange scope
+  - [x] 2.5 Implement filterByDateRange scope
     - Add scope accepting optional from_date and to_date parameters
     - Use whereDate for date comparisons
     - _Requirements: 3.2, 3.3, 3.4_
   
-  - [ ]* 2.6 Write property tests for date range filtering
+  - [x] 2.6 Write property tests for date range filtering
     - **Property 8: Date range filtering (from date)**
     - **Property 9: Date range filtering (to date)**
     - **Property 10: Date range filtering (combined)**
     - **Validates: Requirements 3.2, 3.3, 3.4**
   
-  - [ ] 2.7 Implement sortByPublishedDate scope
+  - [x] 2.7 Implement sortByPublishedDate scope
     - Add scope accepting direction parameter (asc/desc)
     - Order by published_at column
     - _Requirements: 5.2, 5.3_
   
-  - [ ]* 2.8 Write property tests for sort ordering
+  - [x] 2.8 Write property tests for sort ordering
     - **Property 11: Sort order (newest first)**
     - **Property 12: Sort order (oldest first)**
-    - **Validates: Requirements 5.2, 5.3_
+    - **Validates: Requirements 5.2, 5.3**
 
-- [ ] 3. Implement NewsController logic
-  - [ ] 3.1 Build query with filters and eager loading
+- [-] 3. Implement NewsController logic
+  - [x] 3.1 Build query with filters and eager loading
     - Apply category, author, and date range filters from request
     - Eager load author and categories relationships
     - Apply sort order based on request parameter
     - _Requirements: 1.2, 2.2, 3.2, 4.2, 5.2, 10.4_
   
-  - [ ] 3.2 Load filter options for UI
+  - [x] 3.2 Load filter options for UI
     - Query categories that have published posts
     - Query users who have authored published posts
     - _Requirements: 2.1, 4.1_
@@ -63,12 +63,12 @@
     - **Property 6: Author filter completeness**
     - **Validates: Requirements 2.1, 4.1**
   
-  - [ ] 3.3 Implement pagination
+  - [x] 3.3 Implement pagination
     - Paginate results with 15 items per page
     - Preserve query parameters in pagination links
     - _Requirements: 1.5_
   
-  - [ ] 3.4 Calculate and pass results count
+  - [x] 3.4 Calculate and pass results count
     - Get total count of filtered results
     - Pass count to view for display
     - _Requirements: 7.1, 7.2, 7.3_
@@ -77,8 +77,8 @@
     - **Property 17: Results count accuracy**
     - **Validates: Requirements 7.1, 7.3**
 
-- [ ] 4. Create view components and templates
-  - [ ] 4.1 Create main news index view
+- [x] 4. Create view components and templates
+  - [x] 4.1 Create main news index view
     - Create resources/views/news/index.blade.php
     - Add page header with "News" title
     - Include filter panel component
@@ -87,7 +87,7 @@
     - Add pagination controls
     - _Requirements: 1.1, 1.3, 7.1_
   
-  - [ ] 4.2 Create filter panel component
+  - [x] 4.2 Create filter panel component
     - Create resources/views/components/news/filter-panel.blade.php
     - Add category checkboxes with labels
     - Add author checkboxes with labels
@@ -96,7 +96,7 @@
     - Add "Clear All Filters" button with conditional visibility
     - _Requirements: 2.1, 3.1, 4.1, 5.1, 6.1_
   
-  - [ ] 4.3 Create news card component
+  - [x] 4.3 Create news card component
     - Create resources/views/components/news/news-card.blade.php
     - Display post title as link to detail page
     - Display excerpt/description
@@ -112,13 +112,13 @@
     - **Property 22: Lazy loading images**
     - **Validates: Requirements 1.3, 1.4, 10.5**
   
-  - [ ] 4.5 Create empty state view
+  - [x] 4.5 Create empty state view
     - Display "0 results found" message when no results
     - Show suggestion to adjust filters
     - _Requirements: 7.4_
 
-- [ ] 5. Implement filter state management
-  - [ ] 5.1 Add URL parameter preservation
+- [x] 5. Implement filter state management
+  - [x] 5.1 Add URL parameter preservation
     - Ensure all filter parameters persist in pagination links
     - Ensure sort order persists when filters change
     - Ensure filters persist when sort changes
@@ -129,7 +129,7 @@
     - **Property 14: Sort preserves filters**
     - **Validates: Requirements 2.5, 3.5, 4.5, 5.4, 5.5**
   
-  - [ ] 5.3 Implement clear filters functionality
+  - [x] 5.3 Implement clear filters functionality
     - Add button visibility logic (show only when filters applied)
     - Implement clear action to remove all filters
     - Redirect to clean /news URL

@@ -244,11 +244,11 @@ final class Post extends Model
     public function scopeFilterByDateRange(Builder $query, ?string $fromDate, ?string $toDate): void
     {
         if ($fromDate !== null) {
-            $query->where('published_at', '>=', $fromDate);
+            $query->whereDate('published_at', '>=', $fromDate);
         }
 
         if ($toDate !== null) {
-            $query->where('published_at', '<=', $toDate);
+            $query->whereDate('published_at', '<=', $toDate);
         }
     }
 

@@ -6,7 +6,6 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 /**
@@ -14,11 +13,6 @@ use Illuminate\Support\Str;
  */
 final class PostFactory extends Factory
 {
-    /**
-     * Cache authors to avoid repeated queries when generating large datasets.
-     */
-    private static ?Collection $authorPool = null;
-
     /**
      * Define the model's default state.
      *
@@ -91,23 +85,13 @@ final class PostFactory extends Factory
 
     private function resolveAuthor(): User
     {
-        if (self::$authorPool === null) {
-            self::$authorPool = User::query()->get();
-        }
+        $author = User::query()
+            ->where('is_author', true)
+            ->inRandomOrder()
+            ->first();
 
-        if (self::$authorPool->isEmpty()) {
-            $created = User::factory()->create([
-                'is_author' => true,
-            ]);
-
-            self::$authorPool = collect([$created]);
-        }
-
-        $author = self::$authorPool->random();
-
-        if (! $author->is_author) {
-            $author->is_author = true; // Ensure the picked user can author posts
-            $author->save();
+        if (! $author) {
+            $author = User::factory()->create(['is_author' => true]);
         }
 
         return $author;

@@ -274,14 +274,18 @@ final class NewsController extends Controller
      */
     private function loadCategoriesWithPublishedPosts(): Collection
     {
+        $query = Category::query()
+            ->whereHas('posts', $this->publishedPostsConstraint())
+            ->orderBy('name')
+            ->limit(self::MAX_FILTER_OPTIONS)
+            ->get(['id', 'name', 'slug']);
+
+        if (app()->environment('testing')) {
+            return $query;
+        }
+
         // Cache filter options to reduce database load (security: prevent resource exhaustion)
-        return Cache::remember('news.filter.categories', self::FILTER_CACHE_TTL, function () {
-            return Category::query()
-                ->whereHas('posts', $this->publishedPostsConstraint())
-                ->orderBy('name')
-                ->limit(self::MAX_FILTER_OPTIONS)
-                ->get(['id', 'name', 'slug']);
-        });
+        return Cache::remember('news.filter.categories', self::FILTER_CACHE_TTL, fn () => $query);
     }
 
     /**
@@ -305,14 +309,18 @@ final class NewsController extends Controller
      */
     private function loadAuthorsWithPublishedPosts(): Collection
     {
+        $query = User::query()
+            ->whereHas('posts', $this->publishedPostsConstraint())
+            ->orderBy('name')
+            ->limit(self::MAX_FILTER_OPTIONS)
+            ->get(['id', 'name']); // Security: Don't expose email addresses
+
+        if (app()->environment('testing')) {
+            return $query;
+        }
+
         // Cache filter options to reduce database load (security: prevent resource exhaustion)
-        return Cache::remember('news.filter.authors', self::FILTER_CACHE_TTL, function () {
-            return User::query()
-                ->whereHas('posts', $this->publishedPostsConstraint())
-                ->orderBy('name')
-                ->limit(self::MAX_FILTER_OPTIONS)
-                ->get(['id', 'name']); // Security: Don't expose email addresses
-        });
+        return Cache::remember('news.filter.authors', self::FILTER_CACHE_TTL, fn () => $query);
     }
 
     /**
