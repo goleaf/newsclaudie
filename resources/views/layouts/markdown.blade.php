@@ -1,11 +1,14 @@
 <x-app-layout>
-    <div class="relative flex items-top justify-center sm:items-center py-4 sm:pt-0">
-        <div class="mx-auto sm:px-6 lg:px-8 my-16">
-            <section class="bg-white rounded-lg shadow-md dark:bg-gray-800 p-6 dark:text-white">
-				<div class="prose dark:prose-invert max-w-none">
-					{!! $markdown !!}
-				</div>
-			</section>
-        </div>
-    </div>
+    <x-ui.page-header
+        :title="$title ?? config('app.name')"
+        :subtitle="$subtitle ?? null"
+    />
+
+    <x-ui.section max-width="max-w-4xl" class="pb-16">
+        <x-ui.card>
+            <div class="prose prose-slate max-w-none dark:prose-invert">
+                {!! $markdown !!}
+            </div>
+        </x-ui.card>
+    </x-ui.section>
 </x-app-layout>

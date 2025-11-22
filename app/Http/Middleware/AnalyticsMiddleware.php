@@ -1,27 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
+use App\Models\PageView;
 use Closure;
 use Illuminate\Http\Request;
-use App\Models\PageView;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
 
-class AnalyticsMiddleware
+final class AnalyticsMiddleware
 {
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
 
-        if (! Config::get('analytics.enabled')) {
+        if (! Config::get('analytics.enabled') || app()->environment('testing')) {
             return $response;
         }
 
@@ -32,7 +32,7 @@ class AnalyticsMiddleware
 
             // Check if the current path matches any excluded paths
             foreach ($excludedPaths as $excludedPath) {
-                if (str_is($excludedPath, $path)) {
+                if (Str::is($excludedPath, $path)) {
                     return;
                 }
             }

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use App\Http\Controllers\MarkdownFileParser;
 use Illuminate\Console\Command;
 
-class SyncMarkdownFileToDatabase extends Command
+final class SyncMarkdownFileToDatabase extends Command
 {
     /**
      * The name and signature of the console command.

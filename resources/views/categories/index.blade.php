@@ -1,91 +1,98 @@
 <x-app-layout>
     <x-slot name="title">
-        {{ __('Categories') }}
+        {{ __('categories.title') }}
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">
-                            {{ __('Categories') }}
-                        </h2>
-                        @can('access-dashboards')
-                        <a href="{{ route('categories.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                            {{ __('Create Category') }}
-                        </a>
-                        @endcan
-                    </div>
+    <x-ui.page-header
+        :title="__('categories.title')"
+        :subtitle="__('categories.subtitle')"
+    >
+        <x-slot name="meta">
+            <x-ui.badge>
+                {{ trans_choice(__('categories.count_label'), $categories->total(), ['count' => $categories->total()]) }}
+            </x-ui.badge>
+        </x-slot>
+    </x-ui.page-header>
 
-                    @if(session('success'))
-                    <div class="mb-4 p-4 bg-green-100 dark:bg-green-900 border border-green-400 dark:border-green-700 text-green-700 dark:text-green-200 rounded">
-                        {{ session('success') }}
-                    </div>
-                    @endif
+    <x-ui.section class="space-y-6 pb-16">
+        <x-auth-session-status :status="session('success')" />
 
-                    @if($categories->count())
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        @foreach($categories as $category)
-                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 shadow hover:shadow-lg transition-shadow duration-200">
-                            <div class="flex justify-between items-start mb-3">
-                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                    <a href="{{ route('categories.show', $category) }}" class="hover:text-blue-600 dark:hover:text-blue-400">
-                                        {{ $category->name }}
-                                    </a>
-                                </h3>
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                                    {{ $category->posts_count }} {{ __('posts') }}
-                                </span>
-                            </div>
-                            
-                            @if($category->description)
-                            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                                {{ Str::limit($category->description, 100) }}
-                            </p>
-                            @endif
-
-                            <div class="flex justify-between items-center mt-4">
-                                <a href="{{ route('categories.show', $category) }}" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">
-                                    {{ __('View Posts') }}
-                                </a>
-                                @can('access-dashboards')
-                                <div class="flex space-x-2">
-                                    <a href="{{ route('categories.edit', $category) }}" class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200">
-                                        {{ __('Edit') }}
-                                    </a>
-                                    <form action="{{ route('categories.destroy', $category) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('Are you sure you want to delete this category?') }}');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-sm text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-200">
-                                            {{ __('Delete') }}
-                                        </button>
-                                    </form>
-                                </div>
-                                @endcan
-                            </div>
-                        </div>
-                        @endforeach
-                    </div>
-
-                    <div class="mt-6">
-                        {{ $categories->links() }}
-                    </div>
-                    @else
-                    <div class="text-center py-12">
-                        <p class="text-gray-500 dark:text-gray-400 text-lg">
-                            {{ __('No categories found.') }}
-                        </p>
-                        @can('access-dashboards')
-                        <a href="{{ route('categories.create') }}" class="mt-4 inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white">
-                            {{ __('Create First Category') }}
-                        </a>
-                        @endcan
-                    </div>
-                    @endif
-                </div>
-            </div>
+        <div class="flex flex-wrap justify-between gap-3">
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+                {{ __('categories.guidance') }}
+            </p>
+            <x-ui.button href="{{ route('categories.create') }}">
+                {{ __('categories.create_button') }}
+            </x-ui.button>
         </div>
-    </div>
-</x-app-layout>
 
+        @if ($categories->count())
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                @foreach ($categories as $category)
+                    <x-ui.surface
+                        tag="article"
+                        class="transition hover:-translate-y-0.5 hover:shadow-lg"
+                    >
+                        <header class="flex items-start justify-between gap-3">
+                            <div>
+                                <h2 class="text-lg font-semibold text-slate-900 dark:text-white">
+                                    {{ $category->name }}
+                                </h2>
+                                <p class="text-xs uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                                    {{ trans_choice(__('categories.posts_count'), $category->posts_count, ['count' => $category->posts_count]) }}
+                                </p>
+                            </div>
+                            <x-ui.badge variant="ghost" size="sm" :uppercase="false">
+                                {{ $category->slug }}
+                            </x-ui.badge>
+                        </header>
+
+                        @if ($category->description)
+                            <p class="mt-4 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                                {{ \Illuminate\Support\Str::limit($category->description, 140) }}
+                            </p>
+                        @endif
+
+                        <footer class="mt-6 flex items-center justify-between text-sm">
+                            <x-ui.button href="{{ route('categories.show', $category) }}" variant="ghost">
+                                {{ __('categories.view_posts') }}
+                            </x-ui.button>
+
+                            <div class="flex items-center gap-3 text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                                <a href="{{ route('categories.edit', $category) }}" class="hover:text-indigo-500 dark:hover:text-indigo-300">
+                                    {{ __('categories.edit') }}
+                                </a>
+                                <form action="{{ route('categories.destroy', $category) }}" method="POST" onsubmit="return confirm('{{ __('categories.confirm_delete') }}');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="hover:text-rose-500 dark:hover:text-rose-300">
+                                        {{ __('categories.delete') }}
+                                    </button>
+                                </form>
+                            </div>
+                        </footer>
+                    </x-ui.surface>
+                @endforeach
+            </div>
+
+            <x-ui.pagination
+                class="mt-8"
+                :paginator="$categories"
+                summary-key="categories.pagination_summary"
+                per-page-mode="http"
+                per-page-field="{{ \App\Support\Pagination\PageSize::queryParam() }}"
+                :per-page-options="$categoryPageSizeOptions ?? []"
+                :show-per-page="filled($categoryPageSizeOptions ?? null)"
+            />
+        @else
+            <x-ui.empty-state
+                :title="__('categories.empty_title')"
+                :description="__('categories.empty_subtitle')"
+            >
+                <x-ui.button href="{{ route('categories.create') }}">
+                    {{ __('categories.create_button') }}
+                </x-ui.button>
+            </x-ui.empty-state>
+        @endif
+    </x-ui.section>
+</x-app-layout>

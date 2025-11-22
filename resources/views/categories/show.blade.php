@@ -1,43 +1,45 @@
 <x-app-layout>
     <x-slot name="title">
-        {{ $category->name }} - {{ __('Categories') }}
+        {{ $category->name }} — {{ __('categories.title') }}
     </x-slot>
 
-    <div class="relative flex items-top justify-center sm:items-center py-4 sm:pt-0">
-        <section class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <header class="text-center py-5 mt-5">
-                <h1 class="text-3xl font-bold dark:text-white">
-                    {{ $category->name }}
-                </h1>
-                @if($category->description)
-                <p class="text-lg text-gray-600 dark:text-gray-400 mt-3 max-w-2xl mx-auto">
-                    {{ $category->description }}
-                </p>
-                @endif
-                <p class="text-sm text-gray-500 dark:text-gray-500 mt-2">
-                    {{ $posts->total() }} {{ __('posts in this category') }}
-                </p>
-            </header>
+    <x-ui.page-header
+        :title="$category->name"
+        :subtitle="$category->description ?? __('categories.show.subtitle')"
+    >
+        <x-slot name="meta">
+            <x-ui.badge variant="info">
+                {{ trans_choice(__('categories.show.count'), $posts->total(), ['count' => $posts->total()]) }}
+            </x-ui.badge>
+        </x-slot>
+    </x-ui.page-header>
 
-            @if($posts->count())
-            <div class="flex flex-row flex-wrap justify-start">
+    <x-ui.section class="pb-16">
+        @if ($posts->count())
+            <div class="flex flex-wrap justify-start gap-6">
                 @foreach ($posts as $post)
                     <x-post-card :post="$post" />
                 @endforeach
             </div>
 
-            <div class="mt-6">
-                {{ $posts->links() }}
-            </div>
-            @else
-            <div class="text-center py-12">
-                <h2 class="text-2xl font-medium dark:text-white mb-3">
-                    {{ __('No posts found in this category!') }}
-                </h2>
-                <x-link :href="route('categories.index')">{{ __('View All Categories') }}</x-link>
-            </div>
-            @endif
-        </section>
-    </div>
+            <x-ui.pagination
+                class="mt-8"
+                :paginator="$posts"
+                summary-key="categories.show.pagination_summary"
+                per-page-mode="http"
+                per-page-field="{{ \App\Support\Pagination\PageSize::queryParam() }}"
+                :per-page-options="$categoryPostPageSizeOptions ?? []"
+                :show-per-page="filled($categoryPostPageSizeOptions ?? null)"
+            />
+        @else
+            <x-ui.empty-state
+                :title="__('categories.show.empty_title')"
+                :description="__('categories.show.empty_subtitle')"
+            >
+                <x-ui.button href="{{ route('categories.index') }}" variant="secondary">
+                    {{ __('categories.show.view_all') }}
+                </x-ui.button>
+            </x-ui.empty-state>
+        @endif
+    </x-ui.section>
 </x-app-layout>
-

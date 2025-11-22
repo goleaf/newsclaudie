@@ -1,34 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use GrahamCampbell\Markdown\Facades\Markdown;
 
-class MarkdownConverter extends Controller
+final class MarkdownConverter extends Controller
 {
     /**
-     * @var string $markdown source
+     * @var string source
      */
     private string $markdown;
 
     /**
-     * @var string $html generated
+     * @var string generated
      */
     private string $html;
 
     /**
      * Construct the class.
-     * 
-     * @param string $markdown
      */
-    public function __construct(string $markdown) {
+    public function __construct(string $markdown)
+    {
         $this->markdown = $markdown;
     }
 
     /**
      * Generate the markdown.
-     * 
+     *
      * @return string $html
      */
     public function toHtml()
@@ -41,9 +41,9 @@ class MarkdownConverter extends Controller
 
             if ($this->useAttribution()) {
                 // Inject markdown badge
-                $this->html .= "\n\n" . '<i>'
-                    . __('Syntax highlighting provided by')
-                    . ' <a href="https://torchlight.dev/" rel="noopener nofollow">torchlight.dev</a></i>';
+                $this->html .= "\n\n".'<i>'
+                    .__('Syntax highlighting provided by')
+                    .' <a href="https://torchlight.dev/" rel="noopener nofollow">torchlight.dev</a></i>';
             }
         }
 
@@ -52,11 +52,11 @@ class MarkdownConverter extends Controller
 
     /**
      * Check if Torchlight is used.
-     * @return bool
      */
-    private function usesTorchlight(): bool {
+    private function usesTorchlight(): bool
+    {
         // Check if Torchlight is enabled and if attribution is enabled. If it is not, we don't need to search the text.
-        if (!(config('blog.torchlight.enabled'))) {
+        if (! (config('blog.torchlight.enabled'))) {
             return false;
         }
 
@@ -66,10 +66,9 @@ class MarkdownConverter extends Controller
 
     /**
      * Check if we should inject attribution. Should only be called after usesTorchlight has returned true.
-     * @return bool
      */
-    private function useAttribution(): bool {
+    private function useAttribution(): bool
+    {
         return config('blog.torchlight.attribution');
     }
-
 }

@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Support\Facades\Hash;
 
-class DemoSeeder extends Seeder
+final class DemoSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -20,7 +21,7 @@ class DemoSeeder extends Seeder
             abort(403, 'Cannot run demo seeder in production!');
         }
 
-        if (!User::where('email', 'admin@example.org')->count()) {
+        if (! User::where('email', 'admin@example.org')->count()) {
             User::create([
                 'name' => 'Admin',
                 'email' => 'admin@example.org',
@@ -30,8 +31,8 @@ class DemoSeeder extends Seeder
                 'is_author' => true,
             ]);
         }
-        
-        if (!User::where('email', 'author@example.org')->count()) {
+
+        if (! User::where('email', 'author@example.org')->count()) {
             User::create([
                 'name' => 'Author',
                 'email' => 'author@example.org',
@@ -40,8 +41,8 @@ class DemoSeeder extends Seeder
                 'is_author' => true,
             ]);
         }
-        
-        if (!User::where('email', 'guest@example.org')->count()) {
+
+        if (! User::where('email', 'guest@example.org')->count()) {
             User::create([
                 'name' => 'Guest',
                 'email' => 'guest@example.org',
@@ -49,9 +50,9 @@ class DemoSeeder extends Seeder
                 'password' => Hash::make('password'),
             ]);
         }
-        
+
         if (config('blog.bans')) {
-            if (!User::where('email', 'banned@example.org')->count()) {
+            if (! User::where('email', 'banned@example.org')->count()) {
                 User::create([
                     'name' => 'Banned',
                     'email' => 'banned@example.org',
@@ -62,7 +63,7 @@ class DemoSeeder extends Seeder
             }
         }
 
-        \App\Models\User::factory(8)->create();
+        User::factory(8)->create();
 
         $this->call([
             PostSeeder::class,

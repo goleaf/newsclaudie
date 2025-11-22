@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Support\Facades\DB;
@@ -7,23 +9,23 @@ use Illuminate\Support\Facades\DB;
 /**
  * Return an Eloquent Collection of the dynamic tags
  */
-class Tag
+final class Tag
 {
-	/**
-	 * Get all the tags
-	 * 
-	 * @return Illuminate\Support\Collection $tags
-	 */
-	public static function all()
-	{
-		$tags = DB::table('posts')->select('tags')->get()->pluck('tags');
+    /**
+     * Get all the tags
+     *
+     * @return Illuminate\Support\Collection $tags
+     */
+    public static function all()
+    {
+        $tags = DB::table('posts')->select('tags')->get()->pluck('tags');
 
-		$tags = $tags->map(function ($item) {
-			return json_decode($item);
-		});
+        $tags = $tags->map(function ($item) {
+            return json_decode($item);
+        });
 
-		$tags = $tags->flatten()->unique();
+        $tags = $tags->flatten()->unique();
 
-		return $tags;
-	}
+        return $tags;
+    }
 }

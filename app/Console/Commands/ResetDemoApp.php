@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Throwable;
 
-class ResetDemoApp extends Command
+final class ResetDemoApp extends Command
 {
     /**
      * The name and signature of the console command.
@@ -44,8 +47,9 @@ class ResetDemoApp extends Command
 
         try {
             Artisan::call('migrate:fresh --seed --force');
-        } catch (\Throwable $th) {
-            $this->error("Something went wrong!");
+        } catch (Throwable $th) {
+            $this->error('Something went wrong!');
+
             return $this->line($th->getMessage());
         }
 

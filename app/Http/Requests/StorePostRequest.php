@@ -1,37 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
+use App\Models\Post;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePostRequest extends FormRequest
+final class StorePostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return $this->user()->can('create', App\Models\Post::class);
-    }
+        $user = $this->user();
 
-    /**
-     * Prepare the data for validation.
-     * 
-     * Thanks to SO user BenSampo!
-     * @see https://stackoverflow.com/a/54480210/5700388
-     *
-     * @return void
-     */
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'published_at' => $this->is_draft 
-                ? null
-                : Carbon::parse($this->published_at),
-        ]);
+        if ($user === null) {
+            return false;
+        }
+
+        return $user->can('create', Post::class);
     }
 
     /**
@@ -46,8 +36,46 @@ class StorePostRequest extends FormRequest
             'body' => 'required|string',
             'description' => 'nullable|string|max:255',
             'featured_image' => 'nullable|url|max:255',
-            'tags' => 'nullable|json',
+            'tags' => 'nullable|array',
+            'tags.*' => 'string|max:50',
             'published_at' => 'nullable|date|after:1970-12-31T12:00|before:2038-01-09T03:14',
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * Thanks to SO user BenSampo!
+     *
+     * @see https://stackoverflow.com/a/54480210/5700388
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'published_at' => $this->is_draft
+                ? null
+                : Carbon::parse($this->published_at),
+            'tags' => $this->prepareTagsInput($this->input('tags_input')),
+        ]);
+    }
+
+    /**
+     * Normalize the incoming free-form tags input.
+     */
+    protected function prepareTagsInput(?string $raw): ?array
+    {
+        if ($raw === null) {
+            return null;
+        }
+
+        $tags = collect(explode(',', $raw))
+            ->map(fn ($tag) => trim($tag))
+            ->filter()
+            ->unique()
+            ->values();
+
+        return $tags->isEmpty() ? null : $tags->all();
     }
 }

@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\View\Components;
 
+use Closure;
 use Illuminate\View\Component;
 
-class PostTags extends Component
+final class PostTags extends Component
 {
     /**
-     * @var array $tags do display
+     * @var array do display
      */
     public array $tags;
 
@@ -16,14 +19,15 @@ class PostTags extends Component
      *
      * @return void
      */
-    public function __construct(array $tags = []) {
+    public function __construct(array $tags = [])
+    {
         $this->tags = $tags;
     }
 
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
+     * @return \Illuminate\Contracts\View\View|Closure|string
      */
     public function render()
     {

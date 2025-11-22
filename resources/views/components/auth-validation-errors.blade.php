@@ -1,15 +1,14 @@
 @props(['errors'])
 
 @if ($errors->any())
-    <div {{ $attributes }}>
-        <div class="font-medium text-red-600">
+    <x-ui.alert variant="danger" {{ $attributes }}>
+        <p class="font-semibold">
             {{ __('Whoops! Something went wrong.') }}
-        </div>
-
-        <ul class="mt-3 list-disc list-inside text-sm text-red-600">
+        </p>
+        <ul class="mt-2 list-disc space-y-1 ps-5 text-sm leading-relaxed">
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
             @endforeach
         </ul>
-    </div>
+    </x-ui.alert>
 @endif

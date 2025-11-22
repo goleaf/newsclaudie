@@ -1,4 +1,8 @@
-# BlogNews Project Tasks
+## Priority 0: Remove Livewire/Volt Stack
+- [x] Remove Livewire/Volt/Flux packages and providers.
+- [x] Delete legacy Livewire components and replace them with Blade/controller equivalents.
+- [x] Strip Livewire docs/tasks so the roadmap reflects the Blade-only architecture.
+- [x] Ensure no `<livewire:...>` directives or Livewire JS assets remain in compiled output.
 
 ## Priority 1: Project Setup
 - [ ] Clone Laravel BlogKit repository
@@ -10,18 +14,18 @@
 - [ ] Create storage link
 - [ ] Build frontend assets
 
-## Priority 2: Remove Unwanted Features (Per User Rules)
-- [ ] Remove all user authentication system
-- [ ] Remove user-related migrations, models, controllers
-- [ ] Remove comments feature (depends on users)
+## Priority 2: Remove/Replace Unwanted Legacy Features
+- [ ] Decommission the unused legacy auth pages left over from Fortify scaffolding.
+- [ ] Remove dormant user-admin utilities that relied on Livewire.
+- [ ] Trim any features that still depend on the old user/comments coupling once requirements are finalised.
 - [ ] Remove Bootstrap CSS framework
 - [ ] Remove all CDN references from blades
 - [ ] Ensure only TailwindCSS is used
-- [ ] Remove Livewire (per user rules)
+- [ ] Replace remaining legacy components with Blade + controller patterns
 - [ ] Remove any export features (CSV, Excel, PDF)
 - [ ] Remove any import features except remote JSON
 - [ ] Remove reports functionality
-- [ ] Consolidate to single layout file
+- [ ] Consolidate to single layout file for the public blog (no separate Flux layout)
 
 ## Priority 3: Categories Feature Implementation
 - [ ] Create Category model
@@ -60,6 +64,8 @@
 - [ ] Add validation rules and error messages to all requests
 - [ ] Create tests for CategoryController
 - [ ] Create tests for Post-Category relationships
+- [ ] Inventory every class in `app/` and document the required test coverage
+- [ ] Implement missing unit/feature tests for all `app/` classes
 - [ ] Run ./vendor/bin/pint for code formatting
 - [ ] Run ./vendor/bin/phpstan analyse for static analysis
 - [ ] Run php artisan test --parallel
@@ -68,6 +74,7 @@
 
 ## Priority 7: Route Analysis & Verification
 - [ ] List all routes in blade files
+- [ ] Session 2025-11-22: Audit blade route usages vs `routes/web.php`
 - [ ] Verify each route exists in routes/web.php
 - [ ] Test each route in browser
 - [ ] Document route functionality

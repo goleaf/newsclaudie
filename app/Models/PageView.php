@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use App\Concerns\AnalyticsDateFormatting;
-use App\Concerns\AnonymizesRequests;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
 
 /**
  * @property string $page URL of the page visited
@@ -15,7 +15,7 @@ use Carbon\Carbon;
  * @property ?string $user_agent User agent string of the visitor (only stored for bots)
  * @property string $anonymous_id Ephemeral anonymized visitor identifier that cannot be tied to a user
  */
-class PageView extends Model
+final class PageView extends Model
 {
     public const UPDATED_AT = null;
 
@@ -25,6 +25,28 @@ class PageView extends Model
         'user_agent',
         'anonymous_id',
     ];
+
+    public static function fromRequest(Request $request): static
+    {
+        // Is a ref query parameter present? If so, we'll store it as a referrer
+        $ref = $request->query('ref');
+        if ($ref) {
+            $ref = '?ref='.$ref;
+        }
+
+        return self::create([
+            'page' => $request->url(),
+            'referrer' => $ref ?? $request->header('referer') ?? $request->header('referrer'),
+            'user_agent' => $request->userAgent(),
+            'anonymous_id' => self::anonymizeRequest($request),
+        ]);
+    }
+
+    public function getCreatedAtAttribute(string $date): Carbon
+    {
+        // Include the timezone when casting the date to a string
+        return Carbon::parse($date)->settings(['toStringFormat' => 'Y-m-d H:i:s T']);
+    }
 
     protected static function boot(): void
     {
@@ -58,28 +80,6 @@ class PageView extends Model
         });
     }
 
-    public static function fromRequest(Request $request): static
-    {
-        // Is a ref query parameter present? If so, we'll store it as a referrer
-        $ref = $request->query('ref');
-        if ($ref) {
-            $ref = '?ref='.$ref;
-        }
-
-        return static::create([
-            'page' => $request->url(),
-            'referrer' => $ref ?? $request->header('referer') ?? $request->header('referrer'),
-            'user_agent' => $request->userAgent(),
-            'anonymous_id' => self::anonymizeRequest($request),
-        ]);
-    }
-
-    public function getCreatedAtAttribute(string $date): Carbon
-    {
-        // Include the timezone when casting the date to a string
-        return Carbon::parse($date)->settings(['toStringFormat' => 'Y-m-d H:i:s T']);
-    }
-
     protected static function normalizeDomain(string $url): string
     {
         if (! Str::startsWith($url, 'http')) {
@@ -109,6 +109,6 @@ class PageView extends Model
             $ip = $request->ip();
         }
 
-        return substr(hash('sha256', $ip.$request->userAgent().config('hashing.anonymizer_salt').now()->format('Y-m-d')), 0, 40);
+        return mb_substr(hash('sha256', $ip.$request->userAgent().config('hashing.anonymizer_salt').now()->format('Y-m-d')), 0, 40);
     }
 }

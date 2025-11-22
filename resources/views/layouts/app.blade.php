@@ -12,41 +12,22 @@
             {{ (isset($title) ? $title . ' - ' : '') . config('app.name', 'Laravel') }}
         </title>
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
-
-        <!-- Styles -->
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-        
-        <livewire:styles />
-
-        <!-- Scripts -->
-        <script src="{{ asset('js/app.js') }}" defer></script>
-
-        <script>
-            // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-            // Credit: https://flowbite.com/docs/customize/dark-mode/
-            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark')
-            }
-        </script>
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @livewireStyles
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
+    <body class="font-sans antialiased text-slate-900 dark:text-slate-100 bg-slate-50 dark:bg-slate-950">
+        <div class="min-h-screen flex flex-col">
+            <x-navigation.main />
 
             <!-- Page Content -->
-            <main>
+            <main class="flex-1">
                 {{ $slot }}
             </main>
 
-            @include('layouts.footer')
+            <x-layouts.footer />
         </div>
 
-        <livewire:scripts />
-
         @stack('scripts')
+        @livewireScripts
     </body>
 </html>

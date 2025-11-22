@@ -1,9 +1,15 @@
-<div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-    <div>
-        {{ $logo }}
-    </div>
+@props(['logo' => null])
 
-    <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-        {{ $slot }}
+<div class="flex min-h-screen items-center justify-center bg-gradient-to-b from-slate-50 via-white to-slate-100 px-4 py-12 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <div class="w-full max-w-md space-y-6">
+        @if ($logo)
+            <div class="flex justify-center">
+                {{ $logo }}
+            </div>
+        @endif
+
+        <x-ui.card class="space-y-6 p-8">
+            {{ $slot }}
+        </x-ui.card>
     </div>
 </div>

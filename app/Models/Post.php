@@ -1,15 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Http\Controllers\MarkdownFileParser;
 use App\Scopes\PublishedScope;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use BadMethodCallException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Throwable;
 
-class Post extends Model
+final class Post extends Model
 {
     use HasFactory;
 
@@ -19,6 +23,7 @@ class Post extends Model
      * @var array
      */
     protected $fillable = [
+        'user_id',
         'title',
         'body',
         'description',
@@ -38,24 +43,6 @@ class Post extends Model
     ];
 
     /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    protected static function boot()
-    {
-        parent::boot();
-    
-        // Order by latest posts by default, with draft posts first
-        static::addGlobalScope('order', function (Builder $builder) {
-            $builder->orderByRaw('-published_at');
-        });
-
-        // Filter out posts that are not published
-        static::addGlobalScope(new PublishedScope);
-    }
-    
-    /**
      * Get the route key for the model.
      *
      * @return string
@@ -67,27 +54,24 @@ class Post extends Model
 
     /**
      * Get the model's Description. If one has not been set we return a truncated part of the body.
-     * 
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
-    public function description(): \Illuminate\Database\Eloquent\Casts\Attribute
+    public function description(): Attribute
     {
         return new Attribute(
             get: fn ($value) => empty($value)
-                ? substr($this->body, 0, 255)
+                ? mb_substr($this->body, 0, 255)
                 : $value
         );
     }
 
     /**
      * Get the model's Featured Image. If one has not been set we return a default image.
-     * 
+     *
      * Default Image by Picjumbo
+     *
      * @see https://picjumbo.com/tremendous-mountain-peak-krivan-in-high-tatras-slovakia/
-     * 
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
-    public function featuredImage(): \Illuminate\Database\Eloquent\Casts\Attribute
+    public function featuredImage(): Attribute
     {
         return new Attribute(
             get: fn ($value) => empty($value)
@@ -97,9 +81,7 @@ class Post extends Model
     }
 
     /**
-     * Check if the post is published by comparing the published_at date with the current date. 
-     * 
-     * @return bool
+     * Check if the post is published by comparing the published_at date with the current date.
      */
     public function isPublished(): bool
     {
@@ -108,34 +90,27 @@ class Post extends Model
 
     /**
      * Check if the post was created using a markdown file. Used to show a warning in the editor that changes may be overridden if the file is changed.
-     * 
-     * @return bool
      */
     public function isFileBased(): bool
     {
         try {
             MarkdownFileParser::getQualifiedFilepath($this->slug);
+
             return true;
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             //
         }
+
         return false;
     }
 
-    /**
-     * Get the author associated with the Post
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function author(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function author(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
      * Get all of the comments for the Post
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
@@ -144,8 +119,6 @@ class Post extends Model
 
     /**
      * Get all categories associated with this post
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function categories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
@@ -158,7 +131,7 @@ class Post extends Model
     public function getViewCount(): int
     {
         if (! config('analytics.enabled')) {
-            throw new \BadMethodCallException('Analytics are not enabled');
+            throw new BadMethodCallException('Analytics are not enabled');
         }
 
         $cacheKey = "post.{$this->id}.views";
@@ -166,7 +139,7 @@ class Post extends Model
 
         // Get the cached value (even if expired)
         $value = cache()->get($cacheKey);
-        
+
         if ($value !== null) {
             // If the cache exists but is stale, dispatch background refresh
             if (! cache()->has($cacheKey)) {
@@ -175,14 +148,32 @@ class Post extends Model
                     cache()->put($cacheKey, $newValue, now()->addMinutes($cacheDuration));
                 })->afterResponse();
             }
-            
+
             return $value;
         }
 
         // If no cached value exists at all, fetch and cache synchronously
         $value = PageView::where('page', route('posts.show', $this, false))->count();
         cache()->put($cacheKey, $value, now()->addMinutes($cacheDuration));
-        
+
         return $value;
+    }
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Order by latest posts by default, with draft posts first
+        self::addGlobalScope('order', function (Builder $builder) {
+            $builder->orderByRaw('-published_at');
+        });
+
+        // Filter out posts that are not published
+        self::addGlobalScope(new PublishedScope);
     }
 }

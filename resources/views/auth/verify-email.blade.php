@@ -2,38 +2,44 @@
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                <x-application-logo class="h-12 w-12 text-indigo-600" />
             </a>
         </x-slot>
 
-        <div class="mb-4 text-sm text-gray-600">
-            {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
-        </div>
+        <div class="space-y-6">
+            <header class="space-y-2 text-center">
+                <p class="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-400">
+                    {{ __('One last step') }}
+                </p>
+                <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">
+                    {{ __('Verify your email address') }}
+                </h1>
+                <p class="text-sm text-slate-500 dark:text-slate-400">
+                    {{ __('We’ve sent you a link. Confirming it helps keep your account secure and ensures you get important updates.') }}
+                </p>
+            </header>
 
-        @if (session('status') == 'verification-link-sent')
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ __('A new verification link has been sent to the email address you provided during registration.') }}
+            @if (session('status') === 'verification-link-sent')
+                <x-ui.alert variant="success" size="md">
+                    {{ __('A new verification link is on its way to :email.', ['email' => optional(auth()->user())->email]) }}
+                </x-ui.alert>
+            @endif
+
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <form method="POST" action="{{ route('verification.send') }}">
+                    @csrf
+                    <x-ui.button type="submit">
+                        {{ __('Resend verification email') }}
+                    </x-ui.button>
+                </form>
+
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="text-sm font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-slate-100">
+                        {{ __('Log out') }}
+                    </button>
+                </form>
             </div>
-        @endif
-
-        <div class="mt-4 flex items-center justify-between">
-            <form method="POST" action="{{ route('verification.send') }}">
-                @csrf
-
-                <div>
-                    <x-button>
-                        {{ __('Resend Verification Email') }}
-                    </x-button>
-                </div>
-            </form>
-
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-
-                <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900">
-                    {{ __('Log Out') }}
-                </button>
-            </form>
         </div>
     </x-auth-card>
 </x-guest-layout>

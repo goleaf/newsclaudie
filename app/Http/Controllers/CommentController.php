@@ -1,47 +1,90 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCommentRequest;
+use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Comment;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use App\Livewire\EditCommentForm;
+use App\Models\Post;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
-class CommentController extends Controller
+final class CommentController extends Controller
 {
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * Thanks to s-patompong for the tip on how to call a livewire component from controller
-     * @author https://github.com/s-patompong
-     * @see https://github.com/livewire/livewire/discussions/2255#discussioncomment-1680285
-     * 
-     * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Comment $comment)
+    public function store(StoreCommentRequest $request, Post $post): RedirectResponse
     {
-        $this->authorize('update', $comment);
-        
-        $livewire = new EditCommentForm();
+        $comment = $post->comments()->create([
+            'user_id' => $request->user()->id,
+            'content' => $request->validated()['content'],
+        ]);
 
-        $livewire->comment = $comment;
-
-        return App::call([$livewire, '__invoke']);
+        return $this->redirectToComment($comment, $post, __('comments.created'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Comment $comment)
+    public function edit(Comment $comment): View
+    {
+        $this->authorize('update', $comment);
+
+        return view('comments.edit', [
+            'comment' => $comment,
+        ]);
+    }
+
+    public function update(UpdateCommentRequest $request, Comment $comment): RedirectResponse
+    {
+        $comment->update($request->validated());
+
+        return $this->redirectToComment($comment, $comment->post, __('comments.updated'));
+    }
+
+    public function destroy(Comment $comment): RedirectResponse
     {
         $this->authorize('delete', $comment);
 
         $comment->delete();
 
-        return back()->with('success', 'Successfully Deleted Comment!');
+        return back()->with('success', __('comments.deleted'));
+    }
+
+    private function redirectToComment(Comment $comment, Post $post, string $message): RedirectResponse
+    {
+        $page = $this->resolveCommentPage($comment, $post);
+
+        $routeParameters = ['post' => $post];
+
+        if ($page > 1) {
+            $routeParameters['page'] = $page;
+        }
+
+        return redirect()
+            ->route('posts.show', $routeParameters)
+            ->withFragment('comment-'.$comment->id)
+            ->with('success', $message);
+    }
+
+    private function resolveCommentPage(Comment $comment, Post $post): int
+    {
+        $perPage = max(1, (int) config('blog.commentsPerPage', 10));
+
+        if (! $comment->created_at) {
+            $preceding = $post->comments()
+                ->where('id', '>', $comment->id)
+                ->count();
+        } else {
+            $preceding = $post->comments()
+                ->where(function ($query) use ($comment) {
+                    $query->where('created_at', '>', $comment->created_at)
+                        ->orWhere(function ($subQuery) use ($comment) {
+                            $subQuery
+                                ->where('created_at', $comment->created_at)
+                                ->where('id', '>', $comment->id);
+                        });
+                })
+                ->count();
+        }
+
+        return (int) floor($preceding / $perPage) + 1;
     }
 }

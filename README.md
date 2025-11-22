@@ -6,7 +6,7 @@
 
 # Laravel Blog Starter Kit
 
-## Kickstart the development of your Laravel Blog with this Starter Kit built Laravel 11, TailwindCSS, AlpineJS, and Livewire!
+## Kickstart the development of your Laravel Blog with this Starter Kit built on Laravel 11, TailwindCSS, and AlpineJS.
 
 <img src="https://cdn.jsdelivr.net/gh/caendesilva/laravel-blogkit-static-demo@latest/storage/screenshots/devices/laptop_composite-min.png" />
 
@@ -15,12 +15,31 @@ This project is currently not receiving new features as I am focusing on [HydePH
 the project will continue to get security fixes as long as Laravel 11 is still supported. Open source contributions are welcome!
 
 ## Features
-* **Highly Customizable:** Turn features on and off in the config
-*  **Security Focused CMS:** A CMS for Posts, Users, and Comments with strong and customizable security policies is included out of the box. You can easily update user's permissions as well.
-*  **Dark Mode & Mobile Friendly:** A must for the modern app: Dark mode. And of course, all parts of the site are mobile friendly, including the tables in the CMS.
-*  **Smart Markdown Editor:** Posts are made using Markdown. To aid in this, the EasyMDE editor is included by default which allows for rich text editing with autosave and markdown previews.
-*  **Users & Comments:** Users can create accounts and leave comments. If you want them too. You can even require users to verify their emails to comment.
-*  **Semantic and data-rich SEO-minded HTML:** The frontend adheres to follow the practices of Semantic HTML. Blog articles are automatically injected with Open Graph meta tags for better SEO. 
+* **Tailwind-first UI:** Shared Blade components (`x-ui.*`, `x-navigation.main`) keep the public layout responsive and dark-mode-aware, while the admin panel runs on Livewire Volt + Flux UI for a modern workflow (dashboard, posts, categories, comments moderation, and user management).
+* **Category-aware archive:** Filter the public posts index by category with a localized dropdown (and matching on-page breadcrumbs that jump straight to the filtered feed).
+* **Localization-ready:** JSON translations (English + Spanish today) power every nav label, flash message, and validation error. Add locales by extending `config('app.supported_locales')`.
+* **Security-focused CMS:** Posts, categories, users, and comments use dedicated FormRequests and policies so authorization rules live in one place.
+* **Smart Markdown editor:** EasyMDE ships by default for rich previews and autosave, but you can toggle it off in `config/blog.php` to fall back to the textarea component.
+* **Users & comments:** Email verification gates commenting, and the workflow now runs through classic controllers + Blade forms for easier customization.
+* **Semantic, SEO-friendly HTML:** Every post renders OG tags, schema.org metadata, and optional Torchlight highlighting.
+
+## Navigation & Localization
+The primary navigation lives in `resources/views/components/navigation/main.blade.php` and is hydrated entirely via translations, so both the desktop pills and the mobile drawer stay locale-aware.
+
+1. **Dynamic route links** — extend the `$primaryLinks` collection to expose new named routes (home, posts, categories, readme, etc.).
+2. **Locale picker** — a POST form targeting `route('locale.update')`, backed by `App\Http\Middleware\SetLocaleFromSession` so preferences persist between requests.
+3. **Theme toggle & mobile drawer** — powered by `resources/js/app.js`, with no inline scripts or CDNs required.
+
+To add another language:
+
+    cp lang/en.json lang/fr.json   # translate the copy
+
+Then register the locale:
+
+    // config/app.php
+    'supported_locales' => ['en', 'es', 'fr'],
+
+The picker automatically renders a button for every locale in that array, and validation/errors follow suit because the copy all comes from the same JSON keys. Everything ships through Vite, so there are no remote font or Livewire assets to manage.
 
 ## Full Documentation
 Full documentation is available at https://docs.desilva.se/blogkit/. Generated using my free [Laradocgen](https://github.com/caendesilva/laradocgen) package!
@@ -49,6 +68,8 @@ php artisan serve
 
 Once you have installed the Laravel app you can use the helper command to create an admin account using `php artisan admin:create` in your terminal.
 
+After logging in, head to `/admin/dashboard` to use the Livewire + Flux admin workspace for drafts, categories, and moderation.
+
 ### How to set up the blog using the demo settings
 **Important! This guide is just to demo the site. For production use you must follow the production guide as this guide allows anyone to log in as admin! **
 
@@ -63,7 +84,20 @@ Once you have installed the Laravel app you can use the helper command to create
 4. Next, follow the instructions in the [Official Deployment Documentation](https://laravel.com/docs/9.x/deployment) to ensure you are following the best practices.
 
 #### How to add authors
-It may be useful to add more authors to your blog. First, instruct the author to create a standard account. Then, you as admin go to the dashboard and press the "manage" button and check the "Is User Author?" tick and press save.
+It may be useful to add more authors to your blog. First, instruct the author to create a standard account and confirm their email. Then sign in as an administrator, visit `/admin/dashboard`, and verify they appear in the Flux admin tables. Until the dedicated user modal ships, promote that user by running `php artisan tinker` and setting `$user->is_author = true` (or by updating the record directly in your database). When `is_author` is enabled the author can access the post creation tools immediately.
+
+### Testing
+Browser, feature, and unit suites all run through Pest:
+
+```bash
+npm install
+npm run playwright:install   # once, downloads browser binaries
+php artisan test             # runs Playwright + Pest suites
+```
+
+The Playwright-powered `tests/Browser/HomepageTest` now renders the real homepage to catch Tailwind/layout regressions, while the Feature + Unit folders continue to cover form requests, policies, and Markdown tooling.
+`tests/Browser/AdminNavigationTest` signs in through the login form and ensures each Flux admin screen responds once authenticated.
+`tests/Browser/AdminPostsPublishTest` goes a step further by publishing and unpublishing a draft directly from the Volt table to guard those Livewire actions.
 
 ### Writing blog posts
 Blog posts are a breeze to create using the Markdown editor!
@@ -90,11 +124,11 @@ Current todo list:
 - [ ] Add drafts manager for the drafts stored in the user's localstorage
 
 ## Open Source Attributions
-The Starter Kit is a modern [TALL stack](https://tallstack.dev/) application based on [Laravel Breeze](https://github.com/laravel/breeze) (MIT) using:
+The Starter Kit is a modern Blade-first application built on top of [Laravel Breeze](https://github.com/laravel/breeze) (MIT) using:
 - [TailwindCSS 3](https://tailwindcss.com/) (MIT)
 - [AlpineJS 3](https://alpinejs.dev/) (MIT)
-- [Laravel 11](https://laravel.com/) (MIT)
-- [Livewire 2](https://laravel-livewire.com/) (MIT)
+- [Laravel 12](https://laravel.com/) (MIT)
+- [Blade components + Vite](https://laravel.com/docs/11.x/vite) (MIT)
 
 Featured images on blog posts used by the seeder come from [Unsplash](https://unsplash.com/) via [picsum.photos](https://picsum.photos/) (Image License)[https://unsplash.com/license]
 Some of the frontend components are from [Flowbite](https://github.com/themesberg/flowbite) (MIT)

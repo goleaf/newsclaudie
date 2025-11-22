@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
+use Throwable;
 
-class CreateAdminUser extends Command
+final class CreateAdminUser extends Command
 {
     /**
      * The name and signature of the console command.
@@ -39,17 +42,17 @@ class CreateAdminUser extends Command
      */
     public function handle()
     {
-        $this->info("Create new Admin User");
+        $this->info('Create new Admin User');
 
         $name = $this->ask('What is your name?', 'Admin');
         $email = $this->ask('What is your email?', 'admin@example.org');
         $password = $this->secret('Enter a strong password');
         if ($this->confirm("Do you wish to create user {$name} with email {$email}?", true)) {
-            $this->info("Creating a new Admin User!");
+            $this->info('Creating a new Admin User!');
             if (empty($password)) {
-                return $this->error("Password cannot be empty!");
+                return $this->error('Password cannot be empty!');
             }
-            if (strlen($password) < 8) {
+            if (mb_strlen($password) < 8) {
                 $this->warn('You are using a weak password!');
                 if ($this->confirm('Would you like to set a new password?', true)) {
                     $password = $this->secret('Enter a strong password');
@@ -64,13 +67,14 @@ class CreateAdminUser extends Command
                     'is_admin' => true,
                     'is_author' => true,
                 ]);
-                $this->info("User created successfully!");
-            } catch (\Throwable $th) {
-                $this->error("Something went wrong!");
+                $this->info('User created successfully!');
+            } catch (Throwable $th) {
+                $this->error('Something went wrong!');
+
                 return $this->line($th->getMessage());
             }
         } else {
-            return $this->warn("Canceling creation of Admin User!");
+            return $this->warn('Canceling creation of Admin User!');
         }
     }
 }

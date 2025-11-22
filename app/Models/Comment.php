@@ -1,31 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model
+final class Comment extends Model
 {
     use HasFactory;
-    
-    /**
-     * Get the user associated with the Comment
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function user(): \Illuminate\Database\Eloquent\Relations\HasOne
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the post associated with the Comment
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function post(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function post(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasOne(Post::class, 'id', 'post_id');
+        return $this->belongsTo(Post::class);
     }
 }

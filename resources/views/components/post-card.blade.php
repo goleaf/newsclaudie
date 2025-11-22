@@ -1,65 +1,88 @@
-<article class="w-full sm:w-80 bg-white rounded-lg shadow-md dark:bg-gray-800 m-4 my-5 flex flex-col flex-grow">
-    <header>
-        <a href="{{ route('posts.show', $post) }}">
-            <span class="rounded-t-lg featured-post-image" role="img" style="background-image: url('{{ $post->featured_image }}');" alt="Featured Image"></span>
-        </a>
-    </header>
-    <div class="p-5 h-full flex flex-col">
+@php
+    $isDraft = ! $post->isPublished();
+    $viewCount = config('analytics.enabled') ? number_format($post->getViewCount()) : null;
+    $commentCount = null;
 
-        @if(config('blog.withTags') && config('blog.showTagsOnPostCard') && $post->tags)
-            <x-post-tags :tags="$post->tags" class="text-xs" />
-        @endif
-                
-        <a href="{{ route('posts.show', $post) }}">
-            <h3 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white break-words">
-                @if($post->isPublished())
-                {{ $post->title }}
-                @else
-                <span class="opacity-75" title="This post has not yet been published">
-                    Draft: 
+    if (config('blog.allowComments')) {
+        $commentCount = $post->comments_count
+            ?? ($post->relationLoaded('comments') ? $post->comments->count() : null);
+    }
+@endphp
+
+<article class="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white/80 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800/70 dark:bg-slate-900/70">
+    <a href="{{ route('posts.show', $post) }}" class="relative block aspect-[4/3]">
+        <span
+            class="absolute inset-0 block object-cover"
+            role="img"
+            aria-label="{{ $post->title }}"
+            style="background-image: url('{{ $post->featured_image }}'); background-size: cover; background-position: center;"
+        ></span>
+        <span class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/10 to-transparent"></span>
+        <div class="absolute bottom-4 left-4 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-wide text-white">
+            @if ($isDraft)
+                <span class="rounded-full bg-white/20 px-3 py-1 text-[11px]">{{ __('Draft') }}</span>
+            @endif
+
+            @if (config('blog.withTags') && config('blog.showTagsOnPostCard') && $post->tags)
+                <x-post-tags :tags="$post->tags" class="text-[11px] uppercase tracking-wide" />
+            @endif
+        </div>
+    </a>
+
+    <div class="flex flex-1 flex-col space-y-4 p-6">
+        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+            @if ($post->author)
+                <span>
+                    {{ __('By') }}
+                    <x-link :href="route('posts.index', ['author' => $post->author])" rel="author">
+                        {{ $post->author->name }}
+                    </x-link>
                 </span>
-                <i>{{ $post->title }}</i>
-                @endif
+            @else
+                <span>{{ __('By') }} {{ __('posts.unknown_author') }}</span>
+            @endif
+            @if ($post->isPublished())
+                <span>&bull;</span>
+                <time datetime="{{ $post->published_at }}" class="text-slate-400">
+                    {{ $post->published_at->format('M j, Y') }}
+                </time>
+            @endif
+        </div>
+
+        <a href="{{ route('posts.show', $post) }}" class="group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+            <h3 class="text-xl font-semibold text-slate-900 transition dark:text-white">
+                {{ $post->title }}
             </h3>
         </a>
-        
-        <p class="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400 overflow-hidden text-ellipsis">
-            By <x-link :href="route('posts.index', ['author' => $post->author])" rel="author">{{ $post->author->name }}</x-link>
-            @if($post->isPublished())
-            <span class="opacity-75" role="none">&bullet;</span>
-            <time datetime="{{ $post->published_at }}" title="Published {{ $post->published_at }}">{{ $post->published_at->format('Y-m-d') }}</time>.
-            @endif
-            @if(config('blog.allowComments') || config('analytics.enabled'))
-                <span class="inline float-right">
-                    @if(config('analytics.enabled'))
-                        <span class="{{ config('blog.allowComments') ? 'mr-2' : '' }}" role="none" aria-hidden="true" title="{{ number_format($post->getViewCount()) }} views">
-                            <svg class="inline fill-gray-500 dark:text-gray-300" role="presentation" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                            {{ number_format($post->getViewCount()) }}
-                        </span>
-                    @endif
 
-                    @if(config('blog.allowComments'))
-                        <span class="sr-only">
-                        The post has {{ $post->comments->count() }} comments.
-                            <a href="{{ route('posts.show', $post) }}#comments">Go to post comment section</a>
-                        </span>
-                        
-                        <a href="{{ route('posts.show', $post) }}#comments" role="none" aria-hidden="true" title="{{ $post->comments->count() }} comments">
-                            <svg class="inline fill-gray-500 dark:text-gray-300" role="presentation" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
-                            {{ $post->comments->count() }}
-                        </a>
-                    @endif
-                </span>
-            @endif
-        </p>
-
-        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 overflow-hidden text-ellipsis">
+        <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
             {{ $post->description }}
         </p>
 
-        <a href="{{ route('posts.show', $post) }}" class="mt-auto w-fit inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            {{ __('Read more') }}
-            <svg class="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-        </a>
+        <div class="mt-auto flex flex-wrap items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <div class="flex items-center gap-3">
+                @if ($viewCount)
+                    <span class="inline-flex items-center gap-1">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 10.5a3 3 0 110-6 3 3 0 010 6z" />
+                        </svg>
+                        {{ $viewCount }}
+                    </span>
+                @endif
+
+                @if ($commentCount)
+                    <a href="{{ route('posts.show', $post) }}#comments" class="inline-flex items-center gap-1 hover:text-indigo-600 dark:hover:text-indigo-400">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M21 4H3a1 1 0 00-1 1v13l4-4h15a1 1 0 001-1V5a1 1 0 00-1-1z" />
+                        </svg>
+                        {{ $commentCount }}
+                    </a>
+                @endif
+            </div>
+
+            <x-ui.button href="{{ route('posts.show', $post) }}" variant="ghost">
+                {{ __('Read more') }}
+            </x-ui.button>
+        </div>
     </div>
 </article>

@@ -1,125 +1,121 @@
 <x-app-layout>
     <x-slot name="title">
-        Edit Post
+        {{ __('posts.form.edit_title') }}
     </x-slot>
 
-    <div class="relative flex items-top justify-center sm:items-center py-4 sm:pt-0">
-        <div class="max-w-5xl w-full mx-auto sm:px-6 lg:px-8 my-8 sm:my-16">
-            @if($post->isFileBased())
-            <div class="bg-red-300 overflow-hidden shadow-sm sm:rounded-lg mb-5">
-                <div class="py-3 px-4 text-red-900">
-                    Warning! This post was created using a markdown file. Changes made here may be overridden!
-                </div>
-            </div>
-            @endif
-            
-            <h1 class="text-3xl font-bold dark:text-white mb-8 sm:my-3 text-center sm:text-left">Update Blog Post</h1>
-            <section class="bg-white rounded-lg shadow-md dark:bg-gray-800 py-4 px-6 dark:text-white">
-				<form action="{{ route('posts.update', $post) }}" method="POST" class="text-gray-900">
-                    @method('PATCH')
-                    @csrf
-                    <fieldset>
-                        <legend class="dark:text-white">Required Fields</legend>
+    <x-ui.page-header
+        :title="__('posts.form.edit_heading')"
+        :subtitle="$post->title"
+    />
 
-                        <div class="mt-3">
-                            <x-label for="title">
-                                {{ __('Title*') }} <small>(Note that the slug will not change)</small>
-                            </x-label>
-                            <x-input id="title" name="title" :value="old('title') ?? $post->title" type="text" class="block mt-1 w-full" maxlength="255" required autofocus placeholder="The post title"/>
-                            @error('title') <span class="text-red-500">{{ $message }}</span> @enderror
-                        </div>
+    <x-ui.section max-width="max-w-5xl" class="pb-16 space-y-6">
+        @if ($post->isFileBased())
+            <x-ui.alert variant="danger">
+                {{ __('posts.form.markdown_warning') }}
+            </x-ui.alert>
+        @endif
 
-                        <div class="mt-3">
-                            <x-label for="body" :value="__('Body*')" />
-                            <x-textarea id="body" name="body" class="block mt-1 w-full" placeholder="Main content of the post" rows="8">{{ old('body') ?? $post->body }}</x-textarea>
-                            @error('body') <span class="text-red-500">{{ $message }}</span> @enderror
-                        </div>        
-                
-                        @if(config('blog.easyMDE.enabled'))
+        <x-ui.card>
+            <form action="{{ route('posts.update', $post) }}" method="POST" class="space-y-10 text-slate-900 dark:text-white">
+                @csrf
+                @method('PATCH')
+
+                <x-ui.form-section :title="__('posts.form.required_heading')">
+                    <div class="space-y-2">
+                        <x-label for="title">
+                            {{ __('posts.form.title_label') }}
+                            <small class="text-slate-400 dark:text-slate-500">{{ __('posts.form.slug_note') }}</small>
+                        </x-label>
+                        <x-input id="title" name="title" :value="old('title', $post->title)" type="text" maxlength="255" required autofocus />
+                        @error('title') <p class="text-sm text-rose-500">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="space-y-2">
+                        <x-label for="body" :value="__('posts.form.body_label')" />
+                        <x-textarea id="body" name="body" rows="8">{{ old('body', $post->body) }}</x-textarea>
+                        @error('body') <p class="text-sm text-rose-500">{{ $message }}</p> @enderror
+                    </div>
+
+                    @if (config('blog.easyMDE.enabled'))
                         <x-markdown-editor :draft_id="$draft_id" />
-                        @endif
-                
-                    </fieldset>
-                
-                    <fieldset>
-                        <legend class="dark:text-white">Optional Fields</legend>
+                    @endif
+                </x-ui.form-section>
 
-                        <div class="mt-3">
-                            <x-label for="description" :value="__('Description')" />
-                            <x-input id="description" name="description" :value="old('description') ?? $post->description" type="text" class="block mt-1 w-full" maxlength="255" placeholder="The post excerpt"/>
-                            @error('description') <span class="text-red-500">{{ $message }}</span> @enderror
-                        </div>
-                
-                        <div class="mt-3">
-                            <x-label for="featured_image" :value="__('Featured image URI')" />
-                            <x-input id="featured_image" name="featured_image" :value="old('featured_image') ?? $post->featured_image" type="text" class="block mt-1 w-full" maxlength="255" placeholder="https://example.org/static/image.jpg"/>
-                            @error('featured_image') <span class="text-red-500">{{ $message }}</span> @enderror
-                        </div>
-                        
-                        <div class="mt-3">
-                            <x-label for="published_at" :value="__('When should the post be published?')" />
-                            <div class="flex flex-row items-center">
-                                <div>
-                                    <x-input id="published_at" name="published_at" :value="optional($post->published_at)->format('Y-m-d\TH:i')" type="datetime-local" class="block mt-1 w-full" placeholder="{{ now() }}"/>
-                                    @error('published_at') <span class="text-red-500">{{ $message }}</span> @enderror
-                                </div>
-                            </div>
-                            
-                            <x-label for="published_at">
-                                <small>You can also <button class="text-indigo-500 dark:text-indigo-300" title="Clear the input field" type="button" role="button" onclick="clearPublishedAtInput()">leave it blank</button> to save the post as a draft.</small>
-                            </x-label>
+                <x-ui.form-section :title="__('posts.form.optional_heading')">
+                    <div class="grid gap-6 md:grid-cols-2">
+                        <div class="space-y-2">
+                            <x-label for="description" :value="__('posts.form.description_label')" />
+                            <x-input id="description" name="description" :value="old('description', $post->description)" type="text" maxlength="255" placeholder="{{ __('posts.form.description_placeholder') }}" />
+                            @error('description') <p class="text-sm text-rose-500">{{ $message }}</p> @enderror
                         </div>
 
-                        @if(config('blog.withTags'))
-                        <livewire:tag-manager :currenttags="$post->tags" />
-                        @endif
+                        <div class="space-y-2">
+                            <x-label for="featured_image" :value="__('posts.form.featured_image_label')" />
+                            <x-input id="featured_image" name="featured_image" :value="old('featured_image', $post->featured_image)" type="url" maxlength="255" placeholder="{{ __('posts.form.featured_image_placeholder') }}" />
+                            @error('featured_image') <p class="text-sm text-rose-500">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
 
-                        <div class="mt-3">
-                            <x-label for="categories" :value="__('Categories')" />
-                            <div class="mt-2 space-y-2">
-                                @foreach($categories as $category)
-                                <div class="flex items-center">
-                                    <input 
-                                        type="checkbox" 
-                                        name="categories[]" 
-                                        value="{{ $category->id }}" 
-                                        id="category_{{ $category->id }}"
-                                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    <div class="space-y-2">
+                        <x-label for="published_at" :value="__('posts.form.publish_label')" />
+                        <x-input
+                            id="published_at"
+                            name="published_at"
+                            type="datetime-local"
+                            :value="old('published_at', optional($post->published_at)->format('Y-m-d\TH:i'))"
+                        />
+                        @error('published_at') <p class="text-sm text-rose-500">{{ $message }}</p> @enderror
+                        <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                            {!! __('forms.publish_hint', [
+                                'action' => '<button type="button" class="font-semibold text-indigo-500 dark:text-indigo-300" data-clear-published-at="#published_at">'.e(__('forms.publish_clear')).'</button>',
+                            ]) !!}
+                        </p>
+                    </div>
+
+                    @if (config('blog.withTags'))
+                        <x-tags-field :initial="old('tags_input', collect($post->tags ?? [])->implode(', '))" />
+                    @endif
+
+                    <div class="space-y-2">
+                        <x-label :value="__('posts.form.categories_label')" />
+                        <div class="mt-3 grid gap-3 sm:grid-cols-2">
+                            @foreach ($categories as $category)
+                                <label class="flex items-center gap-2 rounded-xl border border-slate-200/70 px-3 py-2 text-sm dark:border-slate-700">
+                                    <input
+                                        type="checkbox"
+                                        name="categories[]"
+                                        value="{{ $category->id }}"
+                                        class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                                         {{ in_array($category->id, old('categories', $post->categories->pluck('id')->toArray())) ? 'checked' : '' }}
                                     >
-                                    <label for="category_{{ $category->id }}" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                                        {{ $category->name }}
-                                    </label>
-                                </div>
-                                @endforeach
-                            </div>
-                            @error('categories') <span class="text-red-500">{{ $message }}</span> @enderror
+                                    <span>{{ $category->name }}</span>
+                                </label>
+                            @endforeach
                         </div>
-                    </fieldset>
-
-                    <div class="flex items-center justify-end mt-4 mb-2">
-                        <div>
-                            <div class="flex flex-row items-center">
-                                <x-label class="cursor-pointer" for="is_draft" :value="__('Save as draft')" title="Saves the post without a publish date, making it hidden."/>
-                                <x-input id="is_draft" name="is_draft" value="1" :checked="old('is_draft') || isset($post) && $post->published_at === null" type="checkbox" class="block mx-2 cursor-pointer" title="Press to toggle"/>
-                            </div>
-                            @error('is_draft') <span class="text-red-500">{{ $message }}</span> @enderror
-                        </div>
-
-                        <x-button type="submit" class="ml-4">
-                            {{ __('Save') }}
-                        </x-button>
+                        @error('categories') <p class="mt-1 text-sm text-rose-500">{{ $message }}</p> @enderror
                     </div>
-                </form>
-			</section>
-        </div>
-    </div>
+                </x-ui.form-section>
 
-    @push('scripts')
-    <script>
-        function clearPublishedAtInput() { 
-            document.getElementById('published_at').value = null;
-        }
-    </script>
-    @endpush
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <label class="inline-flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                        <input
+                            id="is_draft"
+                            name="is_draft"
+                            type="checkbox"
+                            value="1"
+                            class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                            {{ old('is_draft', $post->published_at === null) ? 'checked' : '' }}
+                        >
+                        {{ __('posts.form.save_draft_label') }}
+                    </label>
+                    @error('is_draft') <p class="w-full text-sm text-rose-500">{{ $message }}</p> @enderror
+
+                    <x-ui.button type="submit">
+                        {{ __('posts.form.update_button') }}
+                    </x-ui.button>
+                </div>
+            </form>
+        </x-ui.card>
+    </x-ui.section>
 </x-app-layout>
+

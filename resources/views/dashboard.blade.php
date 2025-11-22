@@ -1,577 +1,488 @@
 <x-app-layout>
     <x-slot name="title">
-        Dashboard
+        {{ __('Dashboard') }}
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 dark:text-white">
-            @if(session('success'))
-            <div class="bg-green-300 overflow-hidden shadow-sm sm:rounded-lg mb-5">
-                <div class="py-3 px-4 text-green-900">
-                    {{ session('success') }}
-                </div>
-            </div>
+    <x-ui.page-header
+        :title="__('Editorial overview')"
+        :subtitle="__('Track posts, people, comments, and traffic from one space.')"
+    >
+        <x-slot name="meta">
+            @if ($posts)
+                <x-ui.badge>
+                    {{ trans_choice('{0} No posts yet|{1} :count post|[2,*] :count posts', $posts->count(), ['count' => $posts->count()]) }}
+                </x-ui.badge>
             @endif
-
-            @if(config('blog.demoMode'))
-            <section class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-5 text-black dark:text-white">
-                <div class="p-6">
-                    <h3 class="text-xl font-bold mb-1">App is in demo mode!</h3>
-                    <strong>User created posts are hidden from the blog index and the database is reset every six hours.</strong>
-                </div>
-            </section>
+            @if ($users)
+                <x-ui.badge variant="info">
+                    {{ trans_choice('{1} :count user|[2,*] :count users', $users->count(), ['count' => $users->count()]) }}
+                </x-ui.badge>
             @endif
+        </x-slot>
+    </x-ui.page-header>
 
-            @if($posts)
-            <section class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-5">
-                <div class="p-6 bg-white dark:bg-gray-800">
-                    <header class="flex flex-row justify-between items-center">
-                        <h3 class="text-xl font-bold mb-5">Manage Posts</h3>
-                        @can('create', App\Models\Post::class)
-                        <a href="{{ route('posts.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-100 border border-transparent rounded-md font-semibold text-xs text-white dark:text-black uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-gray-300 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150 mb-5">New Post</a>
-                        @endcan
-                    </header>
+    <x-ui.section class="space-y-8 pb-16">
+        @if (session('success'))
+            <x-ui.alert variant="success" class="rounded-3xl px-5 py-4 text-base">
+                {{ session('success') }}
+            </x-ui.alert>
+        @endif
 
-                    @if($posts)
-                    <!-- Desktop Version -->
-                    <div class="hidden sm:block overflow-y-auto" style="max-height: 75vh;">
-                        <table class="w-full table-auto border-collapse border border-slate-500">
-                            <thead>
-                                <tr>
-                                    <x-th>Author</x-th>
-                                    <x-th>Title</x-th>
-                                    <x-th>Published</x-th>
-                                    <x-th>Actions</x-th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-gray:700 dark:text-gray-300">
-                                @foreach ($posts as $post)
-                                <tr class="group">
-                                    <x-td>
-                                        <a href="{{ route('posts.index', ['author' => $post->author]) }}" rel="author" class="hover:text-indigo-500">
-                                            {{ $post->author->name }}
-                                        </a>
-                                    </x-td>
-                                    <x-td>
-                                        <div class="overflow-hidden text-ellipsis">
-                                            <a href="{{ route('posts.show', ['post' => $post]) }}" class="hover:text-indigo-500">
-                                                {{ $post->title }}
-                                            </a>
-                                        </div>
-                                    </x-td>
-                                    <x-td>
-                                        @if($post->isPublished())
-                                        <span title="{{ $post->published_at }}">{{ $post->published_at->format('Y-m-d') }}</span>
-                                        @else
-                                        <span class="rounded-lg bg-gray-400 text-gray-900 px-2 py-1 text-xs uppercase font-bold" title="This post has not yet been published.">Draft</span>
-                                        @can('update', $post)
-                                        <form action="{{ route('posts.publish', ['post' => $post]) }}" method="POST" class="inline ml-2">
-                                            @csrf
-                                            <button type="submit" title="Click to publish the post" class="rounded-lg opacity-0 group-hover:opacity-100 transition-opacity bg-green-400 text-green-900 px-2 py-1 text-xs uppercase font-bold">Publish</button>
-                                        </form>
-                                        @endcan
-                                        @endif
-                                    </x-td>
-                                    <x-td class="text-center">
-                                        @can('update', $post)
-                                        <a href="{{ route('posts.edit', ['post' => $post]) }}">
-                                            Edit
-                                        </a>
-                                        @endcan
-                                        @can('delete', $post)
-                                        <form action="{{ route('posts.destroy', ['post' => $post]) }}" method="POST" class="inline ml-3" onSubmit="return confirm('Are you sure you want to delete this post?')">
-                                            @method('DELETE')
-                                            @csrf
-                                            <button type="submit">Delete</button>
-                                        </form>
-                                        @endcan
-                                    </x-td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+        @if (config('blog.demoMode'))
+            <x-ui.alert
+                variant="warning"
+                :title="__('Demo mode enabled')"
+                class="rounded-3xl px-6 py-4"
+            >
+                {{ __('User-created posts stay hidden from the public index, and the database resets every six hours.') }}
+            </x-ui.alert>
+        @endif
+
+        @if ($posts)
+            <x-ui.card class="space-y-6">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">{{ __('Manage posts') }}</h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">
+                            {{ __('Approve drafts, polish metadata, and publish when ready.') }}
+                        </p>
                     </div>
-                    <!-- Mobile Version -->
-                    <div class="sm:hidden overflow-y-auto" style="max-height: 75vh;">
-                        <table class="w-full table-auto">
-                            @foreach ($posts as $post)
-                            <tbody class="text-gray:700 dark:text-gray-300">
-                                <tr>
-                                    <x-th>Title</x-th>
-                                    <x-th class="lg:py-2 text-left">
-                                        <a href="{{ route('posts.show', ['post' => $post]) }}" class="hover:text-indigo-500">
-                                            {{ $post->title }}
-                                        </a>
-                                    </x-th>
-                                </tr>
-                                <tr>
-                                    <x-th>Author</x-th>
-
-                                    <x-td>
-                                        <a href="{{ route('posts.index', ['author' => $post->author]) }}" rel="author" class="hover:text-indigo-500">
-                                            {{ $post->author->name }}
-                                        </a>
-                                    </x-td>
-                                </tr>
-                                <tr>
-                                    <x-th>Published</x-th>
-                                    <x-td>
-                                        @if($post->isPublished())
-                                        <span title="{{ $post->published_at }}">{{ $post->published_at->format('Y-m-d') }}</span>
-                                        @else
-                                        <span class="rounded-lg bg-gray-400 text-gray-900 px-2 py-1 text-xs uppercase font-bold" title="This post has not yet been published.">Draft</span>
-                                        @can('update', $post)
-                                        <form action="{{ route('posts.publish', ['post' => $post]) }}" method="POST" class="inline ml-2">
-                                            @csrf
-                                            <button type="submit" title="Click to publish the post" class="rounded-lg opacity-0 group-hover:opacity-100 transition-opacity bg-green-400 text-green-900 px-2 py-1 text-xs uppercase font-bold">Publish</button>
-                                        </form>
-                                        @endcan
-                                        @endif
-                                    </x-td>
-                                </tr>
-                                <tr>
-                                    <x-th>Actions</x-th>
-                                    <x-td>
-                                        @can('update', $post)
-                                        <a href="{{ route('posts.edit', ['post' => $post]) }}">
-                                            Edit
-                                        </a>
-                                        @endcan
-                                        @can('delete', $post)
-                                        <form action="{{ route('posts.destroy', ['post' => $post]) }}" method="POST" class="inline ml-3" onSubmit="return confirm('Are you sure you want to delete this post?')">
-                                            @method('DELETE')
-                                            @csrf
-                                            <button type="submit">Delete</button>
-                                        </form>
-                                        @endcan
-                                    </x-td>
-                                </tr>
-                                <!-- Spacer Row -->
-                                <tr role="none">
-                                    <x-td colspan="2">&nbsp;</x-td>
-                                </tr>
-                            </tbody>
-                            @endforeach
-                        </table>
-                    </div>
-                    @endif
+                    @can('create', App\Models\Post::class)
+                        <x-ui.button href="{{ route('posts.create') }}">
+                            {{ __('New post') }}
+                        </x-ui.button>
+                    @endcan
                 </div>
-            </section>
-            @endif
 
-            @if($users)
-            <section class="p-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg my-5 mt-10">
-                <header class="bg-white dark:bg-gray-800">
-                   <h3 class="text-xl font-bold mb-5">Manage Users</h3> 
-                </header>
-
-                <!-- Desktop Version -->
-                <div class="hidden sm:block overflow-y-auto" style="max-height: 75vh;">
-                    <table class="w-full table-auto border-collapse border border-slate-500">
-                        <thead>
-                            <tr>
-                                <x-th>ID</x-th>
-                                <x-th>Name</x-th>
-                                <x-th>Email</x-th>
-                                <x-th>Role</x-th>
-                                <x-th>Actions</x-th>
+                @if ($posts->count())
+                    <x-ui.data-table class="hidden lg:block">
+                        <x-slot name="head">
+                            <tr class="text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                                <th class="px-6 py-3">{{ __('Author') }}</th>
+                                <th class="px-6 py-3">{{ __('Title') }}</th>
+                                <th class="px-6 py-3">{{ __('Published') }}</th>
+                                <th class="px-6 py-3 text-right">{{ __('Actions') }}</th>
                             </tr>
-                        </thead>
-                        <tbody class="text-gray:700 dark:text-gray-300">
-                            @foreach ($users as $user)
-                            <tr>
-                                <x-td>
-                                    <a href="{{ route('posts.index', ['author' => $user]) }}" rel="author" class="hover:text-indigo-500">
-                                        <small class="opacity-75">#</small>{{ $user->id }}
-                                    </a>
-                                </x-td>
-                                <x-td>
-                                    <a href="{{ route('posts.index', ['author' => $user]) }}" rel="author" class="hover:text-indigo-500">
-                                        {{ $user->name }}
-                                    </a>
-                                </x-td>
-                                <x-td>
-                                    {{ $user->email }}
-                                    @if($user->email_verified_at)
-                                        <span title="Email Verified">
-                                            <!-- Icon by Google Material Icons (License: MIT) -->
-                                            <svg class="fill-green-400 inline" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                        </x-slot>
+
+                        @foreach ($posts as $post)
+                            <tr class="text-slate-700 transition hover:bg-slate-50/60 dark:text-slate-300 dark:hover:bg-slate-800/60">
+                                <td class="px-6 py-4">
+                                    <x-link :href="route('posts.index', ['author' => $post->author])" rel="author">
+                                        {{ $post->author->name }}
+                                    </x-link>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <x-link :href="route('posts.show', $post)">
+                                        {{ $post->title }}
+                                    </x-link>
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if ($post->isPublished())
+                                        <time datetime="{{ $post->published_at }}" class="text-slate-500 dark:text-slate-400">
+                                            {{ $post->published_at->format('M j, Y') }}
+                                        </time>
+                                    @else
+                                        <span class="inline-flex items-center rounded-full bg-slate-200 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700 dark:bg-slate-700/60 dark:text-slate-200">
+                                            {{ __('Draft') }}
+                                        </span>
+                                        @can('update', $post)
+                                            <form action="{{ route('posts.publish', $post) }}" method="POST" class="inline-flex pl-3" onsubmit="return confirm('{{ __('Publish this post now?') }}');">
+                                                @csrf
+                                                <button type="submit" class="text-xs font-semibold text-emerald-600 hover:text-emerald-500 dark:text-emerald-300">
+                                                    {{ __('Publish') }}
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex justify-end gap-3 text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                                        @can('update', $post)
+                                            <x-link :href="route('posts.edit', $post)">{{ __('Edit') }}</x-link>
+                                        @endcan
+                                        @can('delete', $post)
+                                            <form action="{{ route('posts.destroy', $post) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure you want to delete this post?') }}');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-rose-500 hover:text-rose-400">{{ __('Delete') }}</button>
+                                            </form>
+                                        @endcan
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </x-ui.data-table>
+
+                    <div class="space-y-4 lg:hidden">
+                        @foreach ($posts as $post)
+                            <div class="rounded-2xl border border-slate-200/70 p-4 dark:border-slate-800/70">
+                                <div class="flex items-center justify-between gap-3">
+                                    <x-link :href="route('posts.show', $post)" class="text-base font-semibold text-slate-900 dark:text-white">
+                                        {{ $post->title }}
+                                    </x-link>
+                                    @if ($post->isPublished())
+                                        <span class="text-xs uppercase tracking-wide text-slate-400">
+                                            {{ $post->published_at->format('M j, Y') }}
+                                        </span>
+                                    @else
+                                        <span class="rounded-full bg-slate-200 px-2 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700 dark:bg-slate-700/60 dark:text-slate-200">
+                                            {{ __('Draft') }}
                                         </span>
                                     @endif
-                                </x-td>
-                                <x-td>
-                                    <div class="flex flex-row flex-wrap">
-                                        @if($user->is_admin)
-                                        <span class="rounded-lg bg-orange-400 text-orange-900 px-2 py-1 text-xs uppercase font-bold m-1">Admin</span>                                    
-                                        @endif
-                                        @if($user->is_author)
-                                        <span class="rounded-lg bg-blue-400 text-blue-900 px-2 py-1 text-xs uppercase font-bold m-1">Author</span>                                    
-                                        @endif
-                                        @if($user->is_banned)
-                                        <span class="rounded-lg bg-red-400 text-red-900 px-2 py-1 text-xs uppercase font-bold m-1">Banned</span>                                    
-                                        @endif
+                                </div>
+                                <p class="mt-1 text-xs uppercase tracking-wide text-slate-400">
+                                    {{ __('By :author', ['author' => $post->author->name]) }}
+                                </p>
+                                <div class="mt-4 flex flex-wrap justify-between gap-3 text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                                    <div class="flex gap-3">
+                                        @can('update', $post)
+                                            <x-link :href="route('posts.edit', $post)">{{ __('Edit') }}</x-link>
+                                        @endcan
+                                        @can('delete', $post)
+                                            <form action="{{ route('posts.destroy', $post) }}" method="POST" onsubmit="return confirm('{{ __('Delete this post?') }}');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-rose-500">{{ __('Delete') }}</button>
+                                            </form>
+                                        @endcan
                                     </div>
-                                </x-td>
-                                <x-td class="text-center">
-                                    <button onclick="openEditUserModal('{{ $user->id }}')">
-                                        Manage
-                                    </button>
-                                </x-td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                <!-- Mobile Version -->
-                <div class="sm:hidden overflow-y-auto" style="max-height: 75vh;">
-                    <table class="w-full table-auto">
-                        @foreach ($posts as $post)
-                        <tbody class="text-gray:700 dark:text-gray-300">
-                            <tr>
-                                <x-th>User</x-th>
-                                <x-th class="lg:py-2 text-left">
-                                    <a href="{{ route('posts.index', ['author' => $user]) }}" rel="author" class="hover:text-indigo-500">
-                                        <small class="opacity-75">#</small>{{ $user->id }}
-                                        {{ $user->name }}
-                                    </a>
-                                </x-th>
-                            </tr>
-                           
-                            <tr>
-                                <x-th>Email</x-th>
-                                <x-td>
-                                    <div class="break-all">
-                                        {{ $user->email }}
-                                        @if($user->email_verified_at)
-                                            <span title="Email Verified">
-                                                <!-- Icon by Google Material Icons (License: MIT) -->
-                                                <svg class="fill-green-400 inline" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                                            </span>
-                                        @endif
-                                    </div>
-                                </x-td>
-                            </tr>
-                            <tr>
-                                <x-th>Role</x-th>
-                                <x-td>
-                                    <div class="flex flex-row flex-wrap">
-                                        @if($user->is_admin)
-                                        <span class="rounded-lg bg-orange-400 text-orange-900 px-2 py-1 text-xs uppercase font-bold m-1">Admin</span>                                    
-                                        @endif
-                                        @if($user->is_author)
-                                        <span class="rounded-lg bg-blue-400 text-blue-900 px-2 py-1 text-xs uppercase font-bold m-1">Author</span>                                    
-                                        @endif
-                                        @if($user->is_banned)
-                                        <span class="rounded-lg bg-red-400 text-red-900 px-2 py-1 text-xs uppercase font-bold m-1">Banned</span>                                    
-                                        @endif
-                                    </div>
-                                </x-td>
-                            </tr>
-                            <tr>
-                                <x-th>Actions</x-th>
-                             
-                                <x-td>
-                                    <button onclick="openEditUserModal('{{ $user->id }}')">
-                                        Manage
-                                    </button>
-                                </x-td>
-                            </tr>
-                            <!-- Spacer Row -->
-                            <tr role="none">
-                                <x-td colspan="2">&nbsp;</x-td>
-                            </tr>
-                        </tbody>
+                                    @if (! $post->isPublished() && Gate::check('update', $post))
+                                        <form action="{{ route('posts.publish', $post) }}" method="POST" onsubmit="return confirm('{{ __('Publish this post now?') }}');">
+                                            @csrf
+                                            <button type="submit" class="text-emerald-600 dark:text-emerald-300">{{ __('Publish') }}</button>
+                                        </form>
+                                    @endif
+                                </div>
+                            </div>
                         @endforeach
-                    </table>
-                </div>
-            </section>
-
-
-
-            
-            @if($comments)
-            <section class="p-6 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg my-5 mt-10">
-                <header class="bg-white dark:bg-gray-800">
-                   <h3 class="text-xl font-bold mb-5">Manage Comments</h3> 
-                </header>
-                
-                @if(!$comments->count())
-                    There are no comments here.
+                    </div>
                 @else
-                <!-- Desktop Version -->
-                <div class="hidden sm:block overflow-y-auto" style="max-height: 75vh;">
-                    <table class="w-full table-auto border-collapse border border-slate-500">
-                        <thead>
-                            <tr>
-                                <x-th>User</x-th>
-                                <x-th>Post</x-th>
-                                <x-th>Comment</x-th>
-                                <x-th>Actions</x-th>
+                    <x-ui.empty-state :title="__('No posts yet')">
+                        @can('create', App\Models\Post::class)
+                            <x-ui.button href="{{ route('posts.create') }}">{{ __('Write the first one') }}</x-ui.button>
+                        @endcan
+                    </x-ui.empty-state>
+                @endif
+            </x-ui.card>
+        @endif
+
+        @if ($users)
+            <x-ui.card class="space-y-6">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">{{ __('Manage users') }}</h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">
+                            {{ __('Review author access, roles, and verification status.') }}
+                        </p>
+                    </div>
+                </div>
+
+                <x-ui.data-table class="hidden md:block">
+                    <x-slot name="head">
+                        <tr class="text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                            <th class="px-6 py-3">{{ __('ID') }}</th>
+                            <th class="px-6 py-3">{{ __('Name') }}</th>
+                            <th class="px-6 py-3">{{ __('Email') }}</th>
+                            <th class="px-6 py-3">{{ __('Roles') }}</th>
+                            <th class="px-6 py-3 text-right">{{ __('Actions') }}</th>
+                        </tr>
+                    </x-slot>
+
+                    @foreach ($users as $user)
+                        <tr class="text-slate-700 dark:text-slate-300">
+                            <td class="px-6 py-4 text-slate-400 dark:text-slate-500">#{{ $user->id }}</td>
+                            <td class="px-6 py-4">
+                                <x-link :href="route('posts.index', ['author' => $user])">{{ $user->name }}</x-link>
+                            </td>
+                            <td class="px-6 py-4 break-words">
+                                {{ $user->email }}
+                                @if ($user->email_verified_at)
+                                    <span class="ml-2 text-xs text-emerald-500">{{ __('Verified') }}</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex flex-wrap gap-2">
+                                    @if ($user->is_admin)
+                                        <span class="rounded-full bg-orange-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-orange-900 dark:bg-orange-500/20 dark:text-orange-200">{{ __('Admin') }}</span>
+                                    @endif
+                                    @if ($user->is_author)
+                                        <span class="rounded-full bg-blue-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-blue-900 dark:bg-blue-500/20 dark:text-blue-200">{{ __('Author') }}</span>
+                                    @endif
+                                    @if ($user->is_banned)
+                                        <span class="rounded-full bg-rose-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-rose-900 dark:bg-rose-500/20 dark:text-rose-200">{{ __('Banned') }}</span>
+                                    @endif
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <span class="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                                    {{ __('dashboard.admin_only') }}
+                                </span>
+                            </td>
+                        </tr>
+                    @endforeach
+                </x-ui.data-table>
+
+                <div class="space-y-4 md:hidden">
+                    @foreach ($users as $user)
+                        <div class="rounded-2xl border border-slate-200/70 p-4 dark:border-slate-800/70">
+                            <div class="flex items-center justify-between gap-3">
+                                <div>
+                                    <p class="text-xs uppercase tracking-wide text-slate-400">#{{ $user->id }}</p>
+                                    <x-link :href="route('posts.index', ['author' => $user])" class="text-base font-semibold">
+                                        {{ $user->name }}
+                                    </x-link>
+                                </div>
+                                <span class="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                                    {{ __('dashboard.admin_only') }}
+                                </span>
+                            </div>
+                            <p class="mt-2 text-sm text-slate-500 break-words dark:text-slate-400">
+                                {{ $user->email }}
+                                @if ($user->email_verified_at)
+                                    <span class="ml-2 text-xs text-emerald-500">{{ __('Verified') }}</span>
+                                @endif
+                            </p>
+                            <div class="mt-3 flex flex-wrap gap-2">
+                                @if ($user->is_admin)
+                                    <span class="rounded-full bg-orange-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-orange-900 dark:bg-orange-500/20 dark:text-orange-200">{{ __('Admin') }}</span>
+                                @endif
+                                @if ($user->is_author)
+                                    <span class="rounded-full bg-blue-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-blue-900 dark:bg-blue-500/20 dark:text-blue-200">{{ __('Author') }}</span>
+                                @endif
+                                @if ($user->is_banned)
+                                    <span class="rounded-full bg-rose-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-rose-900 dark:bg-rose-500/20 dark:text-rose-200">{{ __('Banned') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </x-ui.card>
+        @endif
+
+        @if ($comments)
+            <x-ui.card class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-900 dark:text-white">{{ __('Manage comments') }}</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">
+                        {{ __('Moderate community feedback across every story.') }}
+                    </p>
+                </div>
+
+                @if ($comments->count())
+                    <x-ui.data-table class="hidden lg:block">
+                        <x-slot name="head">
+                            <tr class="text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                                <th class="px-6 py-3">{{ __('User') }}</th>
+                                <th class="px-6 py-3">{{ __('Post') }}</th>
+                                <th class="px-6 py-3">{{ __('Comment') }}</th>
+                                <th class="px-6 py-3 text-right">{{ __('Actions') }}</th>
                             </tr>
-                        </thead>
-                        <tbody class="text-gray:700 dark:text-gray-300">
-                            @foreach ($comments as $comment)
-                            <tr>
-                                <x-td>
-                                    <a href="{{ route('posts.index', ['author' => $comment->user]) }}" rel="author" class="hover:text-indigo-500">
-                                        <small class="opacity-75">#</small>{{ $comment->user->id }}
+                        </x-slot>
+
+                        @foreach ($comments as $comment)
+                            <tr class="text-slate-700 dark:text-slate-300">
+                                <td class="px-6 py-4">
+                                    <x-link :href="route('posts.index', ['author' => $comment->user])">
                                         {{ $comment->user->name }}
-                                    </a>
-                                </x-td>
-                                <x-td>
-                                    <a href="{{ route('posts.show', $comment->post) }}" class="hover:text-indigo-500">
-                                        <small class="opacity-75">#</small>{{ $comment->post->id }}
+                                    </x-link>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <x-link :href="route('posts.show', $comment->post)">
                                         {{ $comment->post->title }}
-                                    </a>
-                                </x-td>
-                                <x-td>
-                                    {{ $comment->content }}
-                                </x-td>
-                                <x-td class="text-center">
-                                    <div class="flex justify-center">
+                                    </x-link>
+                                </td>
+                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400">
+                                    {{ \Illuminate\Support\Str::limit($comment->content, 96) }}
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex justify-end gap-3 text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
                                         @can('update', $comment)
-                                        <a class="mx-2" href="{{ route('comments.edit', ['comment' => $comment]) }}">
-                                            Edit
-                                        </a>
+                                            <x-link :href="route('comments.edit', $comment)">{{ __('Edit') }}</x-link>
                                         @endcan
                                         @can('delete', $comment)
-                                        <form class="mx-2" action="{{ route('comments.destroy', ['comment' => $comment]) }}" method="POST" onSubmit="return confirm('Are you sure you want to delete this comment?')">
-                                            @method('DELETE')
-                                            @csrf
-                                            <button type="submit">Delete</button>
-                                        </form>
+                                            <form action="{{ route('comments.destroy', $comment) }}" method="POST" onsubmit="return confirm('{{ __('Delete this comment?') }}');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-rose-500 hover:text-rose-400">{{ __('Delete') }}</button>
+                                            </form>
                                         @endcan
                                     </div>
-                                </x-td>
+                                </td>
                             </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                        @endforeach
+                    </x-ui.data-table>
 
-                <!-- Mobile Version -->
-                <div class="sm:hidden overflow-y-auto" style="max-height: 75vh;">
-                    <table class="w-full table-auto">
-                        @foreach ($posts as $post)
-                        <tbody class="text-gray:700 dark:text-gray-300">
-                            <tr>
-                                <x-th>User</x-th>
-                                <x-td>
-                                    <a href="{{ route('posts.index', ['author' => $comment->user]) }}" rel="author" class="hover:text-indigo-500">
-                                        <small class="opacity-75">#</small>{{ $comment->user->id }}
-                                        {{ $comment->user->name }}
-                                    </a>
-                                </x-td>
-                            </tr>
-                            <tr>
-                                <x-th>Post</x-th>
-                                <x-td>
-                                    <a href="{{ route('posts.show', $comment->post) }}" class="hover:text-indigo-500">
-                                        <small class="opacity-75">#</small>{{ $comment->post->id }}
-                                        {{ $comment->post->title }}
-                                    </a>
-                                </x-td>
-                            </tr>
-                            <tr>
-                                <x-th>Comment</x-th> 
-                                <x-td>
+                    <div class="space-y-4 lg:hidden">
+                        @foreach ($comments as $comment)
+                            <div class="rounded-2xl border border-slate-200/70 p-4 dark:border-slate-800/70">
+                                <div class="text-xs uppercase tracking-wide text-slate-400">
+                                    {{ $comment->created_at->diffForHumans() }}
+                                </div>
+                                <x-link :href="route('posts.show', $comment->post)" class="text-sm font-semibold text-slate-900 dark:text-white">
+                                    {{ $comment->post->title }}
+                                </x-link>
+                                <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
                                     {{ $comment->content }}
-                                </x-td>
-                            </tr>
-                            <tr>
-                                <x-th>Actions</x-th>
-                                <x-td>
+                                </p>
+                                <div class="mt-3 flex flex-wrap justify-between gap-3 text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
                                     @can('update', $comment)
-                                    <a href="{{ route('comments.edit', ['comment' => $comment]) }}">
-                                        Edit
-                                    </a>
+                                        <x-link :href="route('comments.edit', $comment)">{{ __('Edit') }}</x-link>
                                     @endcan
                                     @can('delete', $comment)
-                                    <form action="{{ route('comments.destroy', ['comment' => $comment]) }}" method="POST" onSubmit="return confirm('Are you sure you want to delete this comment?')">
-                                        @method('DELETE')
-                                        @csrf
-                                        <button type="submit">Delete</button>
-                                    </form>
+                                        <form action="{{ route('comments.destroy', $comment) }}" method="POST" onsubmit="return confirm('{{ __('Delete this comment?') }}');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-rose-500">{{ __('Delete') }}</button>
+                                        </form>
                                     @endcan
-                                </x-td>
-                            </tr>
-                            <!-- Spacer Row -->
-                            <tr role="none">
-                                <x-td colspan="2">&nbsp;</x-td>
-                            </tr>
-                        </tbody>
+                                </div>
+                            </div>
                         @endforeach
-                    </table>
-                </div>
+                    </div>
+                @else
+                    <x-ui.empty-state :title="__('No comments awaiting review')" />
                 @endif
-            </section>
-            @endif
+            </x-ui.card>
+        @endif
 
-            @if(isset($analytics))
-            <section class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg my-5">
-                <div class="p-6">
-                    <header class="flex justify-between items-center mb-4">
-                        <h3 class="text-xl font-bold">Analytics Overview</h3>
-                    </header>
+        @if (isset($analytics))
+            <x-ui.card class="space-y-8">
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-900 dark:text-white">{{ __('Analytics overview') }}</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">
+                        {{ __('Daily traffic and referrers pulled from your analytics pipeline.') }}
+                    </p>
+                </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-                            <div class="text-2xl font-bold">{{ number_format($analytics['total_views']) }}</div>
-                            <div class="text-gray-600 dark:text-gray-400">Total Page Views</div>
-                        </div>
-                        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-                            <div class="text-2xl font-bold">{{ number_format($analytics['unique_visitors']) }}</div>
-                            <div class="text-gray-600 dark:text-gray-400">Unique Visitors</div>
+                <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                    <div class="rounded-2xl border border-slate-200/70 bg-white/50 p-4 dark:border-slate-800/60 dark:bg-slate-900/40">
+                        <p class="text-xs uppercase tracking-wide text-slate-400">{{ __('Total views') }}</p>
+                        <p class="mt-2 text-2xl font-semibold text-slate-900 dark:text-white">{{ number_format($analytics['total_views']) }}</p>
+                    </div>
+                    <div class="rounded-2xl border border-slate-200/70 bg-white/50 p-4 dark:border-slate-800/60 dark:bg-slate-900/40">
+                        <p class="text-xs uppercase tracking-wide text-slate-400">{{ __('Unique visitors') }}</p>
+                        <p class="mt-2 text-2xl font-semibold text-slate-900 dark:text-white">{{ number_format($analytics['unique_visitors']) }}</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                        {{ __('Traffic (last 30 days)') }}
+                    </h4>
+                    <canvas id="trafficChart" class="mt-4 h-64 w-full"></canvas>
+                </div>
+
+                <div class="grid gap-6 lg:grid-cols-2">
+                    <div>
+                        <h4 class="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                            {{ __('Popular pages') }}
+                        </h4>
+                        <div class="mt-3 overflow-hidden rounded-2xl border border-slate-200/70 dark:border-slate-800/60">
+                            <table class="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-800">
+                                <thead class="bg-slate-50/70 dark:bg-slate-800/40">
+                                    <tr class="text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                                        <th class="px-4 py-3">{{ __('Page') }}</th>
+                                        <th class="px-4 py-3">{{ __('Visitors') }}</th>
+                                        <th class="px-4 py-3">{{ __('Views') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80">
+                                    @foreach ($analytics['popular_pages'] as $page)
+                                        <tr>
+                                            <td class="px-4 py-3 text-slate-600 dark:text-slate-300">{{ $page->page }}</td>
+                                            <td class="px-4 py-3 text-slate-500 dark:text-slate-400">{{ number_format($page->visitors) }}</td>
+                                            <td class="px-4 py-3 text-slate-500 dark:text-slate-400">{{ number_format($page->views) }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
-                    <!-- Traffic Chart -->
-                    <div class="mb-6">
-                        <h4 class="text-lg font-semibold mb-2">Traffic (Last 30 Days)</h4>
-                        <canvas id="trafficChart" height="200" style="max-height: 200px;"></canvas>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Popular Pages -->
-                        <div>
-                            <h4 class="text-lg font-semibold mb-2">Popular Pages</h4>
-                            <div class="overflow-x-auto">
-                                <table class="w-full">
-                                    <thead>
-                                        <tr>
-                                            <x-th>Page</x-th>
-                                            <x-th>Visitors</x-th>
-                                            <x-th>Views</x-th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($analytics['popular_pages'] as $page)
-                                        <tr>
-                                            <x-td>{{ $page->page }}</x-td>
-                                            <x-td>{{ number_format($page->visitors) }}</x-td>
-                                            <x-td>{{ number_format($page->views) }}</x-td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                    <div x-data="{ tab: 'referrers' }">
+                        <div class="flex gap-3">
+                            <button type="button" class="text-xs font-semibold uppercase tracking-wide" :class="tab === 'referrers' ? 'text-indigo-500' : 'text-slate-400'" @click="tab = 'referrers'">
+                                {{ __('Referrers') }}
+                            </button>
+                            <button type="button" class="text-xs font-semibold uppercase tracking-wide" :class="tab === 'refs' ? 'text-indigo-500' : 'text-slate-400'" @click="tab = 'refs'">
+                                {{ __('Refs') }}
+                            </button>
                         </div>
 
-                        <!-- Top Referrers -->
-                        <div x-data="{ activeTab: 'referrers' }">
-                            <header class="flex space-x-2 mb-2">
-                                <button @click="activeTab = 'referrers'" 
-                                        :class="{ 'opacity-100 font-semibold': activeTab === 'referrers', 'opacity-50': activeTab !== 'referrers' }"
-                                        class="text-lg">
-                                    Referrers
-                                </button>
-                                <button @click="activeTab = 'refs'" 
-                                        :class="{ 'opacity-100 font-semibold': activeTab === 'refs', 'opacity-50': activeTab !== 'refs' }"
-                                        class="text-lg">
-                                    Refs
-                                </button>
-                            </header>
-
-                            <!-- Referrers Table -->
-                            <div x-show="activeTab === 'referrers'" class="overflow-x-auto" x-cloak>
-                                <table class="w-full">
-                                    <thead>
+                        <div class="mt-3 overflow-hidden rounded-2xl border border-slate-200/70 dark:border-slate-800/60">
+                            <table class="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-800">
+                                <thead class="bg-slate-50/70 dark:bg-slate-800/40">
+                                    <tr class="text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                                        <th class="px-4 py-3">{{ __('Source') }}</th>
+                                        <th class="px-4 py-3">{{ __('Visitors') }}</th>
+                                        <th class="px-4 py-3">{{ __('Views') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody x-show="tab === 'referrers'" class="divide-y divide-slate-100 dark:divide-slate-800/80">
+                                    @foreach ($analytics['top_referrers'] as $referrer)
                                         <tr>
-                                            <x-th>Source</x-th>
-                                            <x-th>Visitors</x-th>
-                                            <x-th>Views</x-th>
+                                            <td class="px-4 py-3 text-slate-600 dark:text-slate-300">{{ $referrer->referrer ?: __('Direct / Unknown') }}</td>
+                                            <td class="px-4 py-3 text-slate-500 dark:text-slate-400">{{ number_format($referrer->visitors) }}</td>
+                                            <td class="px-4 py-3 text-slate-500 dark:text-slate-400">{{ number_format($referrer->views) }}</td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($analytics['top_referrers'] as $referrer)
+                                    @endforeach
+                                </tbody>
+                                <tbody x-show="tab === 'refs'" class="divide-y divide-slate-100 dark:divide-slate-800/80">
+                                    @foreach ($analytics['top_refs'] as $ref)
                                         <tr>
-                                            <x-td>{{ $referrer->referrer ?: 'Direct / Unknown' }}</x-td>
-                                            <x-td>{{ number_format($referrer->visitors) }}</x-td>
-                                            <x-td>{{ number_format($referrer->views) }}</x-td>
+                                            <td class="px-4 py-3 text-slate-600 dark:text-slate-300">{{ \Illuminate\Support\Str::after($ref->referrer, '?ref=') }}</td>
+                                            <td class="px-4 py-3 text-slate-500 dark:text-slate-400">{{ number_format($ref->visitors) }}</td>
+                                            <td class="px-4 py-3 text-slate-500 dark:text-slate-400">{{ number_format($ref->views) }}</td>
                                         </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <!-- Refs Table -->
-                            <div x-show="activeTab === 'refs'" class="overflow-x-auto">
-                                <table class="w-full">
-                                    <thead>
-                                        <tr>
-                                            <x-th>Refs</x-th>
-                                            <x-th>Visitors</x-th>
-                                            <x-th>Views</x-th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($analytics['top_refs'] as $ref)
-                                        <tr>
-                                            <x-td>{{ Str::after($ref->referrer, '?ref=') }}</x-td>
-                                            <x-td>{{ number_format($ref->visitors) }}</x-td>
-                                            <x-td>{{ number_format($ref->views) }}</x-td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-            </section>
+            </x-ui.card>
 
             @push('scripts')
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script>
-                const ctx = document.getElementById('trafficChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: @json($analytics['traffic_data']['dates']),
-                        datasets: [{
-                            label: 'Page Views',
-                            data: @json($analytics['traffic_data']['views']),
-                            borderColor: 'rgb(59, 130, 246)',
-                            tension: 0.1
-                        }, {
-                            label: 'Unique Visitors',
-                            data: @json($analytics['traffic_data']['unique']),
-                            borderColor: 'rgb(239, 68, 68)',
-                            tension: 0.1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        interaction: {
-                            intersect: false,
-                            mode: 'index'
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                    const trafficCtx = document.getElementById('trafficChart');
+                    if (trafficCtx) {
+                        new Chart(trafficCtx.getContext('2d'), {
+                            type: 'line',
+                            data: {
+                                labels: @json($analytics['traffic_data']['dates']),
+                                datasets: [{
+                                    label: '{{ __('Page views') }}',
+                                    data: @json($analytics['traffic_data']['views']),
+                                    borderColor: 'rgb(79, 70, 229)',
+                                    backgroundColor: 'rgba(79, 70, 229, 0.15)',
+                                    tension: 0.35,
+                                }, {
+                                    label: '{{ __('Unique visitors') }}',
+                                    data: @json($analytics['traffic_data']['unique']),
+                                    borderColor: 'rgb(16, 185, 129)',
+                                    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                                    tension: 0.35,
+                                }],
+                            },
+                            options: {
+                                responsive: true,
+                                interaction: { mode: 'index', intersect: false },
+                                plugins: { legend: { display: true } },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        grid: { color: 'rgba(148, 163, 184, 0.2)' },
+                                    },
+                                    x: { grid: { display: false } },
+                                },
+                            },
+                        });
                     }
-                });
-            </script>
+                </script>
             @endpush
-            @endif
+        @endif
+    </x-ui.section>
 
-            @push('scripts')
-            <livewire:edit-user-form-modal />
-
-            <script>
-                /**
-                 * Open the Livewire Edit User Modal
-                 * 
-                 * @param integer (user) id
-                 */
-                function openEditUserModal(id) {
-                    Livewire.dispatch('openEditUserModal', { id: id });
-                }
-            </script>
-            @endpush
-            @endif
-        </div>
-    </div>
 </x-app-layout>
