@@ -20,7 +20,7 @@
 
 ### 3. Duplicate Detection & Elimination
 - ☑ Catalog repeated Blade/JS code blocks.  
-  - Captured in `docs/INTERFACE_AUDIT_REPORT.md#2-anti-patterns--resolutions`.
+  - Captured in `docs/INTERFACE_AUDIT_REPORT.md#2-anti-patterns--risks`.
 - ☑ Decide consolidation approach (Blade components, Livewire traits, JS utils).  
   - Livewire uses `ManagesPerPage`; Blade uses `x-ui.pagination` + shared tables.
 - ☑ Track removal of each duplicate.  
@@ -36,8 +36,8 @@
 - ☑ Verify integration with filtering/sorting/search where applicable.  
   - Categories, category detail, comments, and Livewire tables now persist `per_page` parameters alongside filters.
 
--### 5. Refactoring Strategy
-+ ◐ Break large views/components into single-purpose units.  
+### 5. Refactoring Strategy
+- ◐ Break large views/components into single-purpose units.  
   - Split `dashboard.blade.php` (posts/users/comments/analytics) or sunset it in favor of Volt dashboards.
 - ☑ Align naming conventions (components, props, CSS utilities).  
   - Pagination props normalized; component naming captured in `docs/INTERFACE_AUDIT.md`.

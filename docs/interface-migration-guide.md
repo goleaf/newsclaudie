@@ -56,8 +56,8 @@ Pass `$options` (and optionally `$param`) to the view so the component can rende
 
 ## Translation Keys
 
-- Shared summary string: `ui.pagination.summary` (mirrors `pagination.summary`).  
-- Page-size label: `ui.pagination.per_page_label`.  
+- Shared summary string: `pagination.summary` (plus collection-specific overrides like `posts.pagination_summary`).  
+- Page-size label: `pagination.per_page_label`.  
 - Validation for unsupported page sizes: `validation.posts.per_page_options`.
 
 ## Compatibility Notes

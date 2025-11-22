@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Contracts\PerPageConfigurable;
+use App\Http\Controllers\Concerns\HasPagination;
 use App\Http\Requests\PostIndexRequest;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
@@ -13,8 +15,10 @@ use App\Models\User;
 use App\Support\Pagination\PageSize;
 use Illuminate\Http\Request;
 
-final class PostController extends Controller
+final class PostController extends Controller implements PerPageConfigurable
 {
+    use HasPagination;
+
     public const POST_PAGE_SIZE_DEFAULT = 12;
 
     /**
@@ -33,13 +37,9 @@ final class PostController extends Controller
     public function index(PostIndexRequest $request)
     {
         $filters = $request->validated();
-        $perPageParam = PageSize::queryParam();
-        $perPageOptions = PageSize::options(self::POST_PAGE_SIZE_OPTIONS, self::POST_PAGE_SIZE_DEFAULT);
-        $perPage = PageSize::resolve(
-            isset($filters[$perPageParam]) ? (int) $filters[$perPageParam] : null,
-            $perPageOptions,
-            self::POST_PAGE_SIZE_DEFAULT
-        );
+        $perPageParam = $this->getPerPageQueryParam();
+        $perPageOptions = $this->getSanitizedPerPageOptions();
+        $perPage = $this->resolvePerPage($request, isset($filters[$perPageParam]) ? (int) $filters[$perPageParam] : null);
         $categories = Category::orderBy('name')->get();
 
         $query = Post::query()

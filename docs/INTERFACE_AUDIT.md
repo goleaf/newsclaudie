@@ -18,7 +18,7 @@ This document tracks the requested interface overhaul, the associated checklist,
 - Added `App\Livewire\Concerns\ManagesPerPage`, giving every Volt-powered admin screen a shared, sanitized `$perPage` workflow (query-string persistence, `resetPage()` hooks, overridable option lists).
 - Rebuilt `x-admin.table` to expose toolbar slots, consistent card chroming, and embedded pagination summaries while keeping row/empty components laser-focused on table cells.
 - Extended `<x-comments.list>` so the public post detail view uses the same pagination/row components as admin lists, including optional inline moderation actions.
-- **Unified `<x-ui.pagination>`** – the component now renders a single, accessible control set for Blade and Livewire contexts, exposes `aria-label` strings, and deduplicates the three previous template variants that lived inside `resources/views/components/ui/pagination.blade.php`.
+- **Unified `<x-ui.pagination>`** – the component now renders a single, accessible control set for Blade and Livewire contexts, exposes `aria-label` strings, preserves nested query params, and deduplicates the three previous template variants that lived inside `resources/views/components/ui/pagination.blade.php`.
 
 ### Pagination & UX
 - Centralized all pagination UI via `x-ui.pagination`, which now powers admin, public, and Livewire contexts with the same summary copy, per-page selector, Livewire/HTTP behaviors, and ARIA labels.
