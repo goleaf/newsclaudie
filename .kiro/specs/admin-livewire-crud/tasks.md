@@ -301,7 +301,7 @@
   - Includes format hints and server-side error display
   - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5_
 
-- [-] 11.1 All forms have real-time validation
+- [x] 11.1 All forms have real-time validation
   - Categories form validates name, slug format, and uniqueness
   - Posts form validates all fields with live feedback
   - Comments inline edit validates content

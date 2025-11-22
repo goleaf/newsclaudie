@@ -76,6 +76,12 @@ new class extends Component {
         $this->showCreateModal = true;
     }
 
+    public function updatedCreateForm($value, string $key): void
+    {
+        $property = "createForm.{$key}";
+        $this->validateOnly($property, $this->createRules());
+    }
+
     public function createUser(): void
     {
         $this->authorize('create', User::class);
