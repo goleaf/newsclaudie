@@ -6,6 +6,7 @@ namespace Tests\Feature;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -52,6 +53,8 @@ final class CategoryControllerTest extends TestCase
 
     public function test_category_can_be_created(): void
     {
+        $this->actingAsAdmin();
+
         $categoryData = [
             'name' => 'Test Category',
             'slug' => 'test-category',
@@ -64,8 +67,23 @@ final class CategoryControllerTest extends TestCase
         $response->assertRedirect(route('categories.index'));
     }
 
+    public function test_non_admin_users_cannot_create_categories(): void
+    {
+        $user = User::factory()->create(['is_admin' => false, 'is_author' => true]);
+
+        $response = $this->actingAs($user)->post(route('categories.store'), [
+            'name' => 'Restricted Category',
+            'slug' => 'restricted-category',
+        ]);
+
+        $response->assertForbidden();
+        $this->assertDatabaseCount('categories', 0);
+    }
+
     public function test_category_can_be_updated(): void
     {
+        $this->actingAsAdmin();
+
         $category = Category::factory()->create();
 
         $updatedData = [
@@ -82,6 +100,8 @@ final class CategoryControllerTest extends TestCase
 
     public function test_category_can_be_deleted(): void
     {
+        $this->actingAsAdmin();
+
         $category = Category::factory()->create();
 
         $response = $this->delete(route('categories.destroy', $category));
@@ -92,6 +112,8 @@ final class CategoryControllerTest extends TestCase
 
     public function test_category_slug_must_be_unique(): void
     {
+        $this->actingAsAdmin();
+
         $category = Category::factory()->create(['slug' => 'unique-slug']);
 
         $response = $this->post(route('categories.store'), [
@@ -105,6 +127,8 @@ final class CategoryControllerTest extends TestCase
 
     public function test_category_name_is_required(): void
     {
+        $this->actingAsAdmin();
+
         $response = $this->post(route('categories.store'), [
             'slug' => 'test-slug',
             'description' => 'Description',
@@ -115,11 +139,22 @@ final class CategoryControllerTest extends TestCase
 
     public function test_category_slug_is_required(): void
     {
+        $this->actingAsAdmin();
+
         $response = $this->post(route('categories.store'), [
             'name' => 'Test Category',
             'description' => 'Description',
         ]);
 
         $response->assertSessionHasErrors('slug');
+    }
+
+    private function actingAsAdmin(): User
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+
+        $this->actingAs($admin);
+
+        return $admin;
     }
 }

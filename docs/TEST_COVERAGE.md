@@ -16,7 +16,7 @@ This document maps every PHP class under `app/` to its current automated coverag
 | `LocaleController` | `tests/Feature/LocaleControllerTest`. | Add feature test verifying locales constrained to `config('app.supported_locales')`. |
 | `MarkdownConverter` | `tests/Unit/MarkdownConverterTest` (2 scenarios). | Add unit test ensuring Torchlight comment without config enabled does not inject attribution. |
 | `MarkdownFileParser` | `tests/Feature/MarkdownFileParserTest` (success paths). | Add tests for invalid author/date failures using temporary markdown fixture files. |
-| `PostController` | `tests/Feature/PostTagInputTest`, `tests/Feature/PostIndexFilterTest`, and `tests/Unit/CreatesNewPostTest` cover tag input, category filter, and slugging. | Add coverage for publish/unpublish endpoints plus ensuring drafts keep `published_at` null via feature tests. |
+| `PostController` | `tests/Feature/PostTagInputTest` and `tests/Unit/CreatesNewPostTest` cover tag input and slugging flows. | Add coverage for publish/unpublish endpoints plus ensuring drafts keep `published_at` null via feature tests. |
 | `ReadmeController` | No coverage. | Feature test to ensure `/readme` returns markdown output when `blog.readme` true and 404 otherwise (requires toggling config + fixture README). |
 
 ## Middleware
@@ -33,7 +33,7 @@ This document maps every PHP class under `app/` to its current automated coverag
 | `Auth\LoginRequest` | Exercised via auth feature tests. | Covered. |
 | `Auth\RegisterUserRequest`, `Auth\ForgotPasswordRequest`, `Auth\ResetPasswordRequest`, `Auth\ConfirmPasswordRequest`, `Auth\ShowResetPasswordRequest` | Indirect coverage via auth feature tests. | Add unit tests for validation messages if translation regressions occur. |
 | `SetLocaleRequest` | `tests/Feature/LocaleControllerTest`. | Covered. |
-| `StorePostRequest`, `UpdatePostRequest`, `PostIndexRequest` | Partially covered (`PostTagInputTest`). | Add unit tests for `prepareTagsInput`, `published_at` coercion, and `PostIndexRequest` filter constraints; use request fakes. |
+| `StorePostRequest`, `UpdatePostRequest` | Partially covered (`PostTagInputTest`). | Add unit tests for `prepareTagsInput` and `published_at` coercion; use request fakes. |
 | `StoreCategoryRequest`, `UpdateCategoryRequest` | Covered indirectly by `CategoryControllerTest`. | Covered. |
 
 ## Models & Scopes
@@ -55,6 +55,7 @@ This document maps every PHP class under `app/` to its current automated coverag
 
 | Component | Current Coverage | Gap / Required Test |
 | --- | --- | --- |
+| `livewire/posts/index` | `tests/Feature/PostIndexFilterTest` validates category filters + paginator rendering. | Add Livewire/browser test for tag + author filters and per-page validation errors. |
 | `livewire/admin/posts/index` | `tests/Feature/AdminPostsPageTest` exercises access control + table rendering. | Add interaction tests for publish/unpublish actions (Livewire browser test). |
 | `livewire/admin/categories/index` | `tests/Feature/AdminCategoriesPageTest` covers listing + access control. | Add test ensuring delete action requires confirmation/policies. |
 | `livewire/admin/comments/index` | `tests/Feature/AdminCommentsPageTest` covers access control + table data. | Add tests for the Livewire delete action once browser suite is configured. |
@@ -91,4 +92,3 @@ This document maps every PHP class under `app/` to its current automated coverag
 - [x] Document env overrides required for browser/Playwright tests (see README testing section + `npm run playwright:install`).
 - [ ] Ensure `ParallelTesting::setUpProcess` seeds the database if/when factories become mandatory.
 - [ ] Add `tests/ParallelTesting` hooks if tenant-specific config or external services must be faked per process.
-

@@ -17,7 +17,7 @@ final class CreatesNewPostTest extends TestCase
 
     public function test_store_creates_a_post_and_redirects_to_show(): void
     {
-        $user = User::factory()->create(['is_author' => true]);
+        $user = User::factory()->create(['is_admin' => true]);
 
         $input = [
             'title' => 'Sample Title',
@@ -38,7 +38,7 @@ final class CreatesNewPostTest extends TestCase
 
     public function test_store_generates_unique_slug_when_duplicate_exists(): void
     {
-        $user = User::factory()->create(['is_author' => true]);
+        $user = User::factory()->create(['is_admin' => true]);
 
         $existing = Post::withoutGlobalScopes()->forceCreate([
             'user_id' => $user->id,

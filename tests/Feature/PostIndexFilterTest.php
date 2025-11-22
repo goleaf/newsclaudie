@@ -35,8 +35,7 @@ final class PostIndexFilterTest extends TestCase
     {
         $response = $this->get(route('posts.index', ['category' => 'missing-category']));
 
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors('category');
+        $response->assertOk();
+        $response->assertSee(__('validation.posts.category_exists'));
     }
 }
-

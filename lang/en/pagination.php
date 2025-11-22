@@ -17,6 +17,8 @@ return [
 
     'previous' => '&laquo; Previous',
     'next' => 'Next &raquo;',
-    'summary' => 'Showing :from-:to of :total results',
+    'summary' => 'Showing :from to :to of :total results',
+    'per_page_label' => 'Items per page',
+    'aria_label' => 'Pagination navigation',
 
 ];

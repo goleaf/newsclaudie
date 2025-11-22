@@ -1,8 +1,10 @@
 import './bootstrap';
 import '../css/app.css';
 import Alpine from 'alpinejs';
+import { adminPostActions } from './admin-post-actions';
 
 window.Alpine = Alpine;
+window.adminPostActions = adminPostActions;
 Alpine.start();
 
 const initThemeToggle = (): void => {
@@ -18,24 +20,40 @@ const initThemeToggle = (): void => {
         localStorage.getItem('color-theme') === 'dark' ||
         (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-    (prefersDark ? themeToggleLightIcon : themeToggleDarkIcon).classList.remove('hidden');
+    const setTheme = (isDark: boolean): void => {
+        document.documentElement.classList.toggle('dark', isDark);
+        themeToggleDarkIcon.classList.toggle('hidden', isDark);
+        themeToggleLightIcon.classList.toggle('hidden', !isDark);
 
-    themeToggleBtn.addEventListener('click', () => {
-        themeToggleDarkIcon.classList.toggle('hidden');
-        themeToggleLightIcon.classList.toggle('hidden');
+        const lightLabel = themeToggleBtn.dataset.themeLabelLight;
+        const darkLabel = themeToggleBtn.dataset.themeLabelDark;
 
-        const storedTheme = localStorage.getItem('color-theme');
-        if (storedTheme) {
-            const nextTheme = storedTheme === 'light' ? 'dark' : 'light';
-            document.documentElement.classList.toggle('dark', nextTheme === 'dark');
-            localStorage.setItem('color-theme', nextTheme);
-
-            return;
+        if (isDark && lightLabel) {
+            themeToggleBtn.title = lightLabel;
+            themeToggleBtn.setAttribute('aria-label', lightLabel);
+        } else if (!isDark && darkLabel) {
+            themeToggleBtn.title = darkLabel;
+            themeToggleBtn.setAttribute('aria-label', darkLabel);
         }
 
-        const willEnableDark = !document.documentElement.classList.contains('dark');
-        document.documentElement.classList.toggle('dark', willEnableDark);
-        localStorage.setItem('color-theme', willEnableDark ? 'dark' : 'light');
+        themeToggleBtn.setAttribute('aria-pressed', isDark.toString());
+    };
+
+    setTheme(prefersDark);
+
+    themeToggleBtn.addEventListener('click', () => {
+        const storedTheme = localStorage.getItem('color-theme');
+        const nextTheme =
+            storedTheme === 'dark'
+                ? 'light'
+                : storedTheme === 'light'
+                    ? 'dark'
+                    : document.documentElement.classList.contains('dark')
+                        ? 'light'
+                        : 'dark';
+
+        setTheme(nextTheme === 'dark');
+        localStorage.setItem('color-theme', nextTheme);
     });
 };
 
@@ -81,36 +99,8 @@ const initClearPublishedAtButtons = (): void => {
     });
 };
 
-const slugify = (value: string): string =>
-    value
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
-
-const initSlugInputs = (): void => {
-    document.querySelectorAll<HTMLInputElement>('[data-slug-target]').forEach((source) => {
-        const targetSelector = source.getAttribute('data-slug-target');
-        if (!targetSelector) {
-            return;
-        }
-
-        const target = document.querySelector<HTMLInputElement | HTMLTextAreaElement>(targetSelector);
-        if (!target) {
-            return;
-        }
-
-        source.addEventListener('input', () => {
-            target.value = slugify(source.value);
-            target.dispatchEvent(new Event('change'));
-        });
-    });
-};
-
 document.addEventListener('DOMContentLoaded', () => {
     initThemeToggle();
     initMobileNav();
     initClearPublishedAtButtons();
-    initSlugInputs();
 });

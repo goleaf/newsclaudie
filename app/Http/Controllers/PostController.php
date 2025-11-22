@@ -4,91 +4,19 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Contracts\PerPageConfigurable;
-use App\Http\Controllers\Concerns\HasPagination;
-use App\Http\Requests\PostIndexRequest;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Category;
 use App\Models\Post;
-use App\Models\User;
-use App\Support\Pagination\PageSize;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\View\View;
 
-final class PostController extends Controller implements PerPageConfigurable
+final class PostController extends Controller
 {
-    use HasPagination;
-
-    public const POST_PAGE_SIZE_DEFAULT = 12;
-
-    /**
-     * @var array<int>
-     */
-    public const POST_PAGE_SIZE_OPTIONS = [12, 18, 24, 36];
-
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['index', 'show']]);
-    }
-
-    /**
-     * Display a listing of the resource with support for filters and pagination.
-     */
-    public function index(PostIndexRequest $request)
-    {
-        $filters = $request->validated();
-        $perPageParam = $this->getPerPageQueryParam();
-        $perPageOptions = $this->getSanitizedPerPageOptions();
-        $perPage = $this->resolvePerPage($request, isset($filters[$perPageParam]) ? (int) $filters[$perPageParam] : null);
-        $categories = Category::orderBy('name')->get();
-
-        $query = Post::query()
-            ->with(['author'])
-            ->withCount('comments');
-
-        $title = __('posts.title');
-        $filterLabel = null;
-        $activeCategory = null;
-
-        if (! empty($filters['filterByTag'] ?? null)) {
-            $tag = $filters['filterByTag'];
-            $query->whereJsonContains('tags', $tag);
-
-            $title = 'Posts with '.__('blog.tag').' '.$tag;
-            $filterLabel = 'Filtered by '.__('blog.tag').' "'.$tag.'"';
-        } elseif (! empty($filters['author'] ?? null)) {
-            $author = User::findOrFail($filters['author']);
-            $query->where('user_id', $author->id);
-
-            $title = 'Posts by '.$author->name;
-            $filterLabel = 'Filtered by author '.$author->name;
-        } elseif (! empty($filters['category'] ?? null)) {
-            $category = $categories->firstWhere('slug', $filters['category'])
-                ?? Category::where('slug', $filters['category'])->firstOrFail();
-
-            $query->whereHas('categories', fn ($builder) => $builder->where('categories.id', $category->id));
-
-            $title = __('posts.filtered_by_category', ['category' => $category->name]);
-            $filterLabel = __('posts.category_filter_badge', ['category' => $category->name]);
-            $activeCategory = $category;
-        }
-
-        $posts = $query
-            ->orderByDesc('published_at')
-            ->orderByDesc('created_at')
-            ->paginate($perPage)
-            ->withQueryString();
-
-        return view('post.index', [
-            'title' => $title,
-            'filter' => $filterLabel,
-            'posts' => $posts,
-            'categories' => $categories,
-            'activeCategory' => $activeCategory,
-            'perPage' => $perPage,
-            'postPageSizeOptions' => $perPageOptions,
-            'perPageParam' => $perPageParam,
-        ]);
+        $this->middleware('auth', ['except' => ['show']]);
     }
 
     /**
@@ -131,18 +59,14 @@ final class PostController extends Controller implements PerPageConfigurable
         // Extract categories before creating post
         $categories = $request->input('categories', []);
 
-        // Create the post
-        $response = (new CreatesNewPost)->store($request->user(), $validated);
-
-        // Get the created post from the response
-        $post = Post::where('slug', $validated['slug'] ?? \Illuminate\Support\Str::slug($validated['title']))->latest()->first();
+        $post = (new CreatesNewPost())->createPost($request->user(), $validated);
 
         // Sync categories
         if ($post && ! empty($categories)) {
             $post->categories()->sync($categories);
         }
 
-        return $response;
+        return $this->redirectAfterSave($request, $post, __('admin.posts.created'));
     }
 
     /**
@@ -150,28 +74,13 @@ final class PostController extends Controller implements PerPageConfigurable
      *
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Post $post)
+    public function show(Post $post): View
     {
         $this->authorize('view', $post);
-        $post->loadMissing(['categories', 'author'])->loadCount('comments');
-
-        $comments = null;
-        $commentsPerPage = null;
-        $commentPerPageOptions = [];
-
-        if (config('blog.allowComments')) {
-            $defaultCommentsPerPage = (int) config('blog.commentsPerPage', 10);
-            $commentPerPageOptions = PageSize::options([10, 25, 50, $defaultCommentsPerPage], $defaultCommentsPerPage);
-            $commentsPerPage = PageSize::resolve($request->integer('comments_per_page'), $commentPerPageOptions, $defaultCommentsPerPage);
-
-            $comments = $post->comments()
-                ->with(['user'])
-                ->orderByDesc('created_at')
-                ->orderByDesc('id')
-                ->paginate($commentsPerPage)
-                ->withQueryString()
-                ->fragment('comments');
-        }
+        $post->loadMissing(['categories', 'author'])
+            ->loadCount([
+                'comments as comments_count' => fn ($query) => $query->approved(),
+            ]);
 
         // Generate formatted HTML from markdown
         $markdown = (new MarkdownConverter($post->body))->toHtml();
@@ -179,9 +88,6 @@ final class PostController extends Controller implements PerPageConfigurable
         return view('post.show', [
             'post' => $post,
             'markdown' => $markdown,
-            'comments' => $comments,
-            'commentsPerPage' => $commentsPerPage,
-            'commentPerPageOptions' => $commentPerPageOptions,
         ]);
     }
 
@@ -238,7 +144,7 @@ final class PostController extends Controller implements PerPageConfigurable
         // Sync categories
         $post->categories()->sync($categories);
 
-        return redirect()->route('posts.show', ['post' => $post]);
+        return $this->redirectAfterSave($request, $post, __('admin.posts.updated'));
     }
 
     /**
@@ -282,6 +188,48 @@ final class PostController extends Controller implements PerPageConfigurable
 
         $post->delete();
 
-        return back()->with('success', 'Successfully Deleted Post!');
+        return $this->redirectAfterDelete($request, __('admin.posts.deleted'));
+    }
+
+    private function redirectAfterSave(Request $request, Post $post, string $message)
+    {
+        $targetRoute = $request->string('redirect_to')->toString();
+
+        if ($targetRoute !== '' && Route::has($targetRoute)) {
+            $route = Route::getRoutes()->getByName($targetRoute);
+
+            if ($route && count($route->parameterNames()) === 0) {
+                return redirect()
+                    ->route($targetRoute)
+                    ->with('status', $message)
+                    ->with('success', $message);
+            }
+
+            if ($route && in_array('post', $route->parameterNames(), true)) {
+                return redirect()
+                    ->route($targetRoute, ['post' => $post])
+                    ->with('status', $message)
+                    ->with('success', $message);
+            }
+        }
+
+        return redirect()
+            ->route('posts.show', ['post' => $post])
+            ->with('status', $message)
+            ->with('success', $message);
+    }
+
+    private function redirectAfterDelete(Request $request, string $message)
+    {
+        $targetRoute = $request->string('redirect_to')->toString();
+
+        if ($targetRoute !== '' && Route::has($targetRoute)) {
+            return redirect()
+                ->route($targetRoute)
+                ->with('status', $message)
+                ->with('success', $message);
+        }
+
+        return back()->with('success', $message)->with('status', $message);
     }
 }

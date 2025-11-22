@@ -11,7 +11,10 @@ use Illuminate\Http\Request;
  */
 final class PageSize
 {
-    private const FALLBACK = 15;
+    /**
+     * Lowest-common per-page fallback used when no options are configured.
+     */
+    public const FALLBACK = 15;
 
     /**
      * Default query-string parameter used for HTTP-based pagination.
@@ -101,7 +104,12 @@ final class PageSize
     {
         $defaults = config('interface.pagination.defaults', []);
 
-        return (int) ($defaults[$context] ?? self::FALLBACK);
+        $fallback = self::FALLBACK;
+
+        if ($context === 'comments') {
+            $fallback = (int) config('blog.commentsPerPage', $fallback);
+        }
+
+        return (int) ($defaults[$context] ?? $fallback);
     }
 }
-

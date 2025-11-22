@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Http\Controllers\MarkdownFileParser;
 use App\Scopes\PublishedScope;
 use BadMethodCallException;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -175,5 +176,24 @@ final class Post extends Model
 
         // Filter out posts that are not published
         self::addGlobalScope(new PublishedScope);
+    }
+
+    public static function generateUniqueSlug(string $title): string
+    {
+        $slug = Str::slug($title);
+
+        if (in_array($slug, ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'], true)) {
+            $slug .= '-post';
+        }
+
+        $query = self::withoutGlobalScopes();
+
+        if ($query->where('slug', $slug)->exists()) {
+            $nextId = ($query->max('id') ?? 0) + 1;
+
+            return sprintf('%s-%d', $slug, $nextId);
+        }
+
+        return $slug;
     }
 }

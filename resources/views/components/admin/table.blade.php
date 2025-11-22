@@ -1,25 +1,45 @@
 @props([
     'pagination' => null,
-    'perPageMode' => null,
-    'perPageField' => 'per_page',
+    'summary' => true,
+    'summaryKey' => 'ui.pagination.summary',
+    'showSummary' => true,
+    'perPageMode' => 'livewire',
+    'perPageField' => null,
     'perPageValue' => null,
-    'perPageOptions' => [10, 20, 50],
-    'summary' => null,
+    'perPageOptions' => null,
+    'perPageFormAction' => null,
+    'showPerPage' => null,
+    'align' => 'left',
+    'variant' => 'plain',
+    'edge' => 1,
+    'query' => null,
+    'ariaLabel' => null,
+    'perPageContext' => 'admin',
 ])
 
 @php
-    $hasPagination = $pagination && method_exists($pagination, 'links');
-    $summaryText = $summary;
+    $paginator = $pagination instanceof \Illuminate\Contracts\Pagination\Paginator ? $pagination : null;
 
-    if ($hasPagination && ! $summaryText && method_exists($pagination, 'total')) {
-        $summaryText = trans('pagination.summary', [
-            'from' => $pagination->firstItem(),
-            'to' => $pagination->lastItem(),
-            'total' => $pagination->total(),
-        ]);
-    }
+    $mode = $perPageMode ? strtolower((string) $perPageMode) : 'livewire';
+    $mode = in_array($mode, ['http', 'livewire'], true) ? $mode : 'livewire';
+    $resolvedField = $perPageField ?: ($mode === 'livewire' ? 'perPage' : \App\Support\Pagination\PageSize::queryParam());
+    $perPageContext = $perPageContext ?: 'admin';
 
-    $showPerPage = filled($perPageMode);
+    $defaultPerPage = $perPageValue
+        ?? ($paginator && method_exists($paginator, 'perPage') ? (int) $paginator->perPage() : \App\Support\Pagination\PageSize::contextDefault($perPageContext));
+
+    $options = \App\Support\Pagination\PageSize::options(
+        is_iterable($perPageOptions) && ! empty($perPageOptions)
+            ? collect($perPageOptions)->all()
+            : \App\Support\Pagination\PageSize::contextOptions($perPageContext),
+        $defaultPerPage,
+    );
+
+    $shouldShowPerPage = is_bool($showPerPage)
+        ? $showPerPage
+        : ($paginator && count($options) > 1 && $mode !== 'none');
+
+    $summaryToggle = $showSummary ?? true;
 @endphp
 
 <flux:card {{ $attributes->class('space-y-4') }}>
@@ -29,34 +49,35 @@
         </div>
     @endisset
 
-    <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-800">
-            @isset($head)
-                <thead>
-                    {{ $head }}
-                </thead>
-            @endisset
+    <x-ui.table
+        :paginator="$paginator"
+        :summary="$summary"
+        :summary-key="$summaryKey"
+        :show-summary="$summaryToggle"
+        :page-size-options="$options"
+        :page-size-param="$resolvedField"
+        :per-page-mode="$mode"
+        :per-page-field="$resolvedField"
+        :per-page-value="$perPageValue ?? $defaultPerPage"
+        :per-page-form-action="$perPageFormAction"
+        :show-per-page="$shouldShowPerPage"
+        :pagination-align="$align"
+        :pagination-variant="$variant"
+        :pagination-edge="$edge"
+        :query="$query"
+        :aria-label="$ariaLabel"
+        wrapper-class="overflow-x-auto"
+        table-class="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-800"
+        head-class="bg-slate-50/70 dark:bg-slate-800/40"
+        body-class="divide-y divide-slate-100 dark:divide-slate-800"
+        footer-class="border-t border-slate-200 pt-4 dark:border-slate-800"
+    >
+        @isset($head)
+            <x-slot name="head">
+                {{ $head }}
+            </x-slot>
+        @endisset
 
-            <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
-                {{ $slot }}
-            </tbody>
-        </table>
-    </div>
-
-    @if ($hasPagination)
-        <div class="border-t border-slate-200 pt-4 dark:border-slate-800">
-            <x-ui.pagination
-                :paginator="$pagination"
-                :summary="$summaryText"
-                :per-page-mode="$perPageMode"
-                :per-page-field="$perPageField"
-                :per-page-value="$perPageValue"
-                :per-page-options="$perPageOptions"
-                :show-per-page="$showPerPage"
-                variant="plain"
-                align="left"
-            />
-        </div>
-    @endif
+        {{ $slot }}
+    </x-ui.table>
 </flux:card>
-

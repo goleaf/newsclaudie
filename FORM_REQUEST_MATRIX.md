@@ -2,7 +2,9 @@
 
 | Controller & Method | Request class in use | Notes / next steps |
 | --- | --- | --- |
-| `PostController@index` | `PostIndexRequest` ✅ | Validates tag/author filters with localized errors. |
+| Volt `posts.index` (Livewire) | Validated inside component ✅ | Querystring filters + per-page are validated in `livewire/posts/index` before pagination runs. |
+| Volt `categories.index` (Livewire) | Sanitised inside component ✅ | Search + per-page run through `ManagesPerPage`; admin-only deletes gated via policies. |
+| Volt `categories.show` (Livewire) | Read-only ✅ | Loads counts + hands pagination to `livewire/category-posts`. |
 | `PostController@create` | `Illuminate\Http\Request` ⚠️ | Needs dedicated request (to validate `draft_id` + ensure author authorization). |
 | `PostController@store` | `StorePostRequest` ✅ | Already unique per method. |
 | `PostController@edit` | `Illuminate\Http\Request` ⚠️ | Requires new request mirroring `create` behavior. |
@@ -10,7 +12,7 @@
 | `PostController@publish` / `unpublish` / `destroy` | Route-model only ⚠️ | Introduce intent-specific FormRequests to centralize authorization + messaging. |
 | `CategoryController@store` | `StoreCategoryRequest` ✅ | New per-method request with translated errors. |
 | `CategoryController@update` | `UpdateCategoryRequest` ✅ | New per-method request with translated errors. |
-| `CategoryController@index/create/show/edit/destroy` | Route-model only ⚠️ | Need lightweight FormRequests (even if no payload) to comply with “every function” directive. |
+| `CategoryController@destroy` | Route-model only ⚠️ | Could wrap deletion in a FormRequest for centralized policy/error handling. |
 | `LocaleController@update` | `SetLocaleRequest` ✅ | Already localized via JSON. |
 | `CommentController@store` | `StoreCommentRequest` ✅ | Handles authorization + validation now that Livewire form is gone. |
 | `CommentController@edit` | Route-model only ⚠️ | Could add lightweight request to centralize policy checks. |
@@ -26,4 +28,3 @@
 | `Auth\AuthenticatedSessionController@destroy` | `Illuminate\Http\Request` ⚠️ | Consider `LogoutRequest` to validate CSRF/session state, even if no payload. |
 
 ✅ = compliant with “unique FormRequest + translated errors”. ⚠️ = still pending conversion.
-

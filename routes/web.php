@@ -6,6 +6,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReadmeController;
+use App\Enums\CommentStatus;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
@@ -23,7 +24,9 @@ use Livewire\Volt\Volt;
 
 Route::get('/', function () {
     $latestPosts = Post::with(['author'])
-        ->withCount('comments')
+        ->withCount([
+            'comments as comments_count' => fn ($query) => $query->approved(),
+        ])
         ->latest()
         ->take(6)
         ->get();
@@ -36,11 +39,14 @@ Route::get('/', function () {
 
 Route::post('/locale', [LocaleController::class, 'update'])->name('locale.update');
 
-Route::resource('posts', PostController::class);
+Volt::route('posts', 'posts.index')->name('posts.index');
+Route::resource('posts', PostController::class)->except(['index']);
 Route::post('/posts/{post}/publish', [PostController::class, 'publish'])->name('posts.publish');
 Route::post('/posts/{post}/unpublish', [PostController::class, 'unpublish'])->name('posts.unpublish');
 
-Route::resource('categories', App\Http\Controllers\CategoryController::class);
+Volt::route('categories', 'categories.index')->name('categories.index');
+Route::resource('categories', App\Http\Controllers\CategoryController::class)->except(['index', 'show']);
+Volt::route('categories/{category}', 'categories.show')->name('categories.show');
 
 Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('posts.comments.store');
 Route::resource('comments', CommentController::class)->only([
@@ -52,6 +58,8 @@ Route::resource('comments', CommentController::class)->only([
 Route::middleware(['auth', 'can:access-admin'])->group(function () {
     Volt::route('admin/dashboard', 'admin.dashboard')->name('admin.dashboard');
     Volt::route('admin/posts', 'admin.posts.index')->name('admin.posts.index');
+    Volt::route('admin/posts/create', 'admin.posts.form')->name('admin.posts.create');
+    Volt::route('admin/posts/{post}/edit', 'admin.posts.form')->name('admin.posts.edit');
     Volt::route('admin/categories', 'admin.categories.index')->name('admin.categories.index');
     Volt::route('admin/comments', 'admin.comments.index')->name('admin.comments.index');
     Volt::route('admin/users', 'admin.users.index')->name('admin.users.index');

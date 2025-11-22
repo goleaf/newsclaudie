@@ -11,4 +11,3 @@ return [
         'empty' => 'No records found',
     ],
 ];
-

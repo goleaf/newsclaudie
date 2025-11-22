@@ -3,7 +3,7 @@
     'emptyMessage' => null,
     'showSummary' => true,
     'perPageOptions' => [],
-    'perPageField' => 'comments_per_page',
+    'perPageField' => \App\Support\Pagination\CommentPageSize::QUERY_PARAM,
     'perPageValue' => null,
     'perPageAnchor' => null,
     'showActions' => true,
@@ -15,13 +15,13 @@
     $hasItems = $isPaginator ? $comments->count() > 0 : (is_countable($comments) ? count($comments) > 0 : false);
     $fallbackMessage = $emptyMessage ?? __('post.comments.empty');
 
-    $sanitizedOptions = collect($perPageOptions)
-        ->map(fn ($value) => (int) $value)
-        ->filter(fn ($value) => $value > 0)
-        ->unique()
-        ->values();
+    $defaultPerPage = $perPageValue ?? \App\Support\Pagination\CommentPageSize::default();
+    $sanitizedOptions = collect(\App\Support\Pagination\PageSize::options(
+        is_array($perPageOptions) ? $perPageOptions : [],
+        $defaultPerPage
+    ));
 
-    $showPerPageControl = $hasPagination && $sanitizedOptions->isNotEmpty();
+    $showPerPageControl = $hasPagination && $sanitizedOptions->count() > 1;
     $perPageAction = $perPageAnchor
         ? sprintf('%s#%s', request()->url(), ltrim($perPageAnchor, '#'))
         : null;
@@ -67,7 +67,7 @@
         align="left"
         variant="plain"
         per-page-mode="http"
-        :per-page-options="$sanitizedOptions->all()"
+        :per-page-options="$sanitizedOptions"
         :per-page-field="$perPageField"
         :per-page-value="$perPageValue"
         :per-page-form-action="$perPageAction"

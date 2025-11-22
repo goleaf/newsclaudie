@@ -1,68 +1,72 @@
 # Interface Migration Guide
 
-This guide explains how to adopt the refreshed UI primitives and pagination helpers introduced in the audit.
+This companion to `INTERFACE_MIGRATION.md` gives the quick-start steps for adopting the shared pagination and table components.
 
-## Target Audience
+## Essentials
 
-- Blade authors moving legacy list views to the shared pagination widget.
-- Backend engineers exposing new paginated endpoints.
-- Front-end contributors extending the typed Alpine helpers.
+1. **Use context presets** – Pull defaults/options from `config/interface.php` via `PageSize::contextOptions($context)` and `PageSize::contextDefault($context)`. Contexts ship for `posts`, `categories`, `category_posts`, `admin`, and `comments`.
+2. **Standard query param** – `PageSize::queryParam()` returns `per_page`; comment threads use `CommentPageSize::queryParam()` (`comments_per_page`).
+3. **Render the shared component** – `<x-ui.pagination>` (or `<x-admin.table>` / `<x-ui.table>`) handles summaries, per-page selectors, aria labels, and hides controls when not needed.
 
-## Highlights
+## Blade (HTTP) Example
 
-1. **Unified pagination widget** – use `<x-ui.pagination>` instead of hand-rolled summaries/links.
-2. **Page-size helper** – clamp and normalise query parameters via `App\Support\Pagination\PageSize` (including the shared `queryParam()` name).
-3. **Typed front-end bootstrap** – `resources/js/app.ts` now expects TypeScript-safe DOM interactions.
-4. **Comment threads** – `<x-comments.list>` accepts the same pagination props and preserves the `#comments` anchor when switching sizes.
-
-## Adopting `<x-ui.pagination>`
-
-1. Inject a paginator into your Blade view (controller or Livewire).  
-2. Replace manual `links()` calls with:
+```php
+$param = PageSize::queryParam();
+$options = PageSize::contextOptions('posts');
+$perPage = PageSize::resolve($request->integer($param), $options, PageSize::contextDefault('posts'));
+```
 
 ```blade
 <x-ui.pagination
-    :paginator="$paginator"
-    summary-key="posts.pagination_summary"
+    :paginator="$posts"
+    per-page-mode="http"
+    per-page-field="{{ $param }}"
     :per-page-options="$options"
-    :show-per-page="true"
+    :per-page-value="$perPage"
+    summary-key="posts.pagination_summary"
 />
 ```
 
-3. Optional props:
-   - `variant="inline"` for table toolbars.
-   - `per-page-mode="livewire"` plus `per-page-field` binding for Livewire state.
-   - `per-page-form-action="{{ request()->url().'#anchor' }}"` when the selector should maintain an anchor (e.g. comments).
-
-## Normalising Query Parameters
-
-Use the helper for any controller that exposes the shared `per_page` parameter:
+## Livewire (Volt) Example
 
 ```php
 use App\Support\Pagination\PageSize;
+use App\Livewire\Concerns\ManagesPerPage;
 
-$param = PageSize::queryParam(); // defaults to "per_page"
-$options = PageSize::options([12, 24, 36], 12);
-$perPage = PageSize::resolve($request->integer($param), $options, 12);
+protected $queryString = ['perPage' => ['except' => PageSize::contextDefault('admin')]];
 ```
 
-Pass `$options` (and optionally `$param`) to the view so the component can render the same dropdown.
+```blade
+<x-admin.table
+    :pagination="$resources"
+    per-page-mode="livewire"
+    per-page-field="perPage"
+    :per-page-options="$this->perPageOptions"
+/>
+```
 
-## Front-end Typing
+## Comments
 
-- `resources/js/app.ts` now declares `window.Alpine` and narrows all DOM queries.  
-- When adding new DOM hooks: type selectors (`document.querySelector<HTMLButtonElement>(...)`) and guard dynamic lookups with helper refinements.
-- Run `npm run typecheck` to ensure the TypeScript compiler remains happy.
+```php
+$commentPerPage = CommentPageSize::resolveFromRequest($request);
+$commentOptions = CommentPageSize::options();
+```
 
-## Translation Keys
+```blade
+<x-comments.list
+    :comments="$comments"
+    :per-page-options="$commentOptions"
+    :per-page-value="$commentPerPage"
+    per-page-field="{{ CommentPageSize::queryParam() }}"
+    per-page-anchor="comments"
+/>
+```
 
-- Shared summary string: `pagination.summary` (plus collection-specific overrides like `posts.pagination_summary`).  
-- Page-size label: `pagination.per_page_label`.  
-- Validation for unsupported page sizes: `validation.posts.per_page_options`.
+Include a hidden `comments_per_page` input on comment forms so readers keep their selection after posting.
+When redirecting after create/update, call `CommentPageSize::locatePage($comment, $post, $commentPerPage)` and pass the `comments_per_page` query param only when it differs from the default to keep anchors in sync.
 
-## Compatibility Notes
+## Translations
 
-- URLs using the old `per_page` parameter continue to work; unsupported values fall back to the default option.
-- The legacy `resources/views/layouts/admin.blade.php` now proxies to the component layout, so no template changes are required for existing `@extends` usage.
-
-
+- Prefer `ui.pagination.*` (`summary`, `per_page`, `aria_label`). Collection-specific overrides remain optional (e.g. `posts.pagination_summary`).
+- Provide `ui.pagination.per_page_label` (or `ui.pagination.per_page`) for dropdown labels; legacy `pagination.*` keys remain only for compatibility.
+- Validation messages belong under `validation.*.per_page_options` to stay aligned with FormRequests.

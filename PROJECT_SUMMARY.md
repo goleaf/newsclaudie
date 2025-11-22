@@ -97,9 +97,8 @@ Successfully created a Laravel blog project based on the Laravel BlogKit reposit
 
 ### 5. Posts Index Category Filter ✅
 
-- Added a `category` constraint to `PostIndexRequest` plus new localized validation messages.
-- Updated `PostController@index` to hydrate category lists, serve the new filter branch, and eager-load authors for the cards.
-- Refreshed `post/index.blade.php` with a Tailwind filter form, localized badges, and Spanish/English copy for the new UI.
+- Migrated `/posts` to a Volt full-page Livewire component that validates category/tag/author/per-page query strings inside `livewire/posts/index.blade.php` (no more controller/FormRequest wrapper).
+- Hydrates categories + author/tag filters directly in the component and sets the layout title while keeping the Tailwind filter UI + localized badges intact.
 - Surfaced category chips on the post detail page that link back to the filtered archive state (with localization + fallbacks for missing authors).
 - Added `tests/Feature/PostIndexFilterTest` and `tests/Feature/PostShowCategoriesTest` to keep the archive filter + new breadcrumbs covered.
 
@@ -208,4 +207,3 @@ tests/
 - The project is ready for production deployment
 - All tests are passing
 - Categories feature is fully functional and tested
-

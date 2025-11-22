@@ -2,6 +2,7 @@
 
 use App\Livewire\Concerns\ManagesPerPage;
 use App\Models\User;
+use App\Support\Pagination\PageSize;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
@@ -18,7 +19,7 @@ new class extends Component {
 
     protected $listeners = ['user-updated' => '$refresh'];
     protected $queryString = [
-        'perPage' => ['except' => 20],
+        'perPage' => ['except' => PageSize::contextDefault('admin')],
     ];
 
     public function with(): array
@@ -93,16 +94,6 @@ new class extends Component {
 
         $this->dispatch('user-updated');
     }
-
-    protected function availablePerPageOptions(): array
-    {
-        return [10, 20, 50, 100];
-    }
-
-    protected function defaultPerPage(): int
-    {
-        return 20;
-    }
 }; ?>
 
 <div class="space-y-6">
@@ -122,20 +113,16 @@ new class extends Component {
         per-page-mode="livewire"
         per-page-field="perPage"
         :per-page-options="$this->perPageOptions"
-        :summary="trans('pagination.summary', [
-            'from' => $users->firstItem(),
-            'to' => $users->lastItem(),
-            'total' => $users->total(),
-        ])"
+        :per-page-value="$perPage"
     >
         <x-slot name="head">
-            <tr class="text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                <th class="px-4 py-3">{{ __('admin.users.table.user') }}</th>
-                <th class="px-4 py-3">{{ __('admin.users.table.roles') }}</th>
-                <th class="px-4 py-3">{{ __('admin.users.table.status') }}</th>
-                <th class="px-4 py-3">{{ __('admin.users.table.joined') }}</th>
-                <th class="px-4 py-3 text-right">{{ __('admin.users.table.actions') }}</th>
-            </tr>
+            <x-admin.table-head :columns="[
+                ['label' => __('admin.users.table.user')],
+                ['label' => __('admin.users.table.roles')],
+                ['label' => __('admin.users.table.status')],
+                ['label' => __('admin.users.table.joined')],
+                ['label' => __('admin.users.table.actions'), 'class' => 'text-right'],
+            ]" />
         </x-slot>
 
         @forelse ($users as $user)
@@ -205,5 +192,3 @@ new class extends Component {
         @endforelse
     </x-admin.table>
 </div>
-
-

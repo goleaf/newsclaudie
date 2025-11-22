@@ -14,13 +14,13 @@ final class PostTagInputTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function authors_can_store_posts_with_comma_separated_tags(): void
+    public function admins_can_store_posts_with_comma_separated_tags(): void
     {
-        $author = User::factory()->create([
-            'is_author' => true,
+        $admin = User::factory()->create([
+            'is_admin' => true,
         ]);
 
-        $response = $this->actingAs($author)->post(route('posts.store'), [
+        $response = $this->actingAs($admin)->post(route('posts.store'), [
             'title' => 'Investigative Dispatch',
             'body' => 'Long-form reporting body text.',
             'description' => 'Deep dive.',

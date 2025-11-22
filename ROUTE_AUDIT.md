@@ -4,9 +4,9 @@ This document inventories every `route()` usage across `resources/views` and cro
 
 | Route | Defined in | Blade references | Notes |
 | --- | --- | --- | --- |
-| `home` | `routes/web.php` (`/`) | `post/index.blade.php`, `components/navigation/main.blade.php` | `Route::has('home')` guard avoids failures if renamed. |
+| `home` | `routes/web.php` (`/`) | `livewire/posts/index.blade.php`, `components/navigation/main.blade.php` | `Route::has('home')` guard avoids failures if renamed. |
 | `locale.update` | `routes/web.php` | `components/navigation/main.blade.php` | POST form toggles locale selector. Requires CSRF tokens (already present via Blade component). |
-| `posts.index` | `Route::resource('posts', ...)` | `post/index`, `post/show`, `components/post-card`, `components/post-tags` | Query params (`author`, `filterByTag`) flow as URL parameters and are handled by controller filters. |
+| `posts.index` | `Volt::route('posts', 'posts.index')` | `livewire/posts/index`, `post/show`, `components/post-card`, `components/post-tags` | Query params (`author`, `filterByTag`) flow as URL parameters and are validated inside the Volt component. |
 | `posts.show` | `Route::resource('posts', ...)` | `post/show`, `components/post-card` | Used for canonical/meta tags and navigation. |
 | `posts.create` | `Route::resource` | `post/create` | Author/editor CTA for creating posts. |
 | `posts.store` | `Route::resource` | `post/create` | Form submission. |
@@ -14,10 +14,10 @@ This document inventories every `route()` usage across `resources/views` and cro
 | `posts.update` | `Route::resource` | `post/edit` | Form submission. |
 | `posts.destroy` | `Route::resource` | — | No current Blade references (handled via controller logic). |
 | `posts.publish` | `routes/web.php` custom | `post/show`, `livewire/admin/posts/index` | Additional action for toggling state. |
-| `categories.index` | `Route::resource('categories', ...)` | `categories/create`, `categories/edit`, `categories/show` | Back-navigation buttons. |
+| `categories.index` | `Volt::route('categories', 'categories.index')` | `categories/create`, `categories/edit`, `categories/show` | Livewire page (search + per-page + admin delete gate). |
 | `categories.create` | `Route::resource` | `categories/index` | CTA. |
 | `categories.store` | `Route::resource` | `categories/create` | Form submission. |
-| `categories.show` | `Route::resource` | `categories/index` | Detail navigation. |
+| `categories.show` | `Volt::route('categories/{category}', 'categories.show')` | `categories/index` | Volt page with `livewire/category-posts` paginator. |
 | `categories.edit` | `Route::resource` | `categories/index` | Edit links. |
 | `categories.update` | `Route::resource` | `categories/edit` | Form submission. |
 | `categories.destroy` | `Route::resource` | `categories/index` | Delete forms include method spoofing + CSRF. |
@@ -51,4 +51,3 @@ This document inventories every `route()` usage across `resources/views` and cro
 1. Convert this audit into actionable work by prioritizing Tailwind rewrites per Blade category (layouts, posts, categories, etc.).
 2. Verify the runtime behavior in-browser for a subset of key routes (`home`, `posts.index`, `categories.index`) once frontend refactors are ready.
 3. Document any controller/FormRequest gaps discovered while tracing the routes (e.g., ensure `LocaleController@update` uses a dedicated request with translated validation errors).
-

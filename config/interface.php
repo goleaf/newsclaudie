@@ -6,17 +6,18 @@ return [
     'pagination' => [
         'param' => 'per_page',
         'defaults' => [
-            'grid' => 12,
-            'table' => 15,
             'admin' => 20,
-            'comments' => 10,
+            'comments' => (int) env('BLOGKIT_COMMENTS_PER_PAGE', 10),
+            'posts' => 12,
+            'categories' => 15,
+            'category_posts' => 12,
         ],
         'options' => [
-            'grid' => [12, 24, 36],
-            'table' => [15, 30, 60],
-            'admin' => [10, 20, 50],
-            'comments' => [10, 25, 50],
+            'admin' => [10, 20, 50, 100],
+            'comments' => [10, 25, 50, (int) env('BLOGKIT_COMMENTS_PER_PAGE', 10)],
+            'posts' => [12, 18, 24, 36],
+            'categories' => [12, 15, 24, 30],
+            'category_posts' => [9, 12, 18, 24],
         ],
     ],
 ];
-

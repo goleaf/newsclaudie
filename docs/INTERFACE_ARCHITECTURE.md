@@ -11,7 +11,7 @@ Both shells keep the view-model thin: controllers focus on fetching data, while 
 
 ## 2. UI Component Library
 
-- **Primitives:** `x-ui.surface`, `x-ui.card`, `x-ui.section`, and `x-ui.page-header` define spacing, typography, and responsive padding. They eliminate custom section wrappers scattered across views such as `categories/index`, `post/index`, and `welcome`.
+- **Primitives:** `x-ui.surface`, `x-ui.card`, `x-ui.section`, and `x-ui.page-header` define spacing, typography, and responsive padding. They eliminate custom section wrappers scattered across views such as `categories/index`, `livewire/posts/index`, and `welcome`.
 - **Feedback states:** `x-ui.badge`, `x-ui.empty-state`, `x-auth-session-status`, and Flux callouts provide a consistent language for status messages and ephemeral alerts.
 - **Data tables:** `x-ui.data-table` (HTTP) and `x-admin.table` (Livewire/Flux) wrap the `<table>` markup, slotting in table headers/rows and delegating pagination to `x-ui.pagination`.
 
@@ -30,7 +30,7 @@ public static function resolve(?int $requested, array $allowed, int $default): i
 }
 ```
 
-- **Controller/request layer:** `PostController`, `CategoryController`, and `PostIndexRequest` call `PageSize::options + PageSize::resolve` to sanitize user input and to expose `$*PageSizeOptions` variables to Blade.
+- **Controller/request layer:** The `CategoryController` actions and the Volt `posts.index` page call `PageSize::options + PageSize::resolve` to sanitize user input and to expose `$*PageSizeOptions` variables to Blade.
 - **Blade layer:** `<x-ui.pagination>` is the single widget responsible for summary copy, Laravel paginator links, and per-page selectors. It accepts `per-page-mode="http"` for standard Blade views and `per-page-mode="livewire"` for Volt screens, piping the chosen value back to the correct query string or Livewire property.
 - **Livewire layer:** Components use `App\Livewire\Concerns\ManagesPerPage` to keep `$perPage` in sync with the dropdown, reset pagination after changes, and expose `$this->perPageOptions` to the template.
 
@@ -65,5 +65,4 @@ Alpine.start();
 - `docs/INTERFACE_AUDIT_REPORT.md` captures architectural decisions, anti-patterns, and follow-up tasks.
 - `docs/INTERFACE_MIGRATION.md` (see companion file) explains how to adopt the pagination stack or TypeScript globals in future features.
 - `npm run typecheck` gates TypeScript regressions, while `php artisan test --parallel` (see `PROJECT_SUMMARY.md`) covers backend flows without modifying test fixtures.
-
 

@@ -17,7 +17,10 @@ final class CommentSeeder extends Seeder
     public function run()
     {
         if (config('blog.allowComments')) {
-            Comment::factory(50)->create();
+            Comment::factory()
+                ->count(50)
+                ->randomStatus()
+                ->create();
         }
     }
 }

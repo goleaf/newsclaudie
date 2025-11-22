@@ -1,65 +1,77 @@
 # Interface Migration Guide
 
+> Canonical, actively maintained copy: `docs/interface-migration-guide.md`. Keep this file as a thin pointer to avoid guidance drifting between the two.
+
 ## 1. Controllers & Form Requests
 
-1. **Import the helper:** `use App\Support\Pagination\PageSize;`
-2. **Define options:** `$options = PageSize::options([12, 24, 36], 12);`
-3. **Resolve the per-page value:** `$perPage = PageSize::resolve($request->integer('per_page'), $options, 12);`
-4. **Share with Blade:** pass `'pageSizeOptions' => $options` so templates can render the dropdown.
-5. **Validate input:** in the matching FormRequest use `Rule::in(PageSize::options(...))` to align validation with the controller.
+1. Import the helper: `use App\Support\Pagination\PageSize;`
+2. Pick a context from `config/interface.php` (e.g. `posts`, `categories`, `category_posts`, `admin`, `comments`).
+3. Resolve options + value:
 
-This guarantees that controllers, requests, and views all agree on the same whitelist of page sizes.
+```php
+$perPageParam = PageSize::queryParam();
+$options = PageSize::contextOptions('posts');
+$perPage = PageSize::resolve(
+    $request->integer($perPageParam),
+    $options,
+    PageSize::contextDefault('posts'),
+);
+```
+
+4. In FormRequests, validate with the same options: `Rule::in(PageSize::contextOptions('posts'))`.
+5. Pass `$options`, `$perPage`, and `$perPageParam` to Blade so selectors stay in sync.
 
 ## 2. Blade Views (HTTP)
 
-- Replace raw `{{ $collection->links() }}` calls with `<x-ui.pagination ...>`:
+Replace raw `links()` calls with the shared component:
 
-```69:80:resources/views/post/index.blade.php
+```blade
 <x-ui.pagination
     :paginator="$posts"
     per-page-mode="http"
-    per-page-field="per_page"
+    per-page-field="{{ $perPageParam }}"
     :per-page-value="$perPage"
-    :per-page-options="$perPageOptions"
-    :summary="trans('posts.pagination_summary', [
-        'from' => $posts->firstItem() ?? 0,
-        'to' => $posts->lastItem() ?? 0,
-        'total' => $posts->total(),
-    ])"
+    :per-page-options="$options"
+    summary-key="posts.pagination_summary"
 />
 ```
 
-- Provide `summary-key` or explicit `summary` text for localized copy.
-- When you need to preserve additional query parameters (filters, search terms), pass `:query="request()->except('per_page', 'page')"` to the component.
+`per-page-field` already defaults to `PageSize::queryParam()`; override it only when the route intentionally diverges. When preserving additional query params (filters/search), pass `:query="request()->except([$perPageParam, 'page'])"`.
 
 ## 3. Livewire Volt Screens
 
-1. `use App\Livewire\Concerns\ManagesPerPage;` alongside `WithPagination`.
-2. Expose a query-string binding for `perPage` if you want the selection persisted: `protected $queryString = ['perPage' => ['except' => 20]];`.
-3. Override `availablePerPageOptions()` (and optionally `defaultPerPage()`) to tune the dropdown.
-4. Render `<x-admin.table>` (or `<x-ui.pagination>` directly) with `per-page-mode="livewire"` and `per-page-field="perPage"`.
+1. `use App\Livewire\Concerns\ManagesPerPage;` with `WithPagination`.
+2. Persist the selector in the query string:  
+   `protected $queryString = ['perPage' => ['except' => PageSize::contextDefault('admin')]];`
+3. Render `<x-admin.table :pagination="$dataset" />`; it defaults to Livewire mode (`perPage` binding) with config-backed options.
+4. Avoid manual summaries—`x-admin.table` + `x-ui.pagination` handle `ui.pagination.summary` automatically.
 
-This pattern keeps the dropdown reactive and automatically resets pagination when the user selects a new size.
+## 4. Comment Threads
 
-## 4. TypeScript Globals
+- Use `App\Support\Pagination\CommentPageSize` for the canonical `comments_per_page` param:
+  ```php
+  $perPage = CommentPageSize::resolveFromRequest($request);
+  $options = CommentPageSize::options();
+  ```
+- In `post.show`:
+  ```blade
+  <x-comments.list
+      :comments="$comments"
+      :per-page-options="$options"
+      :per-page-value="$perPage"
+      per-page-field="{{ CommentPageSize::queryParam() }}"
+      per-page-anchor="comments"
+  />
+  ```
+- Keep the reader’s choice after submitting a comment with a hidden input for `comments_per_page`.
 
-- Declare window-level globals inside `resources/js/types/global.d.ts` so every module shares the same augmentation.
-- Keep runtime modules (`app.ts`, `bootstrap.ts`) focused on behaviour; no need to redeclare `declare global {}` blocks in each file.
-- Run `npm run typecheck` after editing to guarantee the DTS files and TS modules stay in sync.
+## 5. Translations & Validation
 
-## 5. Validation & Localization
+- Use `ui.pagination.*` (`summary`, `per_page`, `aria_label`) for all locales. Collection-specific summaries (e.g. `posts.pagination_summary`) remain optional overrides.
+- Validation messages for unsupported sizes belong under `validation.posts.per_page_options` (and similar) so FormRequests and views stay aligned.
 
-- Store any new pagination-related validation strings under the `validation.posts.*` namespace in `lang/en.json` / `lang/es.json`.
-- Summary copy defaults to `ui.pagination.summary` (see `lang/en/ui.php`). Override via the `summary-key` prop when screens need bespoke wording (e.g. `categories.pagination_summary`).
+## 6. Manual Verification
 
-## 6. Testing & Verification
-
-- **PHP:** `php artisan test --parallel` to validate controller + policy changes.
-- **TypeScript:** `npm run typecheck` to ensure the global declarations align with runtime files.
-- **Manual:** Verify that changing the per-page selector:
-    - Updates the query string (HTTP) or Livewire state (Flux admin).
-    - Resets to page 1 and re-renders the table/list without console errors.
-
-Following the above steps keeps the public site, Flux admin, and supporting scripts consistent whenever new resources or screens are added.
-
-
+- Change page-size selectors across posts, categories, and comments; ensure the query string updates and pagination resets to page 1.
+- Flip per-page values in Volt admin tables and confirm the dropdown reflects the persisted `?perPage=` query parameter after refresh.
+- Try invalid `per_page` values and confirm the UI snaps back to the nearest allowed option without losing filters.

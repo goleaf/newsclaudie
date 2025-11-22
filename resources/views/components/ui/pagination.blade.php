@@ -8,18 +8,20 @@
     'align' => 'between',
     'edge' => 1,
     'perPageMode' => 'http',
-    'perPageField' => 'per_page',
+    'perPageField' => \App\Support\Pagination\PageSize::queryParam(),
     'perPageValue' => null,
     'perPageOptions' => [],
     'perPageFormAction' => null,
     'query' => null,
     'showPerPage' => false,
     'ariaLabel' => null,
+    'perPageLabel' => null,
 ])
 
 @php use Illuminate\Support\Str; @endphp
 
 @php
+    $translator = app('translator');
     $collection = $results ?? $paginator;
 
     if (! $collection instanceof \Illuminate\Contracts\Pagination\Paginator) {
@@ -36,9 +38,14 @@
         ->unique()
         ->values();
 
-    $showPerPageControls = $showPerPage && $options->isNotEmpty() && $mode !== 'none';
+    $showPerPageControls = $showPerPage && $options->count() > 1 && $mode !== 'none';
     $hasPages = $collection->hasPages();
     $slotHasContent = isset($slot) && trim($slot) !== '';
+
+    $summaryKey = $summaryKey ?: 'ui.pagination.summary';
+    $resolvedSummaryKey = $translator->has($summaryKey)
+        ? $summaryKey
+        : ($translator->has('pagination.summary') ? 'pagination.summary' : $summaryKey);
 
     $summaryText = null;
     $summaryEnabled = (bool) $showSummary;
@@ -51,7 +58,7 @@
     }
 
     if ($summaryText === null && $summaryEnabled && method_exists($collection, 'firstItem') && $collection->firstItem() !== null) {
-        $summaryText = __($summaryKey, [
+        $summaryText = __($resolvedSummaryKey, [
             'from' => number_format($collection->firstItem()),
             'to' => number_format($collection->lastItem()),
             'total' => number_format(method_exists($collection, 'total') ? $collection->total() : $collection->count()),
@@ -89,7 +96,16 @@
     }
 
     $selectId = Str::slug(($perPageField ?: 'per_page').'-'.spl_object_hash($collection));
-    $ariaLabelText = $ariaLabel ?? trans('ui.pagination.aria_label');
+    $ariaLabelText = $ariaLabel
+        ?? ($translator->has('ui.pagination.aria_label')
+            ? trans('ui.pagination.aria_label')
+            : trans('pagination.aria_label'));
+    $perPageLabelText = $perPageLabel
+        ?? ($translator->has('ui.pagination.per_page_label')
+            ? trans('ui.pagination.per_page_label')
+            : ($translator->has('ui.pagination.per_page')
+                ? trans('ui.pagination.per_page')
+                : trans('pagination.per_page_label')));
 
     $variants = [
         'inline' => 'flex flex-col gap-3 rounded-2xl border border-slate-200/70 bg-white/70 p-4 text-sm text-slate-600 dark:border-slate-800/60 dark:bg-slate-900/60 dark:text-slate-300 sm:flex-row sm:items-center sm:justify-between',
@@ -108,20 +124,30 @@
 
     $alignment = $alignmentClasses[strtolower((string) $align)] ?? $alignmentClasses['between'];
     $shouldRender = $summaryText || $showPerPageControls || $slotHasContent || $hasPages;
+
+    $navView = $mode === 'livewire'
+        ? 'components.ui.pagination.nav-livewire'
+        : 'components.ui.pagination.nav-http';
+
+    $paginatedCollection = method_exists($collection, 'onEachSide')
+        ? $collection->onEachSide($edge)
+        : $collection;
 @endphp
 
 @if ($shouldRender)
-    <div {{ $attributes->class($containerClasses) }}>
+    <div {{ $attributes->class($containerClasses) }} aria-label="{{ $ariaLabelText }}">
         @if ($summaryText || $showPerPageControls)
-            <div class="flex flex-col gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 sm:flex-row sm:items-center {{ $alignment['summary'] }}">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center {{ $alignment['summary'] }}">
                 @if ($summaryText)
-                    <p>{{ $summaryText }}</p>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                        {{ $summaryText }}
+                    </p>
                 @endif
 
                 @if ($showPerPageControls)
                     <div class="flex items-center gap-2">
                         <label for="{{ $selectId }}" class="sr-only">
-                            {{ trans('ui.pagination.per_page') }}
+                            {{ $perPageLabelText }}
                         </label>
 
                         @if ($mode === 'livewire')
@@ -170,12 +196,13 @@
                 @endif
 
                 @if ($hasPages)
-                    <nav aria-label="{{ $ariaLabelText }}" class="flex w-full justify-end sm:w-auto">
-                        {{ method_exists($collection, 'onEachSide') ? $collection->onEachSide($edge)->links() : $collection->links() }}
-                    </nav>
+                    @include($navView, [
+                        'paginator' => $paginatedCollection,
+                        'edge' => $edge,
+                        'ariaLabel' => $ariaLabelText,
+                    ])
                 @endif
             </div>
         @endif
     </div>
 @endif
-

@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | Pagination | Multiple bespoke summaries, inconsistent per-page knobs | Shared `x-ui.pagination` wrapper + `PageSize` helper across posts, categories, comments, admin tables |
 | Layouts | Duplicate admin templates under `layouts/` and `components/layouts/` | Single source of truth (`x-layouts.admin`), legacy layout now proxies to the component |
-| Utilities | Controllers manually clamped `paginate()` values | `App\Support\Pagination\PageSize` centralises sanitisation & option hydration |
+| Utilities | Controllers manually clamped `paginate()` values | Livewire Volt pages + `ManagesPerPage` call `PageSize` so the per-page rules live in one place |
 | Front-end runtime | Untyped Alpine bootstrapper, implicit `window.Alpine` | Typed `resources/js/app.ts` (module-aware, DOM-safe helpers, explicit global contract) |
 
 ## Key Findings & Fixes
@@ -34,24 +34,24 @@
 ## Component Hierarchy (Shared UI)
 
 - `x-ui.pagination` – handles summaries, page-size selectors (HTTP + Livewire modes), and window link density. Consumed by:
+  - `resources/views/livewire/posts/index.blade.php`
+  - `resources/views/livewire/categories/index.blade.php`
+  - `resources/views/livewire/category-posts.blade.php`
+  - `resources/views/livewire/post/comments.blade.php`
   - `x-admin.table` (admin datasets)
-  - `resources/views/post/index.blade.php`
-  - `resources/views/categories/index.blade.php`
-  - `resources/views/categories/show.blade.php`
-  - `x-comments.list` on post detail pages
-- `App\Support\Pagination\PageSize` – shared resolver for controllers that need bounded pagination:
-  - `PostController@index`
-  - `CategoryController@index`
-  - `CategoryController@show`
+- `App\Support\Pagination\PageSize` – shared resolver for Livewire components and helpers:
+  - Volt `posts.index` & `categories.index` pages (`ManagesPerPage`)
+  - Volt `categories.show` via `livewire/category-posts`
+  - `CommentPageSize` helper for per-thread pagination
 
 ## Pagination Coverage Matrix
 
 | Surface | Strategy | Page-size options | File(s) |
 | --- | --- | --- | --- |
-| Public posts index | HTTP query `?per_page=*` via `PostIndexRequest` | 12 · 18 · 24 · 36 | `PostController@index`, `resources/views/post/index.blade.php` |
-| Public categories index | HTTP query `?per_page=*` | 12 · 15 · 24 · 30 | `CategoryController@index`, `resources/views/categories/index.blade.php` |
-| Category detail posts | HTTP query `?per_page=*` | 9 · 12 · 18 · 24 | `CategoryController@show`, `resources/views/categories/show.blade.php` |
-| Post comments | Config-driven per-page, summary via `x-comments.list` | Config (`blog.commentsPerPage`) | `resources/views/components/comments/list.blade.php` |
+| Public posts index | Volt full-page Livewire (`?per_page=*`) | 12 · 18 · 24 · 36 | `Volt::route('posts', 'posts.index')`, `resources/views/livewire/posts/index.blade.php` |
+| Public categories index | Volt full-page Livewire (`?per_page=*`, search) | 12 · 15 · 24 · 30 | `Volt::route('categories', 'categories.index')`, `resources/views/livewire/categories/index.blade.php` |
+| Category detail posts | Livewire child paginator on Volt page | 9 · 12 · 18 · 24 | `Volt::route('categories/{category}', 'categories.show')`, `resources/views/livewire/category-posts.blade.php` |
+| Post comments | Config-driven per-page, Livewire paginator | Config (`blog.commentsPerPage`) | `resources/views/livewire/post/comments.blade.php` |
 | Admin data tables | Livewire paginators wrapped by `x-admin.table` → `x-ui.pagination` | Component-specific (defaults to Livewire per-page) | `resources/views/components/admin/table.blade.php` |
 
 ## Front-end Runtime Notes
@@ -63,5 +63,3 @@
 
 - Consider surfacing `perPageMode="livewire"` controls in admin tables once backend handlers support dynamic page-size updates.
 - Run `npm run typecheck` (already added) inside CI to keep Alpine helpers type-safe as new UI affordances land.
-
-

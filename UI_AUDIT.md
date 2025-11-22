@@ -1,26 +1,21 @@
-# UI Audit — November 22, 2025
+# UI Audit — February 10, 2026
 
 ## Scope
 - Public listings: `post.index`, `post.show`, `categories.index`, `categories.show`
-- Dashboard tables for posts, users, and comments
-- Shared UI components: pagination, tables, and comment rendering
+- Volt admin tables for posts, users, categories, and comments
+- Shared UI components: pagination, data tables, comment rendering
 
 ## Findings
-- Pagination markup was duplicated across pages, producing inconsistent spacing and missing summaries in some contexts.
-- Dashboard tables repeated structural HTML, making further tweaks tedious and error-prone.
-- Comment feeds rendered pagination controls differently than the rest of the UI.
-- The reusable pagination component accepted ad-hoc summaries, which encouraged copy/paste strings instead of localized keys.
+- Pagination scaffolding was split between `x-admin.table` and `x-ui.data-table`, forcing Livewire screens to hand-roll summary strings and per-page controls while leaving empty footers behind when no paginator was present.
+- Pagination copy diverged between namespaces (`pagination.*` vs `ui.pagination.*`), so summary text and per-page labels could change depending on locale coverage.
+- The legacy Jetstream dashboard still uses bespoke table markup instead of the shared component stack, so any new widgets there would bypass the pagination primitives.
 
 ## Actions Taken
-- Re-built `x-ui.pagination` with alignment options, summary auto-generation, and multiple layout variants.
-- Adopted `x-ui.pagination` in posts, categories, and comment lists to ensure the same affordances (summary text + controls) everywhere.
-- Added `x-ui.data-table` to encapsulate the common responsive/table styling and refactored the dashboard tables to use it.
-- Wired the existing Livewire admin categories screen to pass localized summaries through the table component.
-- Documented remaining gaps below for future follow-up.
+- Promoted `x-ui.data-table` to manage pagination UI (alignment, per-page mode/field/value/form-action passthroughs) and to hide its footer when no paginator or controls exist.
+- Refactored `x-admin.table` to compose `x-ui.data-table`, so Volt resources reuse the same pagination chrome without duplicating summary logic; Livewire screens now lean on `ui.pagination.summary` instead of manual strings.
+- Standardised pagination copy on “Showing :from-:to of :total results” and set `ui.pagination.*` as primary with fallbacks to `pagination.*`, keeping PHP + JSON locales aligned.
 
 ## Follow-up Opportunities
-- Extend `x-admin.table` to reuse the new `x-ui.data-table` foundation for complete parity between public and admin surfaces.
-- Add filter indicators (active tag/category badges) beside every paginated feed so readers always know what subset they are viewing.
-- Introduce pagination smoke tests (browser/Pest) once UI stabilizes to guard against regression in future styling passes.
-
-
+- Consolidate the uppercase/lowercase interface docs into a single canonical source and retire the legacy `pagination.*` translations once consumers are verified.
+- Migrate or retire `resources/views/dashboard.blade.php` so future widgets land in Volt + componentized tables.
+- Add a couple of browser checks around the per-page selector (Livewire + HTTP) to prevent regressions in summary rendering and footer visibility.

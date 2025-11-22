@@ -2,6 +2,7 @@
 
 use App\Livewire\Concerns\ManagesPerPage;
 use App\Models\Comment;
+use App\Support\Pagination\PageSize;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Str;
 use Livewire\Volt\Component;
@@ -19,7 +20,7 @@ new class extends Component {
 
     protected $listeners = ['comment-removed' => '$refresh'];
     protected $queryString = [
-        'perPage' => ['except' => 20],
+        'perPage' => ['except' => PageSize::contextDefault('admin')],
     ];
 
     public function with(): array
@@ -44,16 +45,6 @@ new class extends Component {
 
         $this->dispatch('comment-removed');
     }
-
-    protected function availablePerPageOptions(): array
-    {
-        return [10, 20, 50, 100];
-    }
-
-    protected function defaultPerPage(): int
-    {
-        return 20;
-    }
 }; ?>
 
 <div class="space-y-6">
@@ -73,20 +64,16 @@ new class extends Component {
         per-page-mode="livewire"
         per-page-field="perPage"
         :per-page-options="$this->perPageOptions"
-        :summary="trans('pagination.summary', [
-            'from' => $comments->firstItem(),
-            'to' => $comments->lastItem(),
-            'total' => $comments->total(),
-        ])"
+        :per-page-value="$perPage"
     >
         <x-slot name="head">
-            <tr class="text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                <th class="px-4 py-3">{{ __('admin.comments.table.author') }}</th>
-                <th class="px-4 py-3">{{ __('admin.comments.table.post') }}</th>
-                <th class="px-4 py-3">{{ __('admin.comments.table.preview') }}</th>
-                <th class="px-4 py-3">{{ __('admin.comments.table.date') }}</th>
-                <th class="px-4 py-3 text-right">{{ __('admin.comments.table.actions') }}</th>
-            </tr>
+            <x-admin.table-head :columns="[
+                ['label' => __('admin.comments.table.author')],
+                ['label' => __('admin.comments.table.post')],
+                ['label' => __('admin.comments.table.preview')],
+                ['label' => __('admin.comments.table.date')],
+                ['label' => __('admin.comments.table.actions'), 'class' => 'text-right'],
+            ]" />
         </x-slot>
 
         @forelse ($comments as $comment)
@@ -132,5 +119,3 @@ new class extends Component {
         @endforelse
     </x-admin.table>
 </div>
-
-

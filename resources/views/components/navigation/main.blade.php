@@ -76,6 +76,9 @@
                 id="theme-toggle"
                 type="button"
                 aria-label="{{ __('nav.theme_label') }}"
+                title="{{ __('nav.theme_label') }}"
+                data-theme-label-light="{{ __('nav.theme_light') }}"
+                data-theme-label-dark="{{ __('nav.theme_dark') }}"
                 class="rounded-full border border-transparent p-2 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
             >
                 <svg id="theme-toggle-dark-icon" class="hidden h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
@@ -130,4 +133,3 @@
         @endif
     </div>
 </nav>
-

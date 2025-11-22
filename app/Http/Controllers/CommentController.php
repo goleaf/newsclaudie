@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Enums\CommentStatus;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Support\Pagination\CommentPageSize;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -18,9 +20,12 @@ final class CommentController extends Controller
         $comment = $post->comments()->create([
             'user_id' => $request->user()->id,
             'content' => $request->validated()['content'],
+            'status' => CommentStatus::Pending,
         ]);
 
-        return $this->redirectToComment($comment, $post, __('comments.created'));
+        $perPage = CommentPageSize::resolveFromRequest($request);
+
+        return $this->redirectToComment($comment, $post, __('comments.created'), $perPage);
     }
 
     public function edit(Comment $comment): View
@@ -36,7 +41,9 @@ final class CommentController extends Controller
     {
         $comment->update($request->validated());
 
-        return $this->redirectToComment($comment, $comment->post, __('comments.updated'));
+        $perPage = CommentPageSize::resolveFromRequest($request);
+
+        return $this->redirectToComment($comment, $comment->post, __('comments.updated'), $perPage);
     }
 
     public function destroy(Comment $comment): RedirectResponse
@@ -48,43 +55,33 @@ final class CommentController extends Controller
         return back()->with('success', __('comments.deleted'));
     }
 
-    private function redirectToComment(Comment $comment, Post $post, string $message): RedirectResponse
+    private function redirectToComment(Comment $comment, Post $post, string $message, ?int $perPage = null): RedirectResponse
     {
-        $page = $this->resolveCommentPage($comment, $post);
+        $defaultPerPage = CommentPageSize::default();
+        $perPage = $perPage ?? $defaultPerPage;
+        $page = CommentPageSize::locatePage($comment, $post, $perPage);
 
-        $routeParameters = ['post' => $post];
+        $routeParameters = [
+            'post' => $post,
+        ];
+
+        if ($perPage !== $defaultPerPage) {
+            $routeParameters[CommentPageSize::queryParam()] = $perPage;
+        }
 
         if ($page > 1) {
             $routeParameters['page'] = $page;
+        }
+
+        if (! $comment->isApproved()) {
+            return redirect()
+                ->route('posts.show', $routeParameters)
+                ->with('success', $message);
         }
 
         return redirect()
             ->route('posts.show', $routeParameters)
             ->withFragment('comment-'.$comment->id)
             ->with('success', $message);
-    }
-
-    private function resolveCommentPage(Comment $comment, Post $post): int
-    {
-        $perPage = max(1, (int) config('blog.commentsPerPage', 10));
-
-        if (! $comment->created_at) {
-            $preceding = $post->comments()
-                ->where('id', '>', $comment->id)
-                ->count();
-        } else {
-            $preceding = $post->comments()
-                ->where(function ($query) use ($comment) {
-                    $query->where('created_at', '>', $comment->created_at)
-                        ->orWhere(function ($subQuery) use ($comment) {
-                            $subQuery
-                                ->where('created_at', $comment->created_at)
-                                ->where('id', '>', $comment->id);
-                        });
-                })
-                ->count();
-        }
-
-        return (int) floor($preceding / $perPage) + 1;
     }
 }

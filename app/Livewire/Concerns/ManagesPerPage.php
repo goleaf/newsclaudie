@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Concerns;
 
-use Illuminate\Support\Collection;
+use App\Support\Pagination\PageSize;
 
 /**
  * Shared helpers for Livewire components that expose a configurable $perPage value.
@@ -13,11 +13,13 @@ use Illuminate\Support\Collection;
  */
 trait ManagesPerPage
 {
-    public int $perPage = 20;
+    public ?int $perPage = null;
 
     public function bootManagesPerPage(): void
     {
-        $this->perPage = $this->sanitizePerPage($this->perPage ?? $this->defaultPerPage());
+        $this->perPage = $this->sanitizePerPage(
+            $this->perPage ?: $this->defaultPerPage()
+        );
     }
 
     public function updatingPerPage(): void
@@ -50,7 +52,7 @@ trait ManagesPerPage
      */
     protected function defaultPerPage(): int
     {
-        return $this->availablePerPageOptions()[0] ?? 20;
+        return PageSize::contextDefault($this->perPageContext());
     }
 
     /**
@@ -60,23 +62,22 @@ trait ManagesPerPage
      */
     protected function availablePerPageOptions(): array
     {
-        return [10, 20, 50];
+        return PageSize::contextOptions($this->perPageContext());
     }
 
     protected function sanitizePerPage(int $value): int
     {
-        /** @var Collection<int, int> $options */
-        $options = collect($this->availablePerPageOptions())
-            ->map(fn ($option) => (int) $option)
-            ->filter(fn ($option) => $option > 0)
-            ->unique()
-            ->values();
+        $options = collect($this->availablePerPageOptions());
+        $default = $this->defaultPerPage();
 
-        if ($options->isEmpty()) {
-            return 10;
-        }
+        return PageSize::resolve($value, $options->all(), $default);
+    }
 
-        return $options->contains($value) ? $value : $options->first();
+    /**
+     * Override to pull a different option/default context from interface.php.
+     */
+    protected function perPageContext(): string
+    {
+        return 'admin';
     }
 }
-

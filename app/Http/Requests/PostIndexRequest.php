@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\Http\Controllers\PostController;
 use App\Support\Pagination\PageSize;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -26,10 +25,7 @@ final class PostIndexRequest extends FormRequest
      */
     public function rules(): array
     {
-        $perPageOptions = PageSize::options(
-            PostController::POST_PAGE_SIZE_OPTIONS,
-            PostController::POST_PAGE_SIZE_DEFAULT,
-        );
+        $perPageOptions = PageSize::contextOptions('posts');
         $perPageParam = PageSize::queryParam();
 
         return [

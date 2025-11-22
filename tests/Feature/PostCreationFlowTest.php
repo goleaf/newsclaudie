@@ -14,15 +14,15 @@ final class PostCreationFlowTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_authors_can_attach_categories_when_creating_posts(): void
+    public function test_admins_can_attach_categories_when_creating_posts(): void
     {
-        $author = User::factory()->create([
-            'is_author' => true,
+        $admin = User::factory()->create([
+            'is_admin' => true,
         ]);
 
         $categories = Category::factory()->count(2)->create();
 
-        $response = $this->actingAs($author)->post(route('posts.store'), [
+        $response = $this->actingAs($admin)->post(route('posts.store'), [
             'title' => 'Categories are synced',
             'body' => 'Full body content',
             'description' => 'Post with categories',
@@ -43,13 +43,13 @@ final class PostCreationFlowTest extends TestCase
         );
     }
 
-    public function test_draft_posts_leave_published_at_null(): void
+    public function test_draft_posts_leave_published_at_null_for_admins(): void
     {
-        $author = User::factory()->create([
-            'is_author' => true,
+        $admin = User::factory()->create([
+            'is_admin' => true,
         ]);
 
-        $response = $this->actingAs($author)->post(route('posts.store'), [
+        $response = $this->actingAs($admin)->post(route('posts.store'), [
             'title' => 'Draft post',
             'body' => 'Still being written',
             'is_draft' => 1,
@@ -63,13 +63,14 @@ final class PostCreationFlowTest extends TestCase
         $this->assertNull($post->published_at);
     }
 
-    public function test_non_authors_cannot_create_posts(): void
+    public function test_non_admins_cannot_create_posts(): void
     {
-        $reader = User::factory()->create([
-            'is_author' => false,
+        $author = User::factory()->create([
+            'is_author' => true,
+            'is_admin' => false,
         ]);
 
-        $response = $this->actingAs($reader)->post(route('posts.store'), [
+        $response = $this->actingAs($author)->post(route('posts.store'), [
             'title' => 'Unauthorized attempt',
             'body' => 'Should be rejected',
             'is_draft' => 1,
@@ -80,4 +81,3 @@ final class PostCreationFlowTest extends TestCase
         $this->assertDatabaseCount('posts', 0);
     }
 }
-

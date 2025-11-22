@@ -13,7 +13,7 @@ final class StoreCategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->can('access-admin') ?? false;
     }
 
     /**
