@@ -369,34 +369,65 @@ final class PostQueryScopesTest extends TestCase
         $this->assertEquals('Newest', $results->last()->title, 'Newest post should be last');
     }
 
+    /**
+     * Test that multiple scopes can be combined in a single query.
+     *
+     * **What This Tests:**
+     * - Multiple scopes can be chained together
+     * - Scopes combine with AND logic (all conditions must be met)
+     * - Complex filtering scenarios work correctly
+     * - Sort order is applied after all filters
+     *
+     * **Why This Matters:**
+     * In production, users often apply multiple filters simultaneously, such as
+     * "show me posts by Author A in Category X from the last 6 months, newest first".
+     * This test ensures that scope composition works correctly for real-world usage.
+     *
+     * **Test Scenario:**
+     * - 3 posts created with different authors, categories, and dates
+     * - Filter by category1 AND author1 AND date range (Feb onwards)
+     * - Only post3 matches all criteria
+     *
+     * **Requirements Validated:**
+     * - All filter requirements (2.x, 3.x, 4.x, 5.x) working together
+     * - Requirement 5.4: Sort preserves filters
+     *
+     * @test
+     * @return void
+     *
+     * @see Post For all scope implementations
+     * @see NewsController::buildNewsQuery() For production usage of combined scopes
+     */
     public function test_scopes_can_be_combined(): void
     {
-        // Create categories and authors
+        // Arrange: Create test data with various combinations
         $category1 = Category::factory()->create();
         $category2 = Category::factory()->create();
         $author1 = User::factory()->create();
         $author2 = User::factory()->create();
 
-        // Create posts with various combinations
+        // Post 1: category1, author1, January (excluded by date filter)
         $post1 = Post::factory()->create([
             'user_id' => $author1->id,
             'published_at' => '2024-01-15',
         ]);
         $post1->categories()->attach($category1);
 
+        // Post 2: category2, author2, February (excluded by category and author filters)
         $post2 = Post::factory()->create([
             'user_id' => $author2->id,
             'published_at' => '2024-02-15',
         ]);
         $post2->categories()->attach($category2);
 
+        // Post 3: category1, author1, March (matches all filters)
         $post3 = Post::factory()->create([
             'user_id' => $author1->id,
             'published_at' => '2024-03-15',
         ]);
         $post3->categories()->attach($category1);
 
-        // Test combining multiple scopes
+        // Act: Apply all filters together
         $results = Post::withoutGlobalScopes()
             ->filterByCategories([$category1->id])
             ->filterByAuthors([$author1->id])
@@ -404,7 +435,8 @@ final class PostQueryScopesTest extends TestCase
             ->sortByPublishedDate('desc')
             ->get();
 
-        $this->assertCount(1, $results);
-        $this->assertTrue($results->contains($post3));
+        // Assert: Only post3 should match all criteria
+        $this->assertCount(1, $results, 'Only 1 post should match all filter criteria');
+        $this->assertTrue($results->contains($post3), 'Results should contain post3');
     }
 }

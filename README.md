@@ -123,6 +123,7 @@ Comprehensive documentation is available in the `docs/` directory:
 - **[Admin Config Quick Reference](docs/ADMIN_CONFIG_QUICK_REFERENCE.md)** - Quick configuration lookup
 - **[Volt Component Guide](docs/VOLT_COMPONENT_GUIDE.md)** - Building Livewire Volt components
 - **[Livewire Traits Guide](docs/LIVEWIRE_TRAITS_GUIDE.md)** - Using shared traits
+- **[Post Query Scopes Onboarding](docs/POST_QUERY_SCOPES_ONBOARDING.md)** - 10-minute guide to query scopes
 
 ### Feature Documentation
 - **[Admin Configuration](docs/ADMIN_CONFIGURATION.md)** - Complete configuration reference
@@ -131,6 +132,8 @@ Comprehensive documentation is available in the `docs/` directory:
 - **[Accessibility Testing Guide](docs/ACCESSIBILITY_TESTING_GUIDE.md)** - Testing accessibility features
 - **[News Controller Usage](docs/NEWS_CONTROLLER_USAGE.md)** - News page filtering and sorting guide
 - **[News Controller Refactoring](docs/NEWS_CONTROLLER_REFACTORING.md)** - Refactoring notes and service layer
+- **[Post Query Scopes](docs/POST_QUERY_SCOPES.md)** - Reusable query scopes for filtering and sorting
+- **[Post Query Scopes Quick Reference](docs/POST_QUERY_SCOPES_QUICK_REFERENCE.md)** - Quick lookup guide for query scopes
 
 ### API Documentation
 - **[News API](docs/api/NEWS_API.md)** - News endpoint API reference

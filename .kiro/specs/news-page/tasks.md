@@ -46,7 +46,7 @@
     - **Property 12: Sort order (oldest first)**
     - **Validates: Requirements 5.2, 5.3**
 
-- [-] 3. Implement NewsController logic
+- [x] 3. Implement NewsController logic
   - [x] 3.1 Build query with filters and eager loading
     - Apply category, author, and date range filters from request
     - Eager load author and categories relationships
@@ -63,17 +63,17 @@
     - **Property 6: Author filter completeness**
     - **Validates: Requirements 2.1, 4.1**
   
-  - [x] 3.3 Implement pagination
+  - [x] 3.4 Implement pagination
     - Paginate results with 15 items per page
     - Preserve query parameters in pagination links
     - _Requirements: 1.5_
   
-  - [x] 3.4 Calculate and pass results count
+  - [x] 3.5 Calculate and pass results count
     - Get total count of filtered results
     - Pass count to view for display
     - _Requirements: 7.1, 7.2, 7.3_
   
-  - [ ]* 3.5 Write property test for results count
+  - [ ]* 3.6 Write property test for results count
     - **Property 17: Results count accuracy**
     - **Validates: Requirements 7.1, 7.3**
 
