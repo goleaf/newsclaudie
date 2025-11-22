@@ -41,7 +41,9 @@ Route::get('/', function () {
 
 Route::post('/locale', [LocaleController::class, 'update'])->name('locale.update');
 
-Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+Route::get('/news', [NewsController::class, 'index'])
+    ->name('news.index')
+    ->middleware(['throttle:news', 'cache.headers:public;max_age=300']);
 
 Volt::route('posts', 'posts.index')->name('posts.index');
 Route::resource('posts', PostController::class)->except(['index']);

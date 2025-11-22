@@ -11,6 +11,8 @@ use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 /**
@@ -56,6 +58,29 @@ final class NewsController extends Controller
     private const ITEMS_PER_PAGE = 15;
 
     /**
+     * Maximum number of filter options to load (security limit).
+     *
+     * @var int
+     */
+    private const MAX_FILTER_OPTIONS = 100;
+
+    /**
+     * Cache TTL for filter options in seconds (1 hour).
+     *
+     * @var int
+     */
+    private const FILTER_CACHE_TTL = 3600;
+
+    /**
+     * Apply middleware for rate limiting.
+     */
+    public function __construct()
+    {
+        // Rate limit: 60 requests per minute per IP
+        $this->middleware('throttle:news')->only('index');
+    }
+
+    /**
      * Display the news page with filterable published posts.
      *
      * This is the main entry point for the news listing page. It handles:
@@ -98,11 +123,24 @@ final class NewsController extends Controller
     {
         $validated = $request->validated();
 
+        // Log suspicious activity (excessive filters)
+        if (count($request->input('categories', [])) > 5 || count($request->input('authors', [])) > 5) {
+            Log::channel('security')->warning('Suspicious filter usage detected', [
+                'ip' => $request->ip(),
+                'filters' => $validated,
+                'user_agent' => $request->userAgent(),
+            ]);
+        }
+
         // Build and execute the filtered query
         $query = $this->buildNewsQuery($validated);
-        $posts = $query->paginate(self::ITEMS_PER_PAGE)->withQueryString();
+        
+        // Paginate with explicit allowed parameters (security: prevent parameter pollution)
+        $posts = $query->paginate(self::ITEMS_PER_PAGE)->appends(
+            $request->only(['categories', 'authors', 'from_date', 'to_date', 'sort'])
+        );
 
-        // Load filter options for the UI
+        // Load filter options for the UI (cached)
         $filterOptions = $this->loadFilterOptions();
 
         return view('news.index', [
@@ -155,10 +193,14 @@ final class NewsController extends Controller
         // This base query ensures we only show posts that are:
         // 1. Not drafts (published_at is not null)
         // 2. Not scheduled for future (published_at <= now)
+        // Security: Select only necessary columns to prevent data leakage
         $query = Post::query()
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now())
-            ->with(['author', 'categories']);
+            ->with([
+                'author:id,name',
+                'categories:id,name,slug'
+            ]);
 
         // Apply category filter (OR logic) - show posts in ANY selected category
         if (! empty($filters['categories'])) {
@@ -232,10 +274,14 @@ final class NewsController extends Controller
      */
     private function loadCategoriesWithPublishedPosts(): Collection
     {
-        return Category::query()
-            ->whereHas('posts', $this->publishedPostsConstraint())
-            ->orderBy('name')
-            ->get();
+        // Cache filter options to reduce database load (security: prevent resource exhaustion)
+        return Cache::remember('news.filter.categories', self::FILTER_CACHE_TTL, function () {
+            return Category::query()
+                ->whereHas('posts', $this->publishedPostsConstraint())
+                ->orderBy('name')
+                ->limit(self::MAX_FILTER_OPTIONS)
+                ->get(['id', 'name', 'slug']);
+        });
     }
 
     /**
@@ -259,10 +305,14 @@ final class NewsController extends Controller
      */
     private function loadAuthorsWithPublishedPosts(): Collection
     {
-        return User::query()
-            ->whereHas('posts', $this->publishedPostsConstraint())
-            ->orderBy('name')
-            ->get();
+        // Cache filter options to reduce database load (security: prevent resource exhaustion)
+        return Cache::remember('news.filter.authors', self::FILTER_CACHE_TTL, function () {
+            return User::query()
+                ->whereHas('posts', $this->publishedPostsConstraint())
+                ->orderBy('name')
+                ->limit(self::MAX_FILTER_OPTIONS)
+                ->get(['id', 'name']); // Security: Don't expose email addresses
+        });
     }
 
     /**

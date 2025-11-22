@@ -117,4 +117,32 @@ final class PostFactory extends Factory
     {
         return Str::slug($title.'-'.Str::random(8));
     }
+
+    /**
+     * Indicate that the post is published.
+     *
+     * @return static
+     */
+    public function published()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'published_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the post is a draft (unpublished).
+     *
+     * @return static
+     */
+    public function draft()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'published_at' => null,
+            ];
+        });
+    }
 }

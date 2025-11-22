@@ -265,4 +265,19 @@ final class Post extends Model
     {
         $query->orderBy('published_at', $direction);
     }
+
+    /**
+     * Scope a query to only include published posts.
+     *
+     * Filters posts that have a published_at date set and are not scheduled for the future.
+     * This is a convenience scope for security and consistency.
+     *
+     * @param Builder $query The query builder instance
+     * @return void
+     */
+    public function scopePublished(Builder $query): void
+    {
+        $query->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
+    }
 }
