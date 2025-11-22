@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\PostExportController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReadmeController;
 use App\Enums\CommentStatus;
@@ -63,6 +64,10 @@ Route::middleware(['auth', 'can:access-admin'])->group(function () {
     Volt::route('admin/categories', 'admin.categories.index')->name('admin.categories.index');
     Volt::route('admin/comments', 'admin.comments.index')->name('admin.comments.index');
     Volt::route('admin/users', 'admin.users.index')->name('admin.users.index');
+    Route::post('admin/posts/export', [PostExportController::class, 'store'])->name('admin.posts.export');
+    Route::get('admin/posts/export/{export}', [PostExportController::class, 'download'])
+        ->middleware('signed')
+        ->name('admin.posts.export.download');
 });
 
 if (config('blog.readme')) {

@@ -15,6 +15,7 @@ final class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Models\Post' => 'App\Policies\PostPolicy',
+        'App\Models\User' => 'App\Policies\UserPolicy',
     ];
 
     public function boot(): void

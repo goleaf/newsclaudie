@@ -2,6 +2,13 @@ type PostAction = 'publish' | 'unpublish';
 
 type PostStates = Record<number, boolean>;
 
+type QueueItem = {
+    id: number;
+    action: PostAction;
+    targetState: boolean;
+    previousState: boolean;
+};
+
 type AdminPostActionsConfig = {
     initialStates?: PostStates;
     defaultError?: string;
@@ -13,8 +20,8 @@ export const adminPostActions = (config: AdminPostActionsConfig = {}) => ({
     states: { ...(config.initialStates ?? {}) } as PostStates,
     confirmed: { ...(config.initialStates ?? {}) } as PostStates,
     defaultError: config.defaultError ?? fallbackError,
-    queue: [] as Array<{ id: number; action: PostAction }>,
-    active: null as { id: number; action: PostAction } | null,
+    queue: [] as Array<QueueItem>,
+    active: null as QueueItem | null,
     lagging: false,
     errorMessage: '',
 
@@ -42,6 +49,12 @@ export const adminPostActions = (config: AdminPostActionsConfig = {}) => ({
         return Boolean(this.active && this.active.id === id);
     },
 
+    queuedPosition(id: number): number | null {
+        const position = this.queue.findIndex((item) => item.id === id);
+
+        return position >= 0 ? position + 1 : null;
+    },
+
     queueSize(): number {
         return this.queue.length + (this.active ? 1 : 0);
     },
@@ -51,20 +64,30 @@ export const adminPostActions = (config: AdminPostActionsConfig = {}) => ({
     },
 
     queueAction(action: PostAction, id: number, fallback = false): void {
-        const nextState = action === 'publish';
+        const nextState = this.actionToState(action);
+        const previousState = this.confirmed[id] ?? this.stateFor(id, fallback);
 
         this.stateFor(id, fallback);
 
         this.states[id] = nextState;
         this.errorMessage = '';
-        this.queue.push({ id, action });
+        this.queue.push({
+            id,
+            action,
+            targetState: nextState,
+            previousState,
+        });
 
         if (!this.active) {
             this.processNext();
         }
     },
 
-    mergeServerState(snapshot: PostStates): void {
+    mergeServerState(snapshot?: PostStates | null): void {
+        if (!snapshot) {
+            return;
+        }
+
         Object.entries(snapshot).forEach(([rawId, state]) => {
             const id = Number(rawId);
 
@@ -92,6 +115,8 @@ export const adminPostActions = (config: AdminPostActionsConfig = {}) => ({
             return;
         }
 
+        this.states[this.active.id] = this.active.targetState;
+
         const lagTimer = window.setTimeout(() => {
             this.lagging = true;
         }, 450);
@@ -103,10 +128,17 @@ export const adminPostActions = (config: AdminPostActionsConfig = {}) => ({
                 await this.$wire.unpublish(this.active.id);
             }
 
-            this.confirmed[this.active.id] = this.states[this.active.id];
+            this.confirmed[this.active.id] = this.active.targetState;
+            this.states[this.active.id] = this.active.targetState;
         } catch (error) {
-            this.states[this.active.id] = this.confirmed[this.active.id] ?? false;
+            const fallbackState =
+                this.confirmed[this.active.id] ??
+                this.active.previousState ??
+                false;
+
+            this.states[this.active.id] = fallbackState;
             this.errorMessage = this.extractError(error);
+            this.queue = [];
         } finally {
             window.clearTimeout(lagTimer);
             this.lagging = false;
@@ -114,6 +146,10 @@ export const adminPostActions = (config: AdminPostActionsConfig = {}) => ({
 
             queueMicrotask(() => this.processNext());
         }
+    },
+
+    actionToState(action: PostAction): boolean {
+        return action === 'publish';
     },
 
     extractError(error: unknown): string {

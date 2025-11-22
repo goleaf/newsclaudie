@@ -40,6 +40,9 @@
         : ($paginator && count($options) > 1 && $mode !== 'none');
 
     $summaryToggle = $showSummary ?? true;
+
+    $tableLabel = $ariaLabel ?: __('admin.table.default_label');
+    $tableId = \Illuminate\Support\Str::slug($tableLabel) ?: 'admin-table';
 @endphp
 
 <flux:card {{ $attributes->class('space-y-4') }}>
@@ -65,7 +68,10 @@
         :pagination-variant="$variant"
         :pagination-edge="$edge"
         :query="$query"
-        :aria-label="$ariaLabel"
+        aria-label="{{ $tableLabel }}"
+        data-admin-table="true"
+        data-admin-table-id="{{ $tableId }}"
+        data-admin-table-label="{{ $tableLabel }}"
         wrapper-class="overflow-x-auto"
         table-class="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-800"
         head-class="bg-slate-50/70 dark:bg-slate-800/40"

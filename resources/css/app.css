@@ -69,4 +69,8 @@
         background-color: #fff;
         opacity: 0.9;
     }
+
+    .admin-row-selected {
+        @apply ring-2 ring-indigo-500/70 ring-offset-1 ring-offset-white dark:ring-indigo-400/70 dark:ring-offset-slate-900;
+    }
 }

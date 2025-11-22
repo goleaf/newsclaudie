@@ -19,9 +19,12 @@ new class extends Component {
     use WithPagination;
 
     protected $listeners = ['comment-removed' => '$refresh'];
-    protected $queryString = [
-        'perPage' => ['except' => PageSize::contextDefault('admin')],
-    ];
+    protected array $queryString = [];
+
+    public function mount(): void
+    {
+        $this->queryString['perPage'] = ['except' => PageSize::contextDefault('admin')];
+    }
 
     public function with(): array
     {

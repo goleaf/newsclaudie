@@ -56,13 +56,13 @@ final class PostController extends Controller
         // Retrieve the validated input data...
         $validated = $request->validated();
 
-        // Extract categories before creating post
-        $categories = $request->input('categories', []);
+        $categories = $validated['categories'] ?? [];
+        unset($validated['categories']);
 
         $post = (new CreatesNewPost())->createPost($request->user(), $validated);
 
         // Sync categories
-        if ($post && ! empty($categories)) {
+        if ($post) {
             $post->categories()->sync($categories);
         }
 
@@ -135,8 +135,8 @@ final class PostController extends Controller
         // Retrieve the validated input data...
         $validated = $request->validated();
 
-        // Extract categories
-        $categories = $request->input('categories', []);
+        $categories = $validated['categories'] ?? [];
+        unset($validated['categories']);
 
         // Update the post
         $post->update($validated);
@@ -182,7 +182,7 @@ final class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy(Request $request, Post $post)
     {
         $this->authorize('delete', $post);
 

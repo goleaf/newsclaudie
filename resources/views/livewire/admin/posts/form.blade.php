@@ -42,17 +42,13 @@ new class extends Component {
 
 @php
     $action = $isEditing && $post ? route('posts.update', $post) : route('posts.store');
-    $method = $isEditing ? 'PATCH' : 'POST';
     $publishedValue = old(
         'published_at',
         $isEditing
             ? optional($post->published_at)->format('Y-m-d\TH:i')
             : now()->format('Y-m-d\TH:i')
     );
-    $selectedCategories = old(
-        'categories',
-        $isEditing && $post ? $post->categories->pluck('id')->toArray() : []
-    );
+    $selectedCategories = $isEditing && $post ? $post->categories->pluck('id')->toArray() : [];
     $tagsInitial = old(
         'tags_input',
         $isEditing && $post ? collect($post->tags ?? [])->implode(', ') : ''
@@ -150,24 +146,10 @@ new class extends Component {
                         <x-tags-field :initial="$tagsInitial" />
                     @endif
 
-                    <div class="space-y-2">
-                        <x-label :value="__('posts.form.categories_label')" />
-                        <div class="mt-3 grid gap-3 sm:grid-cols-2">
-                            @foreach ($categories as $category)
-                                <label class="flex items-center gap-2 rounded-xl border border-slate-200/70 px-3 py-2 text-sm dark:border-slate-700">
-                                    <input
-                                        type="checkbox"
-                                        name="categories[]"
-                                        value="{{ $category->id }}"
-                                        class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
-                                        {{ in_array($category->id, $selectedCategories, true) ? 'checked' : '' }}
-                                    >
-                                    <span>{{ $category->name }}</span>
-                                </label>
-                            @endforeach
-                        </div>
-                        @error('categories') <p class="mt-1 text-sm text-rose-500">{{ $message }}</p> @enderror
-                    </div>
+                    <x-categories.multi-select
+                        :categories="$categories"
+                        :selected="$selectedCategories"
+                    />
                 </x-ui.form-section>
 
                 <div class="flex flex-wrap items-center justify-between gap-4">

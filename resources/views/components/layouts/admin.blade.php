@@ -28,7 +28,7 @@
         @fluxAppearance
         @stack('meta')
     </head>
-    <body class="min-h-screen bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100">
+    <body class="min-h-screen bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100" data-admin-keyboard>
         <flux:sidebar sticky stashable class="border-e border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 

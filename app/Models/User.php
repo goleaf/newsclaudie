@@ -21,6 +21,9 @@ final class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
+        'is_author',
+        'is_banned',
     ];
 
     /**
@@ -51,5 +54,10 @@ final class User extends Authenticatable
     public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Post::class, 'user_id', 'id');
+    }
+
+    public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Comment::class, 'user_id', 'id');
     }
 }

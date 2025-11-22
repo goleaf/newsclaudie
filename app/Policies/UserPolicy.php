@@ -62,15 +62,19 @@ final class UserPolicy
     public function delete(User $user, User $model)
     {
         if (! $user->is_admin) {
-            return Response::deny('You are not an admin.');
+            return Response::deny(__('admin.users.errors.not_admin'));
+        }
+
+        if ($model->is($user)) {
+            return Response::deny(__('admin.users.errors.delete_self'));
         }
 
         if ($model->is_admin) {
-            return Response::deny('You cannot delete an admin user. You must remove the permission first.');
+            return Response::deny(__('admin.users.errors.delete_admin'));
         }
 
-        if ($model->posts()->count()) {
-            return Response::deny('You cannot delete a user that has posts. You must remove them first.');
+        if ($model->posts()->exists()) {
+            return Response::deny(__('admin.users.errors.delete_has_posts'));
         }
 
         return true;
@@ -84,11 +88,15 @@ final class UserPolicy
     public function ban(User $user, User $model)
     {
         if (! $user->is_admin) {
-            return Response::deny('You are not an admin.');
+            return Response::deny(__('admin.users.errors.not_admin'));
+        }
+
+        if ($model->is($user)) {
+            return Response::deny(__('admin.users.errors.ban_self'));
         }
 
         if ($model->is_admin) {
-            return Response::deny('You cannot ban an admin user. You must remove the permission first.');
+            return Response::deny(__('admin.users.errors.ban_admin'));
         }
 
         return true;

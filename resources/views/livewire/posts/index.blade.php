@@ -4,6 +4,7 @@ use App\Livewire\Concerns\ManagesPerPage;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
+use App\Notifications\ExportReadyNotification;
 use App\Support\Pagination\PageSize;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -158,6 +159,21 @@ new class extends Component {
             ->paginate($this->perPage)
             ->withQueryString();
 
+        $exportNotifications = collect();
+
+        if (auth()->check()) {
+            $exportNotifications = auth()->user()
+                ->unreadNotifications()
+                ->where('type', ExportReadyNotification::class)
+                ->get();
+
+            if ($exportNotifications->isNotEmpty()) {
+                auth()->user()->unreadNotifications()
+                    ->whereIn('id', $exportNotifications->pluck('id'))
+                    ->update(['read_at' => now()]);
+            }
+        }
+
         $isFiltered = $filterLabel !== null;
         $subtitle = $isFiltered ? $filterLabel : __('posts.subtitle_latest');
         $countLabel = trans_choice('posts.count_label', $posts->total(), ['count' => $posts->total()]);
@@ -176,6 +192,7 @@ new class extends Component {
             'emptyDescription' => $emptyDescription,
             'isFiltered' => $isFiltered,
             'filterLabel' => $filterLabel,
+            'exportNotifications' => $exportNotifications,
         ];
     }
 }; ?>
@@ -194,6 +211,99 @@ new class extends Component {
             @endif
         </x-slot>
     </x-ui.page-header>
+
+    @if (session('export_status'))
+        <x-ui.alert :variant="session('export_url') ? 'success' : 'info'" class="dark:text-slate-100">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="space-y-1">
+                    <p>{{ session('export_status') }}</p>
+                    @if (session('export_expires'))
+                        <p class="text-sm text-slate-600 dark:text-slate-300">
+                            {{ __('admin.exports.expires', ['time' => session('export_expires')]) }}
+                        </p>
+                    @endif
+                </div>
+                @if (session('export_url'))
+                    <x-ui.button href="{{ session('export_url') }}" target="_blank" rel="noopener">
+                        {{ __('admin.exports.download') }}
+                    </x-ui.button>
+                @endif
+            </div>
+        </x-ui.alert>
+    @endif
+
+    @if ($exportNotifications->isNotEmpty())
+        @foreach ($exportNotifications as $notification)
+            <x-ui.alert variant="success" class="dark:text-slate-100">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="space-y-1">
+                        <p class="font-semibold">
+                            {{ $notification->data['message'] ?? __('admin.exports.ready_title') }}
+                        </p>
+                        <p class="text-sm text-slate-600 dark:text-slate-300">
+                            {{ __('admin.exports.notification_body', [
+                                'format' => strtoupper($notification->data['format'] ?? 'CSV'),
+                                'count' => $notification->data['rows'] ?? 0,
+                            ]) }}
+                        </p>
+                        @if (! empty($notification->data['expires_at']))
+                            <p class="text-xs text-slate-500 dark:text-slate-400">
+                                {{ __('admin.exports.expires', ['time' => \Illuminate\Support\Carbon::parse($notification->data['expires_at'])->toDayDateTimeString()]) }}
+                            </p>
+                        @endif
+                    </div>
+                    @if (! empty($notification->data['url']))
+                        <x-ui.button href="{{ $notification->data['url'] }}">
+                            {{ __('admin.exports.download') }}
+                        </x-ui.button>
+                    @endif
+                </div>
+            </x-ui.alert>
+        @endforeach
+    @endif
+
+    @can('access-admin')
+        <x-ui.surface tag="section" class="space-y-3 dark:text-slate-100">
+            <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div>
+                    <p class="text-base font-semibold text-slate-900 dark:text-white">
+                        {{ __('admin.exports.title') }}
+                    </p>
+                    <p class="text-sm text-slate-600 dark:text-slate-300">
+                        {{ __('admin.exports.hint') }}
+                    </p>
+                </div>
+                <form method="POST" action="{{ route('admin.posts.export') }}" class="flex flex-col gap-2 sm:flex-row sm:items-center">
+                    @csrf
+                    @if ($category)
+                        <input type="hidden" name="category" value="{{ $category }}">
+                    @endif
+                    @if ($filterByTag)
+                        <input type="hidden" name="filterByTag" value="{{ $filterByTag }}">
+                    @endif
+                    @if ($author)
+                        <input type="hidden" name="author" value="{{ $author }}">
+                    @endif
+                    <label for="export-format" class="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                        {{ __('admin.exports.format_label') }}
+                    </label>
+                    <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+                        <select
+                            id="export-format"
+                            name="format"
+                            class="w-full rounded-2xl border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 sm:w-40"
+                        >
+                            <option value="csv" @selected(old('format', 'csv') === 'csv')>{{ __('admin.exports.format_csv') }}</option>
+                            <option value="json" @selected(old('format', 'csv') === 'json')>{{ __('admin.exports.format_json') }}</option>
+                        </select>
+                        <x-ui.button type="submit">
+                            {{ __('admin.exports.export_button') }}
+                        </x-ui.button>
+                    </div>
+                </form>
+            </div>
+        </x-ui.surface>
+    @endcan
 
     @if ($categories->isNotEmpty())
         <x-ui.surface tag="section" class="space-y-4 dark:text-slate-100">

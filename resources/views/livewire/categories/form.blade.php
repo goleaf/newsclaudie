@@ -63,6 +63,13 @@ new class extends Component {
         ];
     }
 
+    public function updated(string $propertyName): void
+    {
+        if (in_array($propertyName, ['name', 'slug', 'description'], true)) {
+            $this->validateOnly($propertyName);
+        }
+    }
+
     public function updatedName(string $value): void
     {
         if ($this->slugManuallyEdited) {
@@ -122,7 +129,13 @@ new class extends Component {
 
         <x-ui.card>
             <form wire:submit.prevent="save" class="space-y-6">
-                <div class="space-y-2">
+                @php
+                    $nameError = $errors->first('name');
+                    $slugError = $errors->first('slug');
+                    $descriptionError = $errors->first('description');
+                @endphp
+
+                <div class="space-y-2" data-validation-field="name">
                     <x-label for="name" :value="__('categories.form.name_label')" />
                     <x-input
                         id="name"
@@ -132,11 +145,15 @@ new class extends Component {
                         autofocus
                         placeholder="{{ __('categories.form.name_placeholder') }}"
                         wire:model.live.debounce.300ms="name"
+                        :invalid="(bool) $nameError"
+                        @if ($nameError) aria-describedby="name-error" @endif
                     />
-                    @error('name') <p class="text-sm text-rose-500">{{ $message }}</p> @enderror
+                    @if ($nameError)
+                        <p id="name-error" class="text-sm text-rose-500" data-field-error>{{ $nameError }}</p>
+                    @endif
                 </div>
 
-                <div class="space-y-2">
+                <div class="space-y-2" data-validation-field="slug">
                     <x-label for="slug" :value="__('categories.form.slug_label')" />
                     <x-input
                         id="slug"
@@ -145,22 +162,31 @@ new class extends Component {
                         required
                         placeholder="{{ __('categories.form.slug_placeholder') }}"
                         wire:model.live.debounce.300ms="slug"
+                        pattern="^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                        :invalid="(bool) $slugError"
+                        aria-describedby="slug-hint{{ $slugError ? ' slug-error' : '' }}"
                     />
-                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                    <p id="slug-hint" class="text-xs text-slate-500 dark:text-slate-400" data-field-hint>
                         {{ __('categories.form.slug_help') }}
                     </p>
-                    @error('slug') <p class="text-sm text-rose-500">{{ $message }}</p> @enderror
+                    @if ($slugError)
+                        <p id="slug-error" class="text-sm text-rose-500" data-field-error>{{ $slugError }}</p>
+                    @endif
                 </div>
 
-                <div class="space-y-2">
+                <div class="space-y-2" data-validation-field="description">
                     <x-label for="description" :value="__('categories.form.description_label')" />
                     <x-textarea
                         id="description"
                         rows="4"
                         placeholder="{{ __('categories.form.description_placeholder') }}"
                         wire:model.live="description"
+                        :invalid="(bool) $descriptionError"
+                        @if ($descriptionError) aria-describedby="description-error" @endif
                     ></x-textarea>
-                    @error('description') <p class="text-sm text-rose-500">{{ $message }}</p> @enderror
+                    @if ($descriptionError)
+                        <p id="description-error" class="text-sm text-rose-500" data-field-error>{{ $descriptionError }}</p>
+                    @endif
                 </div>
 
                 <div class="flex flex-wrap items-center justify-between gap-3">

@@ -29,7 +29,7 @@ final class StorePostRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'title' => 'required|string|max:255',
@@ -38,7 +38,26 @@ final class StorePostRequest extends FormRequest
             'featured_image' => 'nullable|url|max:255',
             'tags' => 'nullable|array',
             'tags.*' => 'string|max:50',
+            'categories' => 'nullable|array',
+            'categories.*' => 'integer|exists:categories,id',
             'published_at' => 'nullable|date|after:1970-12-31T12:00|before:2038-01-09T03:14',
+        ];
+    }
+
+    /**
+     * Custom validation messages for clearer field feedback.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'tags.array' => __('validation.posts.tags_array'),
+            'tags.*.string' => __('validation.posts.tags_string'),
+            'tags.*.max' => __('validation.posts.tags_length', ['max' => 50]),
+            'categories.array' => __('validation.posts.categories_array'),
+            'categories.*.integer' => __('validation.posts.categories_integer'),
+            'categories.*.exists' => __('validation.posts.categories_exists'),
         ];
     }
 
@@ -54,10 +73,9 @@ final class StorePostRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'published_at' => $this->is_draft
-                ? null
-                : Carbon::parse($this->published_at),
+            'published_at' => $this->normalizePublishedAt(),
             'tags' => $this->prepareTagsInput($this->input('tags_input')),
+            'categories' => $this->prepareCategoryIds($this->input('categories')),
         ]);
     }
 
@@ -77,5 +95,38 @@ final class StorePostRequest extends FormRequest
             ->values();
 
         return $tags->isEmpty() ? null : $tags->all();
+    }
+
+    /**
+     * Normalize the incoming published_at value while preserving invalid input for validation feedback.
+     */
+    protected function normalizePublishedAt(): mixed
+    {
+        if ($this->is_draft || ! $this->filled('published_at')) {
+            return null;
+        }
+
+        $value = $this->input('published_at');
+
+        try {
+            return Carbon::parse($value);
+        } catch (\Throwable) {
+            return $value;
+        }
+    }
+
+    /**
+     * Normalize the incoming category IDs to a unique integer list.
+     */
+    protected function prepareCategoryIds($raw): array
+    {
+        $candidates = is_array($raw) ? $raw : ($raw === null ? [] : [$raw]);
+
+        return collect($candidates)
+            ->map(fn ($id) => is_numeric($id) ? (int) $id : $id)
+            ->filter(fn ($id) => is_int($id) && $id > 0)
+            ->unique()
+            ->values()
+            ->all();
     }
 }

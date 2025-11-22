@@ -99,8 +99,116 @@ const initClearPublishedAtButtons = (): void => {
     });
 };
 
+type ValidatableElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+
+const resolveInvalidClasses = (element: ValidatableElement): string[] => {
+    const styles = element.getAttribute('data-invalid-styles');
+
+    if (styles) {
+        return styles.split(' ').filter(Boolean);
+    }
+
+    return [
+        'border-rose-400',
+        'ring-2',
+        'ring-rose-100',
+        'focus:border-rose-500',
+        'focus:ring-rose-200',
+        'dark:border-rose-500',
+        'dark:ring-rose-500/30',
+        'dark:focus:border-rose-400',
+        'dark:focus:ring-rose-500/40',
+    ];
+};
+
+const initValidationFeedback = (): void => {
+    document.querySelectorAll<HTMLElement>('[data-validation-field]').forEach((field) => {
+        const control = field.querySelector<ValidatableElement>('input, textarea, select');
+        const errorMessage = field.querySelector<HTMLElement>('[data-field-error]');
+
+        if (!control) {
+            return;
+        }
+
+        const invalidClasses = resolveInvalidClasses(control);
+        const validationType = control.dataset.validationType;
+
+        const setInvalidState = (isInvalid: boolean, message?: string): void => {
+            if (isInvalid) {
+                control.classList.add(...invalidClasses);
+                control.setAttribute('aria-invalid', 'true');
+
+                if (errorMessage) {
+                    if (message) {
+                        errorMessage.textContent = message;
+                    }
+
+                    errorMessage.classList.remove('hidden');
+                }
+
+                return;
+            }
+
+            control.classList.remove(...invalidClasses);
+            control.removeAttribute('aria-invalid');
+
+            if (errorMessage) {
+                errorMessage.classList.add('hidden');
+            }
+        };
+
+        const validateTags = (): boolean => {
+            const maxLength = Number(control.dataset.tagMaxLength ?? '50');
+            const raw = control.value ?? '';
+            const tags = raw
+                .split(',')
+                .map((tag) => tag.trim())
+                .filter(Boolean);
+
+            if (tags.length === 0) {
+                return true;
+            }
+
+            const tooLong = tags.find((tag) => tag.length > maxLength);
+
+            if (tooLong) {
+                const message = control.dataset.tagLengthError;
+                setInvalidState(true, message);
+
+                return false;
+            }
+
+            return true;
+        };
+
+        const runValidation = (): void => {
+            if (validationType === 'tags') {
+                const valid = validateTags();
+
+                if (valid) {
+                    setInvalidState(false);
+                }
+
+                return;
+            }
+
+            setInvalidState(!control.checkValidity());
+        };
+
+        if (errorMessage && !errorMessage.classList.contains('hidden')) {
+            control.setAttribute('aria-invalid', 'true');
+            control.classList.add(...invalidClasses);
+        }
+
+        ['input', 'change', 'blur'].forEach((eventName) => {
+            control.addEventListener(eventName, runValidation);
+        });
+    });
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     initThemeToggle();
     initMobileNav();
     initClearPublishedAtButtons();
+    initValidationFeedback();
 });
