@@ -311,7 +311,7 @@
   - Format hints provided (e.g., slug format, email format)
   - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5_
 
-- [ ] 11.2 Write property test for validation error display
+- [-] 11.2 Write property test for validation error display
   - **Property 4: Invalid input rejection**
   - **Validates: Requirements 10.1, 10.4**
 
@@ -398,6 +398,6 @@
   - Document configuration options
   - _Requirements: All requirements_
 
-- [-] 16. Final checkpoint - Ensure all tests pass
+- [x] 16. Final checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
