@@ -68,6 +68,7 @@
         :pagination-variant="$variant"
         :pagination-edge="$edge"
         :query="$query"
+        id="data-table"
         aria-label="{{ $tableLabel }}"
         data-admin-table="true"
         data-admin-table-id="{{ $tableId }}"

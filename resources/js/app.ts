@@ -2,9 +2,12 @@ import './bootstrap';
 import '../css/app.css';
 import Alpine from 'alpinejs';
 import { adminPostActions } from './admin-post-actions';
+import { optimisticUI, optimisticComponent } from './admin-optimistic-ui';
 
 window.Alpine = Alpine;
 window.adminPostActions = adminPostActions;
+window.optimisticUI = optimisticUI;
+window.optimisticComponent = optimisticComponent;
 Alpine.start();
 
 const initThemeToggle = (): void => {
@@ -123,43 +126,49 @@ const resolveInvalidClasses = (element: ValidatableElement): string[] => {
 
 const initValidationFeedback = (): void => {
     document.querySelectorAll<HTMLElement>('[data-validation-field]').forEach((field) => {
-        const control = field.querySelector<ValidatableElement>('input, textarea, select');
-        const errorMessage = field.querySelector<HTMLElement>('[data-field-error]');
+        const controls = Array.from(field.querySelectorAll<ValidatableElement>('input, textarea, select'));
+        const errorMessages = field.querySelectorAll<HTMLElement>('[data-field-error]');
+        const hints = field.querySelectorAll<HTMLElement>('[data-field-hint]');
 
-        if (!control) {
+        if (controls.length === 0) {
             return;
         }
 
-        const invalidClasses = resolveInvalidClasses(control);
-        const validationType = control.dataset.validationType;
+        const primaryControl = controls[0];
+        const invalidClasses = resolveInvalidClasses(primaryControl);
+        const validationType = primaryControl.dataset.validationType;
 
         const setInvalidState = (isInvalid: boolean, message?: string): void => {
             if (isInvalid) {
-                control.classList.add(...invalidClasses);
-                control.setAttribute('aria-invalid', 'true');
+                primaryControl.classList.add(...invalidClasses);
+                primaryControl.setAttribute('aria-invalid', 'true');
 
-                if (errorMessage) {
-                    if (message) {
+                errorMessages.forEach((errorMessage, index) => {
+                    if (message && index === 0) {
                         errorMessage.textContent = message;
                     }
 
                     errorMessage.classList.remove('hidden');
-                }
+                });
+
+                hints.forEach((hint) => hint.classList.add('hidden'));
 
                 return;
             }
 
-            control.classList.remove(...invalidClasses);
-            control.removeAttribute('aria-invalid');
+            primaryControl.classList.remove(...invalidClasses);
+            primaryControl.removeAttribute('aria-invalid');
 
-            if (errorMessage) {
+            errorMessages.forEach((errorMessage) => {
                 errorMessage.classList.add('hidden');
-            }
+            });
+
+            hints.forEach((hint) => hint.classList.remove('hidden'));
         };
 
         const validateTags = (): boolean => {
-            const maxLength = Number(control.dataset.tagMaxLength ?? '50');
-            const raw = control.value ?? '';
+            const maxLength = Number(primaryControl.dataset.tagMaxLength ?? '50');
+            const raw = primaryControl.value ?? '';
             const tags = raw
                 .split(',')
                 .map((tag) => tag.trim())
@@ -172,7 +181,7 @@ const initValidationFeedback = (): void => {
             const tooLong = tags.find((tag) => tag.length > maxLength);
 
             if (tooLong) {
-                const message = control.dataset.tagLengthError;
+                const message = primaryControl.dataset.tagLengthError;
                 setInvalidState(true, message);
 
                 return false;
@@ -192,18 +201,312 @@ const initValidationFeedback = (): void => {
                 return;
             }
 
-            setInvalidState(!control.checkValidity());
+            const hasInvalidControl = controls.some((control) => !control.checkValidity());
+            setInvalidState(hasInvalidControl);
         };
 
-        if (errorMessage && !errorMessage.classList.contains('hidden')) {
-            control.setAttribute('aria-invalid', 'true');
-            control.classList.add(...invalidClasses);
-        }
+        errorMessages.forEach((errorMessage) => {
+            if (!errorMessage.classList.contains('hidden')) {
+                primaryControl.setAttribute('aria-invalid', 'true');
+                primaryControl.classList.add(...invalidClasses);
+            }
+        });
 
-        ['input', 'change', 'blur'].forEach((eventName) => {
-            control.addEventListener(eventName, runValidation);
+        controls.forEach((control) => {
+            ['input', 'change', 'blur'].forEach((eventName) => {
+                control.addEventListener(eventName, runValidation);
+            });
         });
     });
+};
+
+const isTextEntry = (target: EventTarget | null): target is HTMLElement => {
+    if (!(target instanceof HTMLElement)) {
+        return false;
+    }
+
+    const tag = target.tagName.toLowerCase();
+
+    return target.isContentEditable || tag === 'input' || tag === 'textarea' || tag === 'select';
+};
+
+const findOpenFluxDialog = (): HTMLDialogElement | null =>
+    document.querySelector<HTMLDialogElement>('[data-flux-modal] dialog[open]');
+
+class AdminTableNavigator {
+    element: HTMLElement;
+    rows: HTMLElement[] = [];
+    selectedId: string | null = null;
+
+    constructor(element: HTMLElement) {
+        this.element = element;
+        this.refreshRows();
+    }
+
+    private rowId(row: HTMLElement): string {
+        return row.dataset.rowId ?? String(this.rows.indexOf(row));
+    }
+
+    refreshRows(): void {
+        this.rows = Array.from(this.element.querySelectorAll<HTMLElement>('[data-admin-row]'));
+
+        if (this.rows.length === 0) {
+            this.selectedId = null;
+            return;
+        }
+
+        if (!this.selectedId) {
+            this.clearSelection();
+            return;
+        }
+
+        const current = this.rows.find((row) => this.rowId(row) === this.selectedId);
+
+        if (current) {
+            this.applySelection(current, false, false);
+        } else {
+            this.clearSelection();
+        }
+    }
+
+    applySelection(row: HTMLElement, scroll = true, focus = true): void {
+        this.rows.forEach((item) => {
+            const isSelected = item === row;
+            item.classList.toggle('admin-row-selected', isSelected);
+            item.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+        });
+
+        this.selectedId = this.rowId(row);
+
+        if (focus) {
+            try {
+                row.focus({ preventScroll: true });
+            } catch {
+                row.focus();
+            }
+        }
+
+        if (scroll) {
+            row.scrollIntoView({ block: 'nearest' });
+        }
+    }
+
+    move(delta: number): void {
+        if (this.rows.length === 0) {
+            return;
+        }
+
+        const currentIndex = this.rows.findIndex((row) => this.rowId(row) === this.selectedId);
+        const safeIndex = currentIndex >= 0 ? currentIndex : -1;
+        const targetIndex = Math.min(Math.max(safeIndex + delta, 0), this.rows.length - 1);
+
+        this.applySelection(this.rows[targetIndex]);
+    }
+
+    currentRow(): HTMLElement | null {
+        if (this.rows.length === 0 || !this.selectedId) {
+            return null;
+        }
+
+        return this.rows.find((row) => this.rowId(row) === this.selectedId) ?? null;
+    }
+
+    deleteSelected(): boolean {
+        const row = this.currentRow();
+
+        if (!row) {
+            return false;
+        }
+
+        const trigger = row.querySelector<HTMLElement>('[data-row-delete]');
+
+        if (!trigger) {
+            return false;
+        }
+
+        try {
+            trigger.focus({ preventScroll: true });
+        } catch {
+            trigger.focus();
+        }
+
+        trigger.click();
+
+        return true;
+    }
+
+    clearSelection(): void {
+        this.rows.forEach((row) => {
+            row.classList.remove('admin-row-selected');
+            row.setAttribute('aria-selected', 'false');
+        });
+
+        this.selectedId = null;
+    }
+}
+
+const initAdminKeyboardShortcuts = (): void => {
+    const adminRoot = document.querySelector<HTMLElement>('[data-admin-keyboard]');
+
+    if (!adminRoot) {
+        return;
+    }
+
+    const tables = new Map<HTMLElement, AdminTableNavigator>();
+    let activeTable: AdminTableNavigator | null = null;
+    let refreshTimer: number | null = null;
+
+    const refreshTables = (): void => {
+        const tableElements = Array.from(adminRoot.querySelectorAll<HTMLElement>('[data-admin-table]'));
+        const nextTables = new Map<HTMLElement, AdminTableNavigator>();
+
+        tableElements.forEach((element) => {
+            const navigator = tables.get(element) ?? new AdminTableNavigator(element);
+            navigator.refreshRows();
+            nextTables.set(element, navigator);
+        });
+
+        tables.clear();
+        nextTables.forEach((navigator, element) => {
+            tables.set(element, navigator);
+        });
+
+        if (!activeTable || !tables.has(activeTable.element)) {
+            activeTable = tableElements.length ? tables.get(tableElements[0]) ?? null : null;
+        }
+    };
+
+    refreshTables();
+
+    const observer = new MutationObserver(() => {
+        if (refreshTimer !== null) {
+            window.clearTimeout(refreshTimer);
+        }
+
+        refreshTimer = window.setTimeout(() => refreshTables(), 80);
+    });
+
+    observer.observe(adminRoot, { childList: true, subtree: true });
+
+    adminRoot.addEventListener('click', (event) => {
+        const row = (event.target as HTMLElement | null)?.closest<HTMLElement>('[data-admin-row]');
+
+        if (!row) {
+            return;
+        }
+
+        const tableElement = row.closest<HTMLElement>('[data-admin-table]');
+
+        if (!tableElement) {
+            return;
+        }
+
+        const navigator = tables.get(tableElement);
+
+        if (!navigator) {
+            return;
+        }
+
+        navigator.refreshRows();
+        navigator.applySelection(row, false);
+        activeTable = navigator;
+    });
+
+    const openCreateModal = (): void => {
+        const trigger = adminRoot.querySelector<HTMLElement>('[data-admin-create-trigger]');
+
+        if (trigger) {
+            trigger.focus();
+            trigger.click();
+        }
+    };
+
+    const closeActiveModal = (): boolean => {
+        const fluxDialog = findOpenFluxDialog();
+
+        if (fluxDialog) {
+            const modalName = fluxDialog.getAttribute('data-modal');
+            document.dispatchEvent(
+                new CustomEvent('modal-close', {
+                    detail: modalName ? { name: modalName } : {},
+                }),
+            );
+            fluxDialog.close();
+
+            return true;
+        }
+
+        const overlay = document.querySelector<HTMLElement>('[data-admin-modal]');
+
+        if (overlay) {
+            const closer = overlay.querySelector<HTMLElement>('[data-admin-modal-close]');
+            closer?.click();
+
+            return true;
+        }
+
+        return false;
+    };
+
+    const handleKeyDown = (event: KeyboardEvent): void => {
+        if (event.defaultPrevented) {
+            return;
+        }
+
+        const target = event.target as HTMLElement | null;
+        const fluxDialog = findOpenFluxDialog();
+        const overlay = document.querySelector<HTMLElement>('[data-admin-modal]');
+
+        if (fluxDialog || overlay) {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                closeActiveModal();
+            }
+
+            return;
+        }
+
+        if (event.key.toLowerCase() === 'c' && event.shiftKey && (event.metaKey || event.ctrlKey)) {
+            event.preventDefault();
+            openCreateModal();
+
+            return;
+        }
+
+        if (isTextEntry(target)) {
+            return;
+        }
+
+        if (event.key === 'ArrowDown') {
+            if (activeTable) {
+                event.preventDefault();
+                activeTable.refreshRows();
+                activeTable.move(1);
+            }
+
+            return;
+        }
+
+        if (event.key === 'ArrowUp') {
+            if (activeTable) {
+                event.preventDefault();
+                activeTable.refreshRows();
+                activeTable.move(-1);
+            }
+
+            return;
+        }
+
+        if (event.key === 'Delete') {
+            if (activeTable) {
+                event.preventDefault();
+                activeTable.refreshRows();
+                activeTable.deleteSelected();
+            }
+        }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -211,4 +514,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobileNav();
     initClearPublishedAtButtons();
     initValidationFeedback();
+    initAdminKeyboardShortcuts();
 });

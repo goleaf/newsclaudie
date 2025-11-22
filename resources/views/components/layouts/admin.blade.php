@@ -29,7 +29,10 @@
         @stack('meta')
     </head>
     <body class="min-h-screen bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100" data-admin-keyboard>
-        <flux:sidebar sticky stashable class="border-e border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+        {{-- Skip Links for Accessibility --}}
+        <x-admin.skip-links />
+
+        <flux:sidebar sticky stashable class="border-e border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900" role="navigation" aria-label="{{ __('admin.sidebar_navigation') }}">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
             <a href="{{ route('home') }}" class="me-5 flex items-center gap-2 text-lg font-semibold tracking-tight" wire:navigate>
@@ -64,7 +67,7 @@
             <flux:badge>{{ config('app.name') }}</flux:badge>
         </flux:header>
 
-        <flux:main class="min-h-screen bg-slate-50/80 px-4 py-6 sm:px-6 lg:ps-[20rem]">
+        <flux:main class="min-h-screen bg-slate-50/80 px-4 py-6 sm:px-6 lg:ps-80" role="main" id="main-content">
             <div class="mx-auto flex w-full max-w-6xl flex-col gap-6">
                 {{ $slot }}
             </div>

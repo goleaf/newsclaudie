@@ -22,3 +22,4 @@ final class LocaleController extends Controller
         return back();
     }
 }
+

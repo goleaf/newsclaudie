@@ -62,3 +62,4 @@
   - See the migration guide and the report's pagination coverage.
 - ☑ Outline testing guidance (manual + automated) without modifying tests.  
   - Tracked in `docs/TEST_COVERAGE.md`; future test updates remain on hold.
+

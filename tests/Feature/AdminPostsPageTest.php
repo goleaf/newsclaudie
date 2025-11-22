@@ -71,3 +71,102 @@ it('toggles sort direction when the same column is selected', function (): void 
         ->call('sortBy', 'title')
         ->assertSet('sortDirection', 'desc');
 });
+
+it('keeps sort state in pagination links', function (): void {
+    $admin = User::factory()->create(['is_admin' => true]);
+
+    Post::factory()->count(12)->create([
+        'user_id' => $admin->id,
+        'published_at' => now(),
+    ]);
+
+    // Test via HTTP request to ensure query string is properly set
+    actingAs($admin)
+        ->get(route('admin.posts.index', ['sort' => 'title', 'direction' => 'asc', 'perPage' => 10]))
+        ->assertOk()
+        ->assertSee('sort=title', false)
+        ->assertSee('direction=asc', false)
+        ->assertSee('perPage=10', false);
+});
+
+it('selects all visible posts when toggling select all', function (): void {
+    $admin = User::factory()->create(['is_admin' => true]);
+
+    $posts = Post::factory()->count(3)->create([
+        'user_id' => $admin->id,
+        'published_at' => now(),
+    ]);
+
+    $component = Livewire::actingAs($admin)
+        ->test('admin.posts.index');
+
+    $expectedIds = $posts->pluck('id')->sort()->values()->all();
+
+    $component->set('selectAll', true);
+    
+    $selected = collect($component->get('selected'))->sort()->values()->all();
+    expect($selected)->toEqual($expectedIds);
+    
+    $component->set('selectAll', false);
+    expect($component->get('selected'))->toEqual([]);
+});
+
+it('bulk publishes selected drafts and clears the selection', function (): void {
+    $admin = User::factory()->create(['is_admin' => true]);
+
+    $drafts = Post::factory()->count(2)->create([
+        'user_id' => $admin->id,
+        'published_at' => null,
+    ]);
+
+    $component = Livewire::actingAs($admin)
+        ->test('admin.posts.index');
+
+    $component
+        ->set('selected', $drafts->pluck('id')->all())
+        ->call('bulkPublish')
+        ->assertSet('selected', [])
+        ->assertSet('selectAll', false);
+
+    $feedback = $component->get('bulkFeedback');
+
+    expect($feedback)->toMatchArray([
+        'status' => 'success',
+        'action' => 'publish',
+        'attempted' => 2,
+        'updated' => 2,
+        'failures' => [],
+    ]);
+
+    $drafts->each(fn (Post $post) => expect($post->fresh()->isPublished())->toBeTrue());
+});
+
+it('reports failures when some bulk actions cannot complete', function (): void {
+    $admin = User::factory()->create(['is_admin' => true]);
+
+    $post = Post::factory()->create([
+        'user_id' => $admin->id,
+        'published_at' => now(),
+    ]);
+
+    $missingId = $post->id + 1000;
+
+    $component = Livewire::actingAs($admin)
+        ->test('admin.posts.index');
+
+    $component
+        ->set('selected', [$post->id, $missingId])
+        ->call('bulkUnpublish')
+        ->assertSet('selected', [$missingId]);
+
+    $feedback = $component->get('bulkFeedback');
+
+    expect($feedback['status'])->toBe('warning')
+        ->and($feedback['action'])->toBe('unpublish')
+        ->and($feedback['attempted'])->toBe(2)
+        ->and($feedback['updated'])->toBe(1)
+        ->and($feedback['failures'])->toHaveCount(1)
+        ->and($feedback['failures'][0]['id'])->toBe($missingId);
+
+    expect($post->fresh()->isPublished())->toBeFalse();
+});

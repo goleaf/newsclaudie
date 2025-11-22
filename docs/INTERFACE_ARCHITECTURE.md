@@ -66,3 +66,4 @@ Alpine.start();
 - `docs/INTERFACE_MIGRATION.md` (see companion file) explains how to adopt the pagination stack or TypeScript globals in future features.
 - `npm run typecheck` gates TypeScript regressions, while `php artisan test --parallel` (see `PROJECT_SUMMARY.md`) covers backend flows without modifying test fixtures.
 
+

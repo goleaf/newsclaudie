@@ -73,4 +73,48 @@
     .admin-row-selected {
         @apply ring-2 ring-indigo-500/70 ring-offset-1 ring-offset-white dark:ring-indigo-400/70 dark:ring-offset-slate-900;
     }
+
+    /* Optimistic UI animations */
+    @keyframes optimistic-pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.7;
+        }
+    }
+
+    .optimistic-update {
+        animation: optimistic-pulse 0.6s ease-in-out;
+    }
+
+    @keyframes optimistic-success {
+        0% {
+            background-color: rgb(34 197 94 / 0.1);
+        }
+        100% {
+            background-color: transparent;
+        }
+    }
+
+    .optimistic-success {
+        animation: optimistic-success 1s ease-out;
+    }
+
+    @keyframes optimistic-error {
+        0%, 100% {
+            transform: translateX(0);
+        }
+        25% {
+            transform: translateX(-4px);
+        }
+        75% {
+            transform: translateX(4px);
+        }
+    }
+
+    .optimistic-error {
+        animation: optimistic-error 0.4s ease-in-out;
+        background-color: rgb(239 68 68 / 0.1);
+    }
 }

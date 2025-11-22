@@ -38,3 +38,4 @@ final class PostTagInputTest extends TestCase
         $this->assertSame(['climate', 'policy', 'insights'], $post->tags);
     }
 }
+

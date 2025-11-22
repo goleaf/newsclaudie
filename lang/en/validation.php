@@ -163,15 +163,29 @@ return [
     'attributes' => [],
 
     // Category validation messages
-    'category_name_required' => 'The category name is required.',
-    'category_name_string' => 'The category name must be a string.',
-    'category_name_max' => 'The category name may not be greater than 255 characters.',
-    'category_slug_required' => 'The category slug is required.',
-    'category_slug_string' => 'The category slug must be a string.',
-    'category_slug_max' => 'The category slug may not be greater than 255 characters.',
-    'category_slug_regex' => 'The category slug format is invalid. Use lowercase letters, numbers, and hyphens only.',
-    'category_slug_unique' => 'This category slug is already taken.',
-    'category_description_string' => 'The category description must be a string.',
-    'category_description_max' => 'The category description may not be greater than 1000 characters.',
+    'category' => [
+        'name_required' => 'The category name is required.',
+        'name_string' => 'The category name must be a string.',
+        'name_max' => 'The category name may not be greater than 255 characters.',
+        'slug_required' => 'The category slug is required.',
+        'slug_string' => 'The category slug must be a string.',
+        'slug_max' => 'The category slug may not be greater than 255 characters.',
+        'slug_regex' => 'The category slug format is invalid. Use lowercase letters, numbers, and hyphens only.',
+        'slug_unique' => 'This category slug is already taken.',
+        'description_string' => 'The category description must be a string.',
+        'description_max' => 'The category description may not be greater than 1000 characters.',
+    ],
+
+    // Post validation messages
+    'post' => [
+        'title_required' => 'The post title is required.',
+        'title_string' => 'The post title must be a string.',
+        'title_max' => 'The post title may not be greater than 255 characters.',
+        'slug_required' => 'The post slug is required.',
+        'slug_string' => 'The post slug must be a string.',
+        'slug_max' => 'The post slug may not be greater than 255 characters.',
+        'slug_regex' => 'The post slug format is invalid. Use lowercase letters, numbers, and hyphens only.',
+        'slug_unique' => 'This post slug is already taken.',
+    ],
 
 ];

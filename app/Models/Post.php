@@ -26,6 +26,7 @@ final class Post extends Model
     protected $fillable = [
         'user_id',
         'title',
+        'slug',
         'body',
         'description',
         'featured_image',

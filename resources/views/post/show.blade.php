@@ -19,7 +19,7 @@
     @php
         $authorName = $post->author->name ?? __('posts.unknown_author');
     @endphp
-	<meta name="author" content="{{ $authorName }}">
+    <meta name="author" content="{{ $authorName }}">
 	<meta name="description" content="{{ $post->description }}">
 	@if(config('blog.withTags') && $post->tags)
 	    <meta name="keywords" itemprop="keywords" content="{{ implode(', ', $post->tags) }}">
@@ -28,7 +28,36 @@
 	    <meta itemprop="license" content="{{ config('blog.contentLicense.link') }}">
 	@endif
 	@endpush
-	
+
+    <div class="mx-auto w-full max-w-5xl px-4 pt-6 sm:px-6 lg:px-8">
+        <nav aria-label="{{ __('post.details.categories_label') }}">
+            <ol class="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                <li>
+                    <a href="{{ route('home') }}" class="rounded-full bg-slate-100 px-3 py-1 transition hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700">
+                        {{ __('nav.home') }}
+                    </a>
+                </li>
+                <li class="text-slate-400 dark:text-slate-600">/</li>
+                <li>
+                    <a href="{{ route('posts.index') }}" class="rounded-full bg-slate-100 px-3 py-1 transition hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700">
+                        {{ __('posts.title') }}
+                    </a>
+                </li>
+                @foreach ($post->categories as $category)
+                    <li class="text-slate-400 dark:text-slate-600">/</li>
+                    <li>
+                        <a
+                            href="{{ route('categories.show', $category) }}"
+                            class="rounded-full bg-slate-900/5 px-3 py-1 text-slate-700 transition hover:bg-slate-900/10 dark:bg-white/10 dark:text-slate-100 dark:hover:bg-white/20"
+                        >
+                            {{ $category->name }}
+                        </a>
+                    </li>
+                @endforeach
+            </ol>
+        </nav>
+    </div>
+
     <x-ui.page-header
         :title="$post->title"
         :subtitle="$post->description"

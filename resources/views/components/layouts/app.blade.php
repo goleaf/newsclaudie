@@ -2,3 +2,4 @@
     {{ $slot }}
 </x-app-layout>
 
+

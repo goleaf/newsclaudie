@@ -8,7 +8,8 @@
         "lint": "prettier --write resources/",
         "test:lint": "prettier --check resources/",
         "typecheck": "tsc --noEmit",
-        "playwright:install": "playwright install"
+        "playwright:install": "playwright install",
+        "test:optimistic": "tsx tests/js/admin-post-actions.test.ts"
     },
     "dependencies": {
         "alpinejs": "^3.15.2",
@@ -25,6 +26,7 @@
         "prettier": "^3.6.2",
         "prettier-plugin-organize-imports": "^4.3.0",
         "prettier-plugin-tailwindcss": "^0.7.1",
+        "tsx": "^4.19.0",
         "tailwindcss": "^4.1.17",
         "typescript": "^5.7.2",
         "vite": "^7.2.4"

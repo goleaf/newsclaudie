@@ -18,3 +18,4 @@ parameters:
 
     tmpDir: /tmp/phpstan
 
+

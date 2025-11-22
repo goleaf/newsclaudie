@@ -24,3 +24,4 @@ it('forbids non-admins from visiting the admin users page', function (): void {
         ->assertForbidden();
 });
 
+

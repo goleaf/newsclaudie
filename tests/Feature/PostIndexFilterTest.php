@@ -39,3 +39,4 @@ final class PostIndexFilterTest extends TestCase
         $response->assertSee(__('validation.posts.category_exists'));
     }
 }
+

@@ -56,6 +56,7 @@
     x-on:click.outside="open = false"
     x-on:keydown.escape.window="open = false"
     class="space-y-3"
+    data-validation-field="categories"
 >
     <div class="flex items-center justify-between">
         <x-label :value="__('posts.form.categories_label')" />
@@ -122,7 +123,7 @@
 
     <div class="flex flex-wrap gap-2">
         <template x-if="selectedOptions().length === 0">
-            <span class="text-sm text-slate-500 dark:text-slate-400">{{ __('posts.form.categories_hint') }}</span>
+            <span class="text-sm text-slate-500 dark:text-slate-400" data-field-hint>{{ __('posts.form.categories_hint') }}</span>
         </template>
 
         <template x-for="option in selectedOptions()" :key="'badge-' + option.id">
@@ -162,9 +163,9 @@
     </noscript>
 
     @error('categories')
-        <p class="text-sm text-rose-500">{{ $message }}</p>
+        <p class="text-sm text-rose-500" data-field-error role="alert">{{ $message }}</p>
     @enderror
     @error('categories.*')
-        <p class="text-sm text-rose-500">{{ $message }}</p>
+        <p class="text-sm text-rose-500" data-field-error role="alert">{{ $message }}</p>
     @enderror
 </div>

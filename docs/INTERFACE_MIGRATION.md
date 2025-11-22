@@ -75,3 +75,4 @@ Replace raw `links()` calls with the shared component:
 - Change page-size selectors across posts, categories, and comments; ensure the query string updates and pagination resets to page 1.
 - Flip per-page values in Volt admin tables and confirm the dropdown reflects the persisted `?perPage=` query parameter after refresh.
 - Try invalid `per_page` values and confirm the UI snaps back to the nearest allowed option without losing filters.
+

@@ -24,3 +24,4 @@ interface TableDisplayable
     public static function getTableHeaders(): array;
 }
 
+

@@ -1,12 +1,14 @@
 <?php
 
 use App\Livewire\Concerns\ManagesPerPage;
+use App\Livewire\Concerns\ManagesSearch;
+use App\Models\Comment;
+use App\Models\Post;
 use App\Models\User;
-use App\Support\Pagination\PageSize;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rule;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use function Livewire\Volt\layout;
@@ -18,112 +20,86 @@ title(__('admin.users.title'));
 new class extends Component {
     use AuthorizesRequests;
     use ManagesPerPage;
+    use ManagesSearch;
     use WithPagination;
 
-    public ?string $search = null;
-
-    public string $newName = '';
-    public string $newEmail = '';
-    public string $newPassword = '';
-    public string $newPasswordConfirmation = '';
-    public bool $newIsAdmin = false;
-    public bool $newIsAuthor = false;
+    public bool $showCreateModal = false;
+    public bool $showDeleteModal = false;
+    public array $createForm = [
+        'name' => '',
+        'email' => '',
+        'password' => '',
+        'password_confirmation' => '',
+        'is_admin' => false,
+        'is_author' => false,
+        'is_banned' => false,
+    ];
+    public ?int $deletingUserId = null;
+    public array $deleteContext = [
+        'name' => '',
+        'posts' => 0,
+        'comments' => 0,
+    ];
+    public string $deleteStrategy = 'transfer';
+    public ?int $transferTarget = null;
+    public array $transferOptions = [];
 
     protected $listeners = ['user-updated' => '$refresh'];
-    protected array $queryString = [
+    protected $queryString = [
+        'perPage' => ['except' => 20],
         'search' => ['except' => ''],
+        'page' => ['except' => 1],
     ];
 
-    public function mount(): void
-    {
-        $this->queryString['perPage'] = ['except' => PageSize::contextDefault('admin')];
-    }
-
-    public function with(): array
-    {
-        $searchTerm = trim((string) $this->search);
-
-        $users = User::query()
-            ->when($searchTerm !== '', function ($query) use ($searchTerm) {
-                $query->where(function ($inner) use ($searchTerm) {
-                    $inner->where('name', 'like', '%'.$searchTerm.'%')
-                        ->orWhere('email', 'like', '%'.$searchTerm.'%');
-                });
-            })
-            ->orderByDesc('is_admin')
-            ->orderByDesc('is_author')
-            ->orderBy('name')
-            ->paginate($this->perPage);
-
-        return [
-            'users' => $users,
-            'searchTerm' => $searchTerm,
-            'userCountLabel' => trans_choice('admin.users.count', $users->total(), ['count' => $users->total()]),
-        ];
-    }
-
-    public function updatingSearch(): void
+    public function applySearchShortcut(): void
     {
         $this->resetPage();
+        $this->search = $this->sanitizeSearch($this->search);
     }
 
-    public function startCreate(): void
+    public function clearSearch(): void
     {
-        $this->authorize('create', User::class);
+        $this->resetPage();
+        $this->search = '';
+    }
 
+    public function clearFilters(): void
+    {
+        $this->clearSearch();
+    }
+
+    public function openCreateModal(): void
+    {
         $this->resetCreateForm();
-
-        $this->dispatch('modal-show', name: 'create-user');
+        $this->resetErrorBag();
+        $this->resetValidation();
+        $this->showCreateModal = true;
     }
 
     public function createUser(): void
     {
         $this->authorize('create', User::class);
 
-        $messages = [
-            'newEmail.unique' => __('admin.users.validation.email_unique'),
-            'newPassword.same' => __('admin.users.validation.password_match'),
-        ];
-
-        $validated = $this->validate(
-            [
-                'newName' => ['required', 'string', 'max:255'],
-                'newEmail' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-                'newPassword' => ['required', Password::defaults(), 'same:newPasswordConfirmation'],
-                'newPasswordConfirmation' => ['required'],
-                'newIsAdmin' => ['boolean'],
-                'newIsAuthor' => ['boolean'],
-            ],
-            $messages,
-            [
-                'newName' => __('admin.users.fields.name'),
-                'newEmail' => __('admin.users.fields.email'),
-                'newPassword' => __('admin.users.fields.password'),
-                'newPasswordConfirmation' => __('admin.users.fields.password_confirmation'),
-            ],
-        );
+        $validated = $this->validate($this->createRules());
 
         $user = User::create([
-            'name' => $validated['newName'],
-            'email' => $validated['newEmail'],
-            'password' => Hash::make($validated['newPassword']),
+            'name' => $validated['createForm']['name'],
+            'email' => $validated['createForm']['email'],
+            'password' => Hash::make($validated['createForm']['password']),
+            'is_admin' => (bool) $validated['createForm']['is_admin'],
+            'is_author' => (bool) $validated['createForm']['is_author'],
+            'is_banned' => (bool) $validated['createForm']['is_banned'],
         ]);
-
-        $user->forceFill([
-            'is_admin' => (bool) $validated['newIsAdmin'],
-            'is_author' => (bool) $validated['newIsAuthor'],
-        ])->save();
-
-        $this->resetCreateForm();
-        $this->resetPage();
 
         session()->flash('status', __('admin.users.created', ['name' => $user->name]));
 
-        $this->dispatch('modal-close', name: 'create-user');
+        $this->resetCreateForm();
+        $this->showCreateModal = false;
+        $this->resetPage();
         $this->dispatch('user-updated');
     }
 
-    public function deleteUser(User $user): void
+    public function confirmDelete(User $user): void
     {
         try {
             $this->authorize('delete', $user);
@@ -133,25 +109,161 @@ new class extends Component {
             return;
         }
 
+        $this->deletingUserId = $user->id;
+        $this->deleteStrategy = 'transfer';
+        $this->transferTarget = auth()->id();
+        $this->deleteContext = [
+            'name' => $user->name,
+            'posts' => Post::withoutGlobalScopes()->where('user_id', $user->id)->count(),
+            'comments' => Comment::where('user_id', $user->id)->count(),
+        ];
+        $this->transferOptions = User::query()
+            ->whereKeyNot($user->id)
+            ->orderBy('name')
+            ->get(['id', 'name'])
+            ->map(fn (User $candidate) => [
+                'id' => $candidate->id,
+                'name' => $candidate->name,
+            ])
+            ->all();
+
+        $this->resetErrorBag();
+        $this->resetValidation();
+        $this->showDeleteModal = true;
+    }
+
+    public function cancelDelete(): void
+    {
+        $this->showDeleteModal = false;
+        $this->deletingUserId = null;
+        $this->deleteContext = [
+            'name' => '',
+            'posts' => 0,
+            'comments' => 0,
+        ];
+        $this->deleteStrategy = 'transfer';
+        $this->transferTarget = auth()->id();
+        $this->transferOptions = [];
+    }
+
+    public function deleteUser(): void
+    {
+        if (! $this->deletingUserId) {
+            return;
+        }
+
+        $user = User::findOrFail($this->deletingUserId);
+
+        try {
+            $this->authorize('delete', $user);
+        } catch (AuthorizationException $exception) {
+            session()->flash('error', $exception->getMessage());
+            $this->cancelDelete();
+
+            return;
+        }
+
+        $strategy = $this->resolveDeleteStrategy($this->deleteStrategy);
+
+        if ($strategy === 'delete') {
+            $postIds = Post::withoutGlobalScopes()
+                ->where('user_id', $user->id)
+                ->pluck('id');
+
+            if ($postIds->isNotEmpty()) {
+                Comment::whereIn('post_id', $postIds)->delete();
+                Post::withoutGlobalScopes()->whereIn('id', $postIds)->delete();
+            }
+        } else {
+            $targetId = $this->transferTarget ?? auth()->id();
+
+            if ($targetId === $user->id) {
+                $targetId = auth()->id();
+            }
+
+            $target = User::find($targetId) ?? auth()->user();
+
+            Post::withoutGlobalScopes()
+                ->where('user_id', $user->id)
+                ->update(['user_id' => $target->id]);
+        }
+
+        Comment::where('user_id', $user->id)->delete();
+
         $user->delete();
 
         session()->flash('status', __('admin.users.deleted', ['name' => $user->name]));
 
+        $this->cancelDelete();
         $this->resetPage();
         $this->dispatch('user-updated');
     }
 
-    public function closeCreateModal(): void
+    protected function resolveDeleteStrategy(?string $strategy): string
     {
-        $this->resetCreateForm();
-        $this->dispatch('modal-close', name: 'create-user');
+        return in_array($strategy, ['transfer', 'delete'], true) ? $strategy : 'transfer';
+    }
+
+    protected function createRules(): array
+    {
+        return [
+            'createForm.name' => ['required', 'string', 'max:255'],
+            'createForm.email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')],
+            'createForm.password' => ['required', 'string', 'min:8', 'confirmed'],
+            'createForm.is_admin' => ['boolean'],
+            'createForm.is_author' => ['boolean'],
+            'createForm.is_banned' => ['boolean'],
+        ];
+    }
+
+    protected function resetCreateForm(): void
+    {
+        $this->createForm = [
+            'name' => '',
+            'email' => '',
+            'password' => '',
+            'password_confirmation' => '',
+            'is_admin' => false,
+            'is_author' => false,
+            'is_banned' => false,
+        ];
+    }
+
+    public function with(): array
+    {
+        $search = trim((string) $this->search);
+
+        $users = User::query()
+            ->withCount([
+                'posts as posts_count' => fn ($query) => $query->withoutGlobalScopes(),
+                'comments',
+            ])
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($inner) use ($search) {
+                    $inner->where('name', 'like', '%'.$search.'%')
+                        ->orWhere('email', 'like', '%'.$search.'%');
+                });
+            })
+            ->orderByDesc('is_admin')
+            ->orderByDesc('is_author')
+            ->orderBy('name')
+            ->paginate($this->perPage)
+            ->withQueryString();
+
+        return [
+            'users' => $users,
+            'searchTerm' => $search,
+            'isFiltered' => $search !== '',
+        ];
     }
 
     public function toggleAuthor(User $user): void
     {
         $this->authorize('update', $user);
 
-        if ($this->denySelfAction($user)) {
+        if ($user->is(auth()->user())) {
+            session()->flash('status', __('admin.users.cannot_self_update'));
+
             return;
         }
 
@@ -169,7 +281,9 @@ new class extends Component {
     {
         $this->authorize('update', $user);
 
-        if ($this->denySelfAction($user)) {
+        if ($user->is(auth()->user())) {
+            session()->flash('status', __('admin.users.cannot_self_update'));
+
             return;
         }
 
@@ -185,6 +299,12 @@ new class extends Component {
 
     public function toggleBan(User $user): void
     {
+        if ($user->is(auth()->user())) {
+            session()->flash('status', __('admin.users.cannot_self_update'));
+
+            return;
+        }
+
         try {
             $this->authorize('ban', $user);
         } catch (AuthorizationException $exception) {
@@ -202,39 +322,17 @@ new class extends Component {
 
         $this->dispatch('user-updated');
     }
-
-    private function resetCreateForm(): void
-    {
-        $this->reset([
-            'newName',
-            'newEmail',
-            'newPassword',
-            'newPasswordConfirmation',
-            'newIsAdmin',
-            'newIsAuthor',
-        ]);
-
-        $this->resetErrorBag();
-        $this->resetValidation();
-    }
-
-    private function denySelfAction(User $user): bool
-    {
-        if ($user->is(auth()->user())) {
-            session()->flash('error', __('admin.users.cannot_self_update'));
-
-            return true;
-        }
-
-        return false;
-    }
 }; ?>
 
 <div class="space-y-6">
     <flux:page-header
         :heading="__('admin.users.heading')"
         :description="__('admin.users.description')"
-    />
+    >
+        <flux:button color="primary" icon="user-plus" wire:click="openCreateModal" data-admin-create-trigger>
+            {{ __('admin.users.create_button') }}
+        </flux:button>
+    </flux:page-header>
 
     @if (session('error'))
         <flux:callout color="red">
@@ -247,6 +345,11 @@ new class extends Component {
             {{ session('status') }}
         </flux:callout>
     @endif
+    @if (session('error'))
+        <flux:callout color="red">
+            {{ session('error') }}
+        </flux:callout>
+    @endif
 
     <x-admin.table
         :pagination="$users"
@@ -254,35 +357,51 @@ new class extends Component {
         per-page-field="perPage"
         :per-page-options="$this->perPageOptions"
         :per-page-value="$perPage"
+        aria-label="{{ __('admin.users.table.aria_label') }}"
     >
         <x-slot name="toolbar">
-            <div class="flex flex-1 flex-wrap items-center gap-3">
-                <div class="w-full md:w-80">
-                    <flux:input
-                        type="search"
-                        icon="magnifying-glass"
-                        clearable
-                        wire:model.live.debounce.300ms="search"
-                        placeholder="{{ __('admin.users.search_placeholder') }}"
-                    />
+            <div class="flex w-full flex-wrap items-center gap-3">
+                <div class="flex flex-1 items-center gap-2">
+                    <div class="relative w-full max-w-md">
+                        <input
+                            type="search"
+                            wire:model.live.debounce.400ms="search"
+                            wire:keydown.enter.prevent="applySearchShortcut"
+                            data-admin-search-input
+                            placeholder="{{ __('admin.users.search_placeholder') }}"
+                            class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2 pr-10 text-sm text-slate-800 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                        />
+                        <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400">
+                            ⌘K
+                        </span>
+                    </div>
+
+                    @if ($isFiltered)
+                        <flux:button
+                            variant="ghost"
+                            size="sm"
+                            icon="x-mark"
+                            wire:click="clearFilters"
+                        >
+                            {{ __('admin.users.clear_filters') }}
+                        </flux:button>
+                    @endif
                 </div>
 
-                @if ($searchTerm !== '')
-                    <flux:badge color="blue">{{ __('admin.users.search_label', ['term' => $searchTerm]) }}</flux:badge>
-                @endif
-
-                <flux:badge>{{ $userCountLabel }}</flux:badge>
+                <div class="flex items-center gap-2">
+                    <flux:button color="primary" icon="user-plus" wire:click="openCreateModal" data-admin-create-trigger>
+                        {{ __('admin.users.create_button') }}
+                    </flux:button>
+                </div>
             </div>
 
-            <div class="flex items-center gap-2">
-                <flux:button
-                    color="primary"
-                    icon="plus"
-                    wire:click="startCreate"
-                >
-                    {{ __('admin.users.create_button') }}
-                </flux:button>
-            </div>
+            @if ($isFiltered)
+                <div class="flex items-center gap-2">
+                    <flux:badge color="indigo">
+                        {{ __('admin.users.filtering', ['term' => $searchTerm]) }}
+                    </flux:badge>
+                </div>
+            @endif
         </x-slot>
 
         <x-slot name="head">
@@ -290,13 +409,19 @@ new class extends Component {
                 ['label' => __('admin.users.table.user')],
                 ['label' => __('admin.users.table.roles')],
                 ['label' => __('admin.users.table.status')],
+                ['label' => __('admin.users.table.content')],
                 ['label' => __('admin.users.table.joined')],
                 ['label' => __('admin.users.table.actions'), 'class' => 'text-right'],
             ]" />
         </x-slot>
 
         @forelse ($users as $user)
-            <x-admin.table-row wire:key="user-{{ $user->id }}">
+            <x-admin.table-row
+                wire:key="user-{{ $user->id }}"
+                :interactive="true"
+                data-row-id="{{ $user->id }}"
+                data-row-label="{{ $user->name }}"
+            >
                 <td class="px-4 py-4">
                     <div class="flex flex-col">
                         <span class="font-semibold">{{ $user->name }}</span>
@@ -324,52 +449,80 @@ new class extends Component {
                     @endif
                 </td>
                 <td class="px-4 py-4">
+                    <div class="flex flex-col gap-1 text-xs text-slate-600 dark:text-slate-300">
+                        <span class="font-medium">
+                            {{ trans_choice('admin.users.posts_count', $user->posts_count, ['count' => $user->posts_count]) }}
+                        </span>
+                        <span>
+                            {{ trans_choice('admin.users.comments_count', $user->comments_count, ['count' => $user->comments_count]) }}
+                        </span>
+                    </div>
+                </td>
+                <td class="px-4 py-4">
                     {{ $user->created_at?->diffForHumans() ?? '—' }}
                 </td>
                 <td class="px-4 py-4 text-right">
                     <div class="flex flex-col items-end gap-3">
                         <div class="flex flex-wrap justify-end gap-4">
-                            <div class="flex items-center gap-2">
-                                <flux:switch
-                                    wire:click="toggleAdmin({{ $user->id }})"
-                                    wire:loading.attr="disabled"
-                                    wire:target="toggleAdmin"
-                                    :checked="$user->is_admin"
-                                    :disabled="$user->is(auth()->user())"
-                                    aria-label="{{ __('admin.users.action_toggle_admin', ['name' => $user->name]) }}"
-                                />
-                                <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                                    {{ __('admin.users.role_admin') }}
-                                </span>
-                            </div>
+                            <label class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                                <div class="relative">
+                                    <flux:switch
+                                        wire:click="toggleAdmin({{ $user->id }})"
+                                        wire:loading.attr="disabled"
+                                        wire:target="toggleAdmin"
+                                        :checked="$user->is_admin"
+                                        :disabled="$user->is(auth()->user())"
+                                        aria-label="{{ __('admin.users.action_toggle_admin', ['name' => $user->name]) }}"
+                                    />
+                                    <div wire:loading wire:target="toggleAdmin" class="absolute inset-0 flex items-center justify-center">
+                                        <svg class="h-4 w-4 animate-spin text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span>{{ __('admin.users.role_admin') }}</span>
+                            </label>
 
-                            <div class="flex items-center gap-2">
-                                <flux:switch
-                                    wire:click="toggleAuthor({{ $user->id }})"
-                                    wire:loading.attr="disabled"
-                                    wire:target="toggleAuthor"
-                                    :checked="$user->is_author"
-                                    :disabled="$user->is(auth()->user())"
-                                    aria-label="{{ __('admin.users.action_toggle_author', ['name' => $user->name]) }}"
-                                />
-                                <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                                    {{ __('admin.users.role_author') }}
-                                </span>
-                            </div>
+                            <label class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                                <div class="relative">
+                                    <flux:switch
+                                        wire:click="toggleAuthor({{ $user->id }})"
+                                        wire:loading.attr="disabled"
+                                        wire:target="toggleAuthor"
+                                        :checked="$user->is_author"
+                                        :disabled="$user->is(auth()->user())"
+                                        aria-label="{{ __('admin.users.action_toggle_author', ['name' => $user->name]) }}"
+                                    />
+                                    <div wire:loading wire:target="toggleAuthor" class="absolute inset-0 flex items-center justify-center">
+                                        <svg class="h-4 w-4 animate-spin text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span>{{ __('admin.users.role_author') }}</span>
+                            </label>
 
-                            <div class="flex items-center gap-2">
-                                <flux:switch
-                                    wire:click="toggleBan({{ $user->id }})"
-                                    wire:loading.attr="disabled"
-                                    wire:target="toggleBan"
-                                    :checked="$user->is_banned"
-                                    :disabled="$user->is(auth()->user())"
-                                    aria-label="{{ $user->is_banned ? __('admin.users.action_unban') : __('admin.users.action_ban') }}"
-                                />
-                                <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                                    {{ __('admin.users.status_banned') }}
-                                </span>
-                            </div>
+                            <label class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                                <div class="relative">
+                                    <flux:switch
+                                        wire:click="toggleBan({{ $user->id }})"
+                                        wire:loading.attr="disabled"
+                                        wire:target="toggleBan"
+                                        :checked="$user->is_banned"
+                                        :disabled="$user->is(auth()->user())"
+                                        aria-label="{{ $user->is_banned ? __('admin.users.action_unban') : __('admin.users.action_ban') }}"
+                                    />
+                                    <div wire:loading wire:target="toggleBan" class="absolute inset-0 flex items-center justify-center">
+                                        <svg class="h-4 w-4 animate-spin text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span>{{ __('admin.users.status_banned') }}</span>
+                            </label>
                         </div>
 
                         <div class="flex items-center gap-2">
@@ -378,9 +531,8 @@ new class extends Component {
                                 size="sm"
                                 color="red"
                                 icon="trash"
-                                wire:click="deleteUser({{ $user->id }})"
-                                wire:confirm="{{ __('admin.users.delete_confirm') }}"
-                                :disabled="$user->is(auth()->user())"
+                                wire:click="confirmDelete({{ $user->id }})"
+                                data-row-delete
                             >
                                 {{ __('admin.users.action_delete') }}
                             </flux:button>
@@ -389,95 +541,277 @@ new class extends Component {
                 </td>
             </x-admin.table-row>
         @empty
-            <x-admin.table-empty colspan="5" :message="$searchTerm !== '' ? __('admin.users.search_empty') : __('admin.users.empty')" />
+            <x-admin.table-empty colspan="6" :message="__('admin.users.empty')" />
         @endforelse
     </x-admin.table>
 </div>
 
-<flux:modal name="create-user">
-    <div class="space-y-6">
-        <div class="flex items-start justify-between gap-3">
-            <div>
-                <flux:heading size="lg">{{ __('admin.users.modal.title') }}</flux:heading>
-                <flux:text class="text-sm text-slate-500 dark:text-slate-400">
-                    {{ __('admin.users.modal.subtitle') }}
-                </flux:text>
+@if ($showCreateModal)
+    <div class="fixed inset-0 z-50 flex items-start justify-center bg-slate-900/60 px-4 py-10 backdrop-blur" data-admin-modal="user-create">
+        <div class="absolute inset-0" wire:click="$set('showCreateModal', false)" data-admin-modal-close></div>
+        <div class="relative z-10 w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-xl dark:bg-slate-900">
+            <div class="flex items-start justify-between border-b border-slate-200 px-6 py-4 dark:border-slate-800">
+                <div>
+                    <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-50">
+                        {{ __('admin.users.create_heading') }}
+                    </h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">
+                        {{ __('admin.users.create_subheading') }}
+                    </p>
+                </div>
+                <button
+                    type="button"
+                    class="rounded-full p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:hover:bg-slate-800"
+                    wire:click="$set('showCreateModal', false)"
+                    aria-label="{{ __('admin.users.close_modal') }}"
+                    data-admin-modal-close
+                >
+                    &times;
+                </button>
+            </div>
+
+            <form wire:submit.prevent="createUser" class="space-y-6 p-6">
+                <div class="grid gap-4 md:grid-cols-2">
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                            {{ __('admin.users.field_name') }}
+                        </label>
+                        <input
+                            type="text"
+                            wire:model.live="createForm.name"
+                            class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                            required
+                            autofocus
+                        />
+                        @error('createForm.name')
+                            <p class="text-xs text-rose-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                            {{ __('admin.users.field_email') }}
+                        </label>
+                        <input
+                            type="email"
+                            wire:model.live="createForm.email"
+                            class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                            required
+                        />
+                        @error('createForm.email')
+                            <p class="text-xs text-rose-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="grid gap-4 md:grid-cols-2">
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                            {{ __('admin.users.field_password') }}
+                        </label>
+                        <input
+                            type="password"
+                            wire:model.live="createForm.password"
+                            class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                            required
+                        />
+                        @error('createForm.password')
+                            <p class="text-xs text-rose-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                            {{ __('admin.users.field_password_confirmation') }}
+                        </label>
+                        <input
+                            type="password"
+                            wire:model.live="createForm.password_confirmation"
+                            class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div class="grid gap-4 md:grid-cols-3">
+                    <label class="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200">
+                        <input
+                            type="checkbox"
+                            wire:model.live="createForm.is_admin"
+                            class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                        >
+                        {{ __('admin.users.role_admin') }}
+                    </label>
+
+                    <label class="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200">
+                        <input
+                            type="checkbox"
+                            wire:model.live="createForm.is_author"
+                            class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                        >
+                        {{ __('admin.users.role_author') }}
+                    </label>
+
+                    <label class="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200">
+                        <input
+                            type="checkbox"
+                            wire:model.live="createForm.is_banned"
+                            class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                        >
+                        {{ __('admin.users.status_banned') }}
+                    </label>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                        {{ __('admin.users.email_unique_hint') }}
+                    </p>
+
+                    <div class="flex items-center gap-2">
+                        <flux:button type="button" variant="ghost" wire:click="$set('showCreateModal', false)" data-admin-modal-close>
+                            {{ __('admin.users.action_cancel') }}
+                        </flux:button>
+                        <flux:button type="submit" color="primary" icon="check">
+                            {{ __('admin.users.action_save') }}
+                        </flux:button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+@endif
+
+@if ($showDeleteModal)
+    <div class="fixed inset-0 z-50 flex items-start justify-center bg-slate-900/60 px-4 py-10 backdrop-blur" data-admin-modal="user-delete">
+        <div class="absolute inset-0" wire:click="cancelDelete" data-admin-modal-close></div>
+        <div class="relative z-10 w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-xl dark:bg-slate-900">
+            <div class="flex items-start justify-between border-b border-slate-200 px-6 py-4 dark:border-slate-800">
+                <div>
+                    <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-50">
+                        {{ __('admin.users.delete_heading', ['name' => $deleteContext['name']]) }}
+                    </h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">
+                        {{ __('admin.users.delete_subheading') }}
+                    </p>
+                </div>
+                <button
+                    type="button"
+                    class="rounded-full p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:hover:bg-slate-800"
+                    wire:click="cancelDelete"
+                    aria-label="{{ __('admin.users.close_modal') }}"
+                    data-admin-modal-close
+                >
+                    &times;
+                </button>
+            </div>
+
+            <div class="space-y-6 p-6">
+                <div class="grid gap-4 md:grid-cols-3">
+                    <flux:badge color="indigo">
+                        {{ trans_choice('admin.users.posts_count', $deleteContext['posts'], ['count' => $deleteContext['posts']]) }}
+                    </flux:badge>
+                    <flux:badge color="blue">
+                        {{ trans_choice('admin.users.comments_count', $deleteContext['comments'], ['count' => $deleteContext['comments']]) }}
+                    </flux:badge>
+                    <flux:badge color="slate">
+                        {{ __('admin.users.delete_status_label', ['status' => $deleteStrategy === 'delete' ? __('admin.users.delete_remove') : __('admin.users.delete_transfer')]) }}
+                    </flux:badge>
+                </div>
+
+                <div class="space-y-3">
+                    <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                        {{ __('admin.users.delete_strategy_label') }}
+                    </p>
+                    <div class="grid gap-3 md:grid-cols-2">
+                        <label class="flex w-full cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm transition hover:border-indigo-200 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-indigo-500">
+                            <input
+                                type="radio"
+                                class="mt-1 h-4 w-4 border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                                value="transfer"
+                                wire:model.live="deleteStrategy"
+                            >
+                            <div class="space-y-1">
+                                <p class="font-semibold text-slate-800 dark:text-slate-100">
+                                    {{ __('admin.users.delete_transfer_label') }}
+                                </p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">
+                                    {{ __('admin.users.delete_transfer_help') }}
+                                </p>
+                            </div>
+                        </label>
+
+                        <label class="flex w-full cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm transition hover:border-rose-200 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-rose-500">
+                            <input
+                                type="radio"
+                                class="mt-1 h-4 w-4 border-slate-300 text-rose-600 focus:ring-rose-500"
+                                value="delete"
+                                wire:model.live="deleteStrategy"
+                            >
+                            <div class="space-y-1">
+                                <p class="font-semibold text-rose-700 dark:text-rose-200">
+                                    {{ __('admin.users.delete_remove_label') }}
+                                </p>
+                                <p class="text-xs text-rose-500 dark:text-rose-300">
+                                    {{ __('admin.users.delete_remove_help') }}
+                                </p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                @if ($deleteStrategy === 'transfer')
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                            {{ __('admin.users.transfer_to_label') }}
+                        </label>
+                        <select
+                            wire:model.live="transferTarget"
+                            class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+                        >
+                            @forelse ($transferOptions as $option)
+                                <option value="{{ $option['id'] }}">
+                                    {{ $option['name'] }}
+                                </option>
+                            @empty
+                                <option value="{{ auth()->id() }}">
+                                    {{ auth()->user()->name }}
+                                </option>
+                            @endforelse
+                        </select>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">
+                            {{ __('admin.users.transfer_hint') }}
+                        </p>
+                    </div>
+                @endif
+
+                <x-ui.alert variant="danger">
+                    {{ __('admin.users.delete_warning') }}
+                </x-ui.alert>
+
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex items-center gap-2">
+                        <flux:button variant="ghost" wire:click="cancelDelete" data-admin-modal-close>
+                            {{ __('admin.users.action_cancel') }}
+                        </flux:button>
+                        <flux:button
+                            color="red"
+                            icon="trash"
+                            wire:click="deleteUser"
+                            wire:loading.attr="disabled"
+                            wire:target="deleteUser"
+                        >
+                            <span wire:loading.remove wire:target="deleteUser">{{ __('admin.users.action_confirm_delete') }}</span>
+                            <span wire:loading.delay.500ms wire:target="deleteUser" class="inline-flex items-center gap-1">
+                                <svg class="h-3 w-3 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                {{ __('admin.deleting') }}
+                            </span>
+                        </flux:button>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <form wire:submit.prevent="createUser" class="space-y-4">
-            <flux:field>
-                <flux:label for="newName">{{ __('admin.users.fields.name') }}</flux:label>
-                <flux:input
-                    id="newName"
-                    type="text"
-                    wire:model.live="newName"
-                    autocomplete="name"
-                />
-                <flux:error name="newName" />
-            </flux:field>
-
-            <flux:field>
-                <flux:label for="newEmail">{{ __('admin.users.fields.email') }}</flux:label>
-                <flux:input
-                    id="newEmail"
-                    type="email"
-                    wire:model.live.debounce.300ms="newEmail"
-                    autocomplete="email"
-                />
-                <flux:error name="newEmail" />
-            </flux:field>
-
-            <div class="grid gap-4 md:grid-cols-2">
-                <flux:field>
-                    <flux:label for="newPassword">{{ __('admin.users.fields.password') }}</flux:label>
-                    <flux:input
-                        id="newPassword"
-                        type="password"
-                        wire:model.live="newPassword"
-                        autocomplete="new-password"
-                    />
-                    <flux:error name="newPassword" />
-                </flux:field>
-
-                <flux:field>
-                    <flux:label for="newPasswordConfirmation">{{ __('admin.users.fields.password_confirmation') }}</flux:label>
-                    <flux:input
-                        id="newPasswordConfirmation"
-                        type="password"
-                        wire:model.live="newPasswordConfirmation"
-                        autocomplete="new-password"
-                    />
-                    <flux:error name="newPasswordConfirmation" />
-                </flux:field>
-            </div>
-
-            <div class="grid gap-4 md:grid-cols-2">
-                <flux:field variant="inline">
-                    <flux:label>{{ __('admin.users.fields.is_admin') }}</flux:label>
-                    <flux:switch wire:model="newIsAdmin" />
-                </flux:field>
-
-                <flux:field variant="inline">
-                    <flux:label>{{ __('admin.users.fields.is_author') }}</flux:label>
-                    <flux:switch wire:model="newIsAuthor" />
-                </flux:field>
-            </div>
-
-            <div class="flex flex-wrap items-center justify-end gap-3">
-                <flux:button type="button" variant="ghost" wire:click="closeCreateModal">
-                    {{ __('admin.users.cancel') }}
-                </flux:button>
-                <flux:button
-                    type="submit"
-                    color="primary"
-                    icon="plus"
-                    wire:loading.attr="disabled"
-                    wire:target="createUser"
-                >
-                    {{ __('admin.users.create_button') }}
-                </flux:button>
-            </div>
-        </form>
     </div>
-</flux:modal>
+@endif

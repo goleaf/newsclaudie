@@ -85,23 +85,53 @@ new class extends Component {
                     @method('PATCH')
                 @endif
                 <input type="hidden" name="redirect_to" value="{{ $redirectRoute }}">
+                @php
+                    $titleError = $errors->first('title');
+                    $bodyError = $errors->first('body');
+                    $descriptionError = $errors->first('description');
+                    $featuredImageError = $errors->first('featured_image');
+                    $publishedAtError = $errors->first('published_at');
+                @endphp
 
                 <x-ui.form-section :title="__('posts.form.required_heading')">
-                    <div class="space-y-2">
+                    <div class="space-y-2" data-validation-field="title">
                         <x-label for="title">
                             {{ __('posts.form.title_label') }}
                             @if ($isEditing)
                                 <small class="text-slate-400 dark:text-slate-500">{{ __('posts.form.slug_note') }}</small>
                             @endif
                         </x-label>
-                        <x-input id="title" name="title" :value="old('title', $post->title ?? '')" type="text" maxlength="255" required autofocus />
-                        @error('title') <p class="text-sm text-rose-500">{{ $message }}</p> @enderror
+                        <x-input
+                            id="title"
+                            name="title"
+                            :value="old('title', $post->title ?? '')"
+                            type="text"
+                            maxlength="255"
+                            required
+                            autofocus
+                            placeholder="{{ __('posts.form.title_placeholder') }}"
+                            :invalid="(bool) $titleError"
+                            @if ($titleError) aria-describedby="title-error" @endif
+                        />
+                        @if ($titleError)
+                            <p id="title-error" class="text-sm text-rose-500" data-field-error role="alert">{{ $titleError }}</p>
+                        @endif
                     </div>
 
-                    <div class="space-y-2">
+                    <div class="space-y-2" data-validation-field="body">
                         <x-label for="body" :value="__('posts.form.body_label')" />
-                        <x-textarea id="body" name="body" rows="8">{{ old('body', $post->body ?? '') }}</x-textarea>
-                        @error('body') <p class="text-sm text-rose-500">{{ $message }}</p> @enderror
+                        <x-textarea
+                            id="body"
+                            name="body"
+                            rows="8"
+                            required
+                            placeholder="{{ __('posts.form.body_placeholder') }}"
+                            :invalid="(bool) $bodyError"
+                            @if ($bodyError) aria-describedby="body-error" @endif
+                        >{{ old('body', $post->body ?? '') }}</x-textarea>
+                        @if ($bodyError)
+                            <p id="body-error" class="text-sm text-rose-500" data-field-error role="alert">{{ $bodyError }}</p>
+                        @endif
                     </div>
 
                     @if (config('blog.easyMDE.enabled'))
@@ -111,20 +141,45 @@ new class extends Component {
 
                 <x-ui.form-section :title="__('posts.form.optional_heading')">
                     <div class="grid gap-6 md:grid-cols-2">
-                        <div class="space-y-2">
+                        <div class="space-y-2" data-validation-field="description">
                             <x-label for="description" :value="__('posts.form.description_label')" />
-                            <x-input id="description" name="description" :value="old('description', $post->description ?? '')" type="text" maxlength="255" placeholder="{{ __('posts.form.description_placeholder') }}" />
-                            @error('description') <p class="text-sm text-rose-500">{{ $message }}</p> @enderror
+                            <x-input
+                                id="description"
+                                name="description"
+                                :value="old('description', $post->description ?? '')"
+                                type="text"
+                                maxlength="255"
+                                placeholder="{{ __('posts.form.description_placeholder') }}"
+                                :invalid="(bool) $descriptionError"
+                                @if ($descriptionError) aria-describedby="description-error" @endif
+                            />
+                            @if ($descriptionError)
+                                <p id="description-error" class="text-sm text-rose-500" data-field-error role="alert">{{ $descriptionError }}</p>
+                            @endif
                         </div>
 
-                        <div class="space-y-2">
+                        <div class="space-y-2" data-validation-field="featured_image">
                             <x-label for="featured_image" :value="__('posts.form.featured_image_label')" />
-                            <x-input id="featured_image" name="featured_image" :value="old('featured_image', $post->featured_image ?? '')" type="url" maxlength="255" placeholder="{{ __('posts.form.featured_image_placeholder') }}" />
-                            @error('featured_image') <p class="text-sm text-rose-500">{{ $message }}</p> @enderror
+                            <x-input
+                                id="featured_image"
+                                name="featured_image"
+                                :value="old('featured_image', $post->featured_image ?? '')"
+                                type="url"
+                                maxlength="255"
+                                placeholder="{{ __('posts.form.featured_image_placeholder') }}"
+                                :invalid="(bool) $featuredImageError"
+                                aria-describedby="featured-image-hint{{ $featuredImageError ? ' featured-image-error' : '' }}"
+                            />
+                            <p id="featured-image-hint" class="text-xs text-slate-500 dark:text-slate-400" data-field-hint>
+                                {{ __('posts.form.featured_image_help') }}
+                            </p>
+                            @if ($featuredImageError)
+                                <p id="featured-image-error" class="text-sm text-rose-500" data-field-error role="alert">{{ $featuredImageError }}</p>
+                            @endif
                         </div>
                     </div>
 
-                    <div class="space-y-2">
+                    <div class="space-y-2" data-validation-field="published_at">
                         <x-label for="published_at" :value="__('posts.form.publish_label')" />
                         <x-input
                             id="published_at"
@@ -133,9 +188,13 @@ new class extends Component {
                             :value="$publishedValue"
                             min="1971-01-01T00:00"
                             max="2038-01-09T03:14"
+                            :invalid="(bool) $publishedAtError"
+                            aria-describedby="publish-hint{{ $publishedAtError ? ' published-at-error' : '' }}"
                         />
-                        @error('published_at') <p class="text-sm text-rose-500">{{ $message }}</p> @enderror
-                        <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                        @if ($publishedAtError)
+                            <p id="published-at-error" class="text-sm text-rose-500" data-field-error role="alert">{{ $publishedAtError }}</p>
+                        @endif
+                        <p id="publish-hint" class="mt-2 text-xs text-slate-500 dark:text-slate-400" data-field-hint>
                             {!! __('forms.publish_hint', [
                                 'action' => '<button type="button" class="font-semibold text-indigo-500 dark:text-indigo-300" data-clear-published-at="#published_at">'.e(__('forms.publish_clear')).'</button>',
                             ]) !!}
@@ -146,10 +205,7 @@ new class extends Component {
                         <x-tags-field :initial="$tagsInitial" />
                     @endif
 
-                    <x-categories.multi-select
-                        :categories="$categories"
-                        :selected="$selectedCategories"
-                    />
+                    <x-categories.multi-select :categories="$categories" :selected="$selectedCategories" />
                 </x-ui.form-section>
 
                 <div class="flex flex-wrap items-center justify-between gap-4">

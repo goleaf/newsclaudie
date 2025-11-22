@@ -73,10 +73,6 @@ final class UserPolicy
             return Response::deny(__('admin.users.errors.delete_admin'));
         }
 
-        if ($model->posts()->exists()) {
-            return Response::deny(__('admin.users.errors.delete_has_posts'));
-        }
-
         return true;
     }
 

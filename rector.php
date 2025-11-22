@@ -51,3 +51,4 @@ return RectorConfig::configure()
         strictBooleans: true,
     )
     ->withPhpSets();
+

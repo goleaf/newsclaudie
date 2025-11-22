@@ -27,3 +27,4 @@ interface PerPageConfigurable
     public function getPerPageQueryParam(): string;
 }
 
+

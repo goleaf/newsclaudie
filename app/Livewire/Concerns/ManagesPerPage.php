@@ -65,6 +65,20 @@ trait ManagesPerPage
         return PageSize::contextOptions($this->perPageContext());
     }
 
+    /**
+     * Standard query-string config for per-page values, keeping the default out of the URL.
+     */
+    protected function perPageQueryStringConfig(?string $alias = null): array
+    {
+        $config = ['except' => $this->defaultPerPage()];
+
+        if ($alias) {
+            $config['as'] = $alias;
+        }
+
+        return $config;
+    }
+
     protected function sanitizePerPage(int $value): int
     {
         $options = collect($this->availablePerPageOptions());
@@ -81,3 +95,4 @@ trait ManagesPerPage
         return 'admin';
     }
 }
+

@@ -19,3 +19,4 @@
 - Consolidate the uppercase/lowercase interface docs into a single canonical source and retire the legacy `pagination.*` translations once consumers are verified.
 - Migrate or retire `resources/views/dashboard.blade.php` so future widgets land in Volt + componentized tables.
 - Add a couple of browser checks around the per-page selector (Livewire + HTTP) to prevent regressions in summary rendering and footer visibility.
+

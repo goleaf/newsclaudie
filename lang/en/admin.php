@@ -1,0 +1,344 @@
+<?php
+
+declare(strict_types=1);
+
+return [
+    'sidebar_note' => 'Admin Panel',
+    'sidebar_navigation' => 'Admin navigation',
+    'skip_to_main' => 'Skip to main content',
+    'skip_to_table' => 'Skip to table',
+    
+    'table' => [
+        'default_label' => 'Data Table',
+        'sort_by' => 'Sort by :field',
+    ],
+    
+    'loading' => 'Loading...',
+    
+    'status' => [
+        'published' => 'Published',
+        'draft' => 'Draft',
+        'approved' => 'Approved',
+        'pending' => 'Pending',
+        'rejected' => 'Rejected',
+        'active' => 'Active',
+        'banned' => 'Banned',
+        'admin' => 'Admin',
+        'author' => 'Author',
+        'reader' => 'Reader',
+    ],
+    
+    'inline' => [
+        'save' => 'Save',
+        'cancel' => 'Cancel',
+        'edit_label' => 'Edit',
+        'edit_field' => 'Edit :field',
+    ],
+    
+    'categories' => [
+        'title' => 'Categories',
+        'heading' => 'Manage Categories',
+        'description' => 'Create and manage blog categories. Categories help organize your content and make it easier for readers to find related posts.',
+        'create_button' => 'Create Category',
+        'action_edit' => 'Edit',
+        'action_delete' => 'Delete',
+        'confirm_delete' => 'Are you sure you want to delete this category? This action cannot be undone.',
+        'empty' => 'No categories found.',
+        'posts_count' => '{0} No posts|{1} :count post|[2,*] :count posts',
+        'searching' => 'Searching for ":term"',
+        'slug_label' => 'Slug: :slug',
+        
+        'search' => [
+            'label' => 'Search categories',
+            'placeholder' => 'Search by name, slug, or description...',
+            'clear' => 'Clear search',
+        ],
+        
+        'filters' => [
+            'clear' => 'Clear filters',
+        ],
+        
+        'sort' => [
+            'label' => 'Sort by',
+            'asc' => 'Ascending',
+            'desc' => 'Descending',
+        ],
+        
+        'table' => [
+            'aria_label' => 'Categories table',
+            'name' => 'Name',
+            'posts' => 'Posts',
+            'updated' => 'Last Updated',
+            'actions' => 'Actions',
+        ],
+        
+        'form' => [
+            'create_title' => 'Create Category',
+            'edit_title' => 'Edit Category',
+            'create_another' => 'Create Another',
+            'subtitle' => 'Add a new category to organize your blog posts.',
+            'edit_subtitle' => 'Update the details for :name.',
+            'this_category' => 'this category',
+            'editing_badge' => 'Editing',
+            'creating_badge' => 'New',
+            'closed_hint' => 'Click the button to create a new category.',
+            'cancel_edit' => 'Cancel',
+            'slug_locked' => 'Slug has been manually edited and will not auto-update.',
+        ],
+    ],
+    
+    'comments' => [
+        'title' => 'Comments',
+        'heading' => 'Manage Comments',
+        'description' => 'Moderate and manage comments on your blog posts. Approve, reject, or delete comments as needed.',
+        'action_edit' => 'Edit',
+        'action_delete' => 'Delete',
+        'confirm_delete' => 'Are you sure you want to delete this comment? This action cannot be undone.',
+        'empty' => 'No comments found.',
+        'unknown_user' => 'Unknown User',
+        'unknown_post' => 'Unknown Post',
+        'updated' => 'Comment updated successfully.',
+        'deleted' => 'Comment deleted successfully.',
+        'status_changed' => 'Comment status changed successfully.',
+        'searching' => 'Searching for ":term"',
+        
+        'status' => [
+            'pending' => 'Pending',
+            'approved' => 'Approved',
+            'rejected' => 'Rejected',
+        ],
+        
+        'search' => [
+            'label' => 'Search comments',
+            'placeholder' => 'Search by content...',
+            'clear' => 'Clear search',
+        ],
+        
+        'filters' => [
+            'status' => 'Filter by status',
+            'status_all' => 'All statuses',
+            'clear' => 'Clear filters',
+        ],
+        
+        'bulk_selected' => '{1} :count comment selected|[2,*] :count comments selected',
+        'bulk_approve' => 'Approve Selected',
+        'bulk_reject' => 'Reject Selected',
+        'bulk_delete' => 'Delete Selected',
+        'bulk_clear' => 'Clear Selection',
+        'bulk_confirm_approve' => '{1} Are you sure you want to approve :count comment?|[2,*] Are you sure you want to approve :count comments?',
+        'bulk_confirm_reject' => '{1} Are you sure you want to reject :count comment?|[2,*] Are you sure you want to reject :count comments?',
+        'bulk_confirm_delete' => '{1} Are you sure you want to delete :count comment?|[2,*] Are you sure you want to delete :count comments?',
+        'bulk_success' => '{1} Successfully :action :count comment.|[2,*] Successfully :action :count comments.',
+        'bulk_summary' => ':updated of :total comments processed.',
+        'bulk_failures' => '{1} :count comment failed|[2,*] :count comments failed',
+        'bulk_not_found' => 'Comment not found',
+        'bulk_unauthorized' => 'Not authorized',
+        
+        'table' => [
+            'aria_label' => 'Comments table',
+            'select_all' => 'Select all comments',
+            'select_comment' => 'Select comment #:id',
+            'author' => 'Author',
+            'post' => 'Post',
+            'comment' => 'Comment',
+            'status' => 'Status',
+            'date' => 'Date',
+            'actions' => 'Actions',
+        ],
+    ],
+    
+    'users' => [
+        'title' => 'Users',
+        'heading' => 'Manage Users',
+        'description' => 'Manage user accounts, roles, and permissions.',
+        'create_button' => 'Create User',
+        'search_placeholder' => 'Search by name or email...',
+        'clear_search' => 'Clear search',
+        'clear_filters' => 'Clear filters',
+        'filtering' => 'Filtering by ":term"',
+        'empty' => 'No users found.',
+        
+        'role_admin' => 'Admin',
+        'role_author' => 'Author',
+        'role_reader' => 'Reader',
+        'status_active' => 'Active',
+        'status_banned' => 'Banned',
+        
+        'posts_count' => '{0} No posts|{1} :count post|[2,*] :count posts',
+        'comments_count' => '{0} No comments|{1} :count comment|[2,*] :count comments',
+        
+        'action_toggle_admin' => 'Toggle admin role for :name',
+        'action_toggle_author' => 'Toggle author role for :name',
+        'action_ban' => 'Ban user',
+        'action_unban' => 'Unban user',
+        'action_delete' => 'Delete',
+        'action_cancel' => 'Cancel',
+        'action_save' => 'Save User',
+        'action_confirm_delete' => 'Confirm Delete',
+        
+        'created' => 'User :name created successfully.',
+        'deleted' => 'User :name deleted successfully.',
+        'made_admin' => ':name is now an admin.',
+        'removed_admin' => ':name is no longer an admin.',
+        'made_author' => ':name is now an author.',
+        'removed_author' => ':name is no longer an author.',
+        'banned' => ':name has been banned.',
+        'unbanned' => ':name has been unbanned.',
+        'cannot_self_update' => 'You cannot modify your own account.',
+        
+        'create_heading' => 'Create New User',
+        'create_subheading' => 'Add a new user account with roles and permissions.',
+        'close_modal' => 'Close modal',
+        'field_name' => 'Name',
+        'field_email' => 'Email',
+        'field_password' => 'Password',
+        'field_password_confirmation' => 'Confirm Password',
+        'email_unique_hint' => 'Email must be unique.',
+        
+        'delete_heading' => 'Delete :name',
+        'delete_subheading' => 'Choose what to do with this user\'s content.',
+        'delete_strategy_label' => 'What should happen to this user\'s content?',
+        'delete_status_label' => 'Strategy: :status',
+        'delete_transfer' => 'Transfer',
+        'delete_remove' => 'Delete',
+        'delete_transfer_label' => 'Transfer Content',
+        'delete_transfer_help' => 'Transfer all posts to another user. Comments will be deleted.',
+        'delete_remove_label' => 'Delete Everything',
+        'delete_remove_help' => 'Permanently delete all posts and comments.',
+        'transfer_to_label' => 'Transfer posts to',
+        'transfer_hint' => 'Select the user who will receive the posts.',
+        'delete_warning' => 'This action cannot be undone.',
+        
+        'table' => [
+            'aria_label' => 'Users table',
+            'user' => 'User',
+            'roles' => 'Roles',
+            'status' => 'Status',
+            'content' => 'Content',
+            'joined' => 'Joined',
+            'actions' => 'Actions',
+        ],
+    ],
+    
+    'posts' => [
+        'title' => 'Posts',
+        'heading' => 'Manage Posts',
+        'description' => 'Create, edit, and manage your blog posts. Control publication status, categories, and more.',
+        'create_button' => 'Create Post',
+        'action_edit' => 'Edit',
+        'action_delete' => 'Delete',
+        'action_publish' => 'Publish',
+        'action_unpublish' => 'Unpublish',
+        'confirm_delete' => 'Are you sure you want to delete this post? This action cannot be undone.',
+        'empty' => 'No posts found.',
+        'selected_count' => '{1} :count post selected|[2,*] :count posts selected',
+        'select_all' => 'Select all',
+        'select_post' => 'Select :title',
+        'clear_selection' => 'Clear selection',
+        'slug_label' => 'Slug: :slug',
+        'comments_count' => '{0} No comments|{1} :count comment|[2,*] :count comments',
+        'created' => 'Post created successfully.',
+        'updated' => 'Post updated successfully.',
+        'deleted' => 'Post deleted successfully.',
+        
+        'status' => [
+            'published' => 'Published',
+            'draft' => 'Draft',
+        ],
+        
+        'filters' => [
+            'search' => 'Search posts',
+            'search_placeholder' => 'Search by title or slug...',
+            'clear_search' => 'Clear search',
+            'status' => 'Filter by status',
+            'status_all' => 'All statuses',
+            'status_published' => 'Published',
+            'status_draft' => 'Drafts',
+            'author' => 'Filter by author',
+            'author_all' => 'All authors',
+            'clear' => 'Clear filters',
+        ],
+        
+        'sort' => [
+            'label' => 'Sort by',
+            'updated' => 'Last Updated',
+            'title' => 'Title',
+            'status' => 'Publication Status',
+            'comments' => 'Comments',
+            'asc' => 'Ascending',
+            'desc' => 'Descending',
+        ],
+        
+        'bulk_publish' => 'Publish Selected',
+        'bulk_unpublish' => 'Unpublish Selected',
+        'bulk_publish_confirm' => 'Are you sure you want to publish the selected posts?',
+        'bulk_unpublish_confirm' => 'Are you sure you want to unpublish the selected posts?',
+        'bulk_publish_result' => 'Published :updated of :attempted posts.',
+        'bulk_unpublish_result' => 'Unpublished :updated of :attempted posts.',
+        'bulk_failures' => ':count failed',
+        'bulk_not_found' => 'Post not found',
+        'bulk_unauthorized' => 'Not authorized',
+        
+        'table' => [
+            'aria_label' => 'Posts table',
+            'title' => 'Title',
+            'status' => 'Status',
+            'comments' => 'Comments',
+            'updated' => 'Last Updated',
+            'actions' => 'Actions',
+        ],
+        
+        'form' => [
+            'create_title' => 'Create Post',
+            'edit_title' => 'Edit Post',
+            'subtitle' => 'Create a new blog post with all the details.',
+            'edit_subtitle' => 'Update the details for :title.',
+            'this_post' => 'this post',
+            'editing_badge' => 'Editing',
+            'creating_badge' => 'New',
+            'cancel' => 'Cancel',
+            'create' => 'Create Post',
+            'update' => 'Update Post',
+            'saving' => 'Saving...',
+            'new_category' => 'New Category',
+            'no_categories' => 'No categories available. Create one to get started.',
+            'publication_heading' => 'Publication Settings',
+        ],
+    ],
+    
+    'shortcuts' => [
+        'help_text' => 'Tip: Press :create to quickly create a new item.',
+        'create_shortcut' => 'Ctrl+K',
+    ],
+    
+    // Loading states for optimistic UI
+    'saving' => 'Saving...',
+    'deleting' => 'Deleting...',
+    'processing' => 'Processing...',
+    'dismiss' => 'Dismiss',
+    
+    // Optimistic UI feedback
+    'action_pending' => 'Action in progress...',
+    'action_success' => 'Action completed successfully',
+    'action_failed' => 'Action failed. Changes have been reverted.',
+    'action_reverted' => 'Changes reverted due to error',
+    
+    // Accessibility
+    'accessibility' => [
+        'skip_to_content' => 'Skip to main content',
+        'skip_to_table' => 'Skip to table',
+        'keyboard_shortcuts' => 'Keyboard shortcuts',
+        'close_dialog' => 'Close dialog',
+        'open_menu' => 'Open menu',
+        'close_menu' => 'Close menu',
+        'toggle_navigation' => 'Toggle navigation',
+        'search_hint' => 'Type to search, press Escape to clear',
+        'modal_instructions' => 'Press Escape to close this dialog',
+        'table_navigation' => 'Use arrow keys to navigate table cells',
+        'sortable_column' => 'Press Enter or Space to sort by this column',
+        'checkbox_select' => 'Press Space to toggle selection',
+        'loading_content' => 'Loading content, please wait',
+        'no_results' => 'No results found',
+        'results_count' => '{1} :count result found|[2,*] :count results found',
+    ],
+];

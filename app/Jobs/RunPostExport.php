@@ -37,7 +37,7 @@ final class RunPostExport implements ShouldQueue
         $this->export->forceFill(['status' => DataExport::STATUS_PROCESSING])->save();
 
         try {
-            [$path, $rows] = $exporter->export($this->export);
+            ['path' => $path, 'rows' => $rows] = $exporter->export($this->export);
             $expiresAt = Carbon::now()->addMinutes(config('exports.link_ttl_minutes', 30));
 
             $this->export->markCompleted($path, $rows, $expiresAt);

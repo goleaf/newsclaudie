@@ -15,6 +15,7 @@ type AdminPostActionsConfig = {
 };
 
 const fallbackError = 'Unable to update the post right now. Please try again.';
+const lagThresholdMs = 550;
 
 export const adminPostActions = (config: AdminPostActionsConfig = {}) => ({
     states: { ...(config.initialStates ?? {}) } as PostStates,
@@ -24,6 +25,10 @@ export const adminPostActions = (config: AdminPostActionsConfig = {}) => ({
     active: null as QueueItem | null,
     lagging: false,
     errorMessage: '',
+    $wire: undefined as unknown as {
+        publish(id: number): Promise<void>;
+        unpublish(id: number): Promise<void>;
+    },
 
     stateFor(id: number, fallback = false): boolean {
         if (this.states[id] === undefined) {
@@ -47,6 +52,10 @@ export const adminPostActions = (config: AdminPostActionsConfig = {}) => ({
 
     isInFlight(id: number): boolean {
         return Boolean(this.active && this.active.id === id);
+    },
+
+    isLagging(id: number): boolean {
+        return Boolean(this.lagging && this.active && this.active.id === id);
     },
 
     queuedPosition(id: number): number | null {
@@ -115,18 +124,24 @@ export const adminPostActions = (config: AdminPostActionsConfig = {}) => ({
             return;
         }
 
+        this.lagging = false;
         this.states[this.active.id] = this.active.targetState;
 
+        const currentId = this.active.id;
         const lagTimer = window.setTimeout(() => {
-            this.lagging = true;
-        }, 450);
+            if (this.active && this.active.id === currentId) {
+                this.lagging = true;
+            }
+        }, lagThresholdMs);
 
         try {
-            if (this.active.action === 'publish') {
-                await this.$wire.publish(this.active.id);
-            } else {
-                await this.$wire.unpublish(this.active.id);
+            const handler = this.$wire?.[this.active.action];
+
+            if (typeof handler !== 'function') {
+                throw new Error(this.defaultError ?? fallbackError);
             }
+
+            await handler.call(this.$wire, this.active.id);
 
             this.confirmed[this.active.id] = this.active.targetState;
             this.states[this.active.id] = this.active.targetState;
@@ -138,7 +153,6 @@ export const adminPostActions = (config: AdminPostActionsConfig = {}) => ({
 
             this.states[this.active.id] = fallbackState;
             this.errorMessage = this.extractError(error);
-            this.queue = [];
         } finally {
             window.clearTimeout(lagTimer);
             this.lagging = false;
@@ -175,4 +189,6 @@ declare global {
     }
 }
 
-window.adminPostActions = adminPostActions;
+if (typeof window !== 'undefined') {
+    (window as Window & { adminPostActions: typeof adminPostActions }).adminPostActions = adminPostActions;
+}

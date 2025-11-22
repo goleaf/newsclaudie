@@ -32,7 +32,7 @@ final class PostExportController extends Controller
 
         $exporter = new PostExporter();
 
-        $totalRows = (clone $exporter->query($filters))->count();
+        $totalRows = $exporter->query($filters)->count();
         $threshold = (int) config('exports.max_sync_rows', 500);
 
         if ($totalRows > $threshold) {
@@ -46,7 +46,7 @@ final class PostExportController extends Controller
 
         $export->forceFill(['status' => DataExport::STATUS_PROCESSING])->save();
 
-        [$path, $rows] = $exporter->export($export);
+        ['path' => $path, 'rows' => $rows] = $exporter->export($export);
         $expiresAt = Carbon::now()->addMinutes(config('exports.link_ttl_minutes', 30));
 
         $export->markCompleted($path, $rows, $expiresAt);
@@ -87,6 +87,10 @@ final class PostExportController extends Controller
         }
 
         if (! $export->isReady()) {
+            abort(404);
+        }
+
+        if ($export->path === null || ! Storage::disk($export->disk)->exists($export->path)) {
             abort(404);
         }
 

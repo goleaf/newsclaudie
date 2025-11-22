@@ -1,8 +1,11 @@
 <?php
 
 use App\Livewire\Concerns\ManagesPerPage;
+use App\Livewire\Concerns\ManagesSearch;
+use App\Livewire\Concerns\ManagesSorting;
 use App\Models\Category;
 use App\Support\Pagination\PageSize;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -17,6 +20,8 @@ title(__('admin.categories.title'));
 new class extends Component {
     use AuthorizesRequests;
     use ManagesPerPage;
+    use ManagesSearch;
+    use ManagesSorting;
     use WithPagination;
 
     public ?int $editingId = null;
@@ -35,13 +40,47 @@ new class extends Component {
     public ?string $statusMessage = null;
     public string $statusLevel = 'success';
 
-    protected array $queryString = [];
+    protected $listeners = [
+        'category-saved' => 'handleCategorySaved',
+    ];
+
+    protected $queryString = [
+        'perPage' => ['except' => null],
+        'search' => ['except' => ''],
+        'sortField' => ['as' => 'sort', 'except' => 'name'],
+        'sortDirection' => ['as' => 'direction', 'except' => 'asc'],
+        'page' => ['except' => 1],
+    ];
 
     public function mount(): void
     {
         $this->authorize('access-admin');
-        $this->queryString['perPage'] = ['except' => PageSize::contextDefault('admin')];
+        $this->queryString['perPage']['except'] = PageSize::contextDefault('admin');
+        $this->perPage = $this->sanitizePerPage($this->perPage ?: $this->defaultPerPage());
+        // Don't set default sortField here - let it be null initially
+        // This allows sortBy() to work correctly on first call
+        $this->search = $this->search ?? '';
         $this->statusMessage = session('success');
+    }
+
+    protected function sortableFields(): array
+    {
+        return ['name', 'posts_count', 'updated_at'];
+    }
+
+    protected function defaultSortField(): string
+    {
+        return 'name';
+    }
+
+    protected function defaultSortDirection(): string
+    {
+        return 'asc';
+    }
+
+    protected function defaultSortDirectionFor(string $field): string
+    {
+        return $field === 'posts_count' ? 'desc' : $this->defaultSortDirection();
     }
 
     public function updated(string $property, mixed $value): void
@@ -131,6 +170,11 @@ new class extends Component {
         $this->resetValidation();
     }
 
+    public function clearFilters(): void
+    {
+        $this->clearSearch();
+    }
+
     public function startCreateForm(): void
     {
         $this->authorize('access-admin');
@@ -143,7 +187,7 @@ new class extends Component {
     {
         $this->authorize('access-admin');
 
-        $category = Category::query()->findOrFail($categoryId);
+        $category = Category::findOrFail($categoryId);
 
         $this->formCategoryId = $category->id;
         $this->formName = $category->name;
@@ -151,9 +195,6 @@ new class extends Component {
         $this->formDescription = $category->description;
         $this->formSlugManuallyEdited = true;
         $this->formOpen = true;
-
-        $this->resetErrorBag();
-        $this->resetValidation();
     }
 
     public function cancelForm(): void
@@ -283,14 +324,42 @@ new class extends Component {
 
     public function with(): array
     {
-        $categories = Category::query()
-            ->withCount('posts')
-            ->orderBy('name')
-            ->paginate($this->perPage);
+        $sortField = $this->sortField ?: $this->defaultSortField();
+        $sortDirection = $this->sortDirection ?: $this->defaultSortDirection();
+
+        $searchTerm = trim($this->search ?? '');
+
+        $query = Category::query()->withCount('posts');
+
+        // Apply search if present
+        if ($searchTerm !== '') {
+            $query->where(function (Builder $q) use ($searchTerm) {
+                $q->where('name', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('slug', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('description', 'LIKE', "%{$searchTerm}%");
+            });
+        }
+
+        $categories = $query
+            ->orderBy($sortField, $sortDirection)
+            ->when($sortField !== 'name', fn (Builder $query) => $query->orderBy('name'))
+            ->when($sortField === 'name', fn (Builder $query) => $query->orderBy('id'))
+            ->paginate($this->perPage)
+            ->withQueryString();
 
         return [
             'categories' => $categories,
+            'searchTerm' => $searchTerm,
         ];
+    }
+
+    public function handleCategorySaved(): void
+    {
+        $this->statusMessage = session('success') ?? __('messages.category_updated');
+        $this->statusLevel = 'success';
+        $this->formOpen = false;
+        $this->resetForm();
+        $this->resetPage();
     }
 
     protected function resetForm(): void
@@ -325,23 +394,24 @@ new class extends Component {
 
 }; ?>
 
-<div class="space-y-6">
-    <flux:page-header
-        :heading="__('admin.categories.heading')"
-        :description="__('admin.categories.description')"
-    >
-        <flux:button color="primary" type="button" wire:click="startCreateForm">
-            {{ $formOpen ? __('admin.categories.form.create_another') : __('admin.categories.create_button') }}
-        </flux:button>
-    </flux:page-header>
+<div>
+    <div class="space-y-6">
+        <flux:page-header
+            :heading="__('admin.categories.heading')"
+            :description="__('admin.categories.description')"
+        >
+            <flux:button color="primary" type="button" wire:click="startCreateForm" data-admin-create-trigger>
+                {{ $formOpen ? __('admin.categories.form.create_another') : __('admin.categories.create_button') }}
+            </flux:button>
+        </flux:page-header>
 
-    @if ($statusMessage)
-        <flux:callout color="{{ $statusLevel === 'error' ? 'red' : 'green' }}">
-            {{ $statusMessage }}
-        </flux:callout>
-    @endif
+        @if ($statusMessage)
+            <flux:callout color="{{ $statusLevel === 'error' ? 'red' : 'green' }}">
+                {{ $statusMessage }}
+            </flux:callout>
+        @endif
 
-    <div class="grid gap-6 lg:grid-cols-[minmax(340px,380px)_1fr]">
+        <div class="grid gap-6 lg:grid-cols-[minmax(340px,380px)_1fr]">
         <flux:card class="space-y-6">
             <div class="flex items-start justify-between gap-3">
                 <div>
@@ -409,8 +479,17 @@ new class extends Component {
                             {{ __('admin.categories.form.cancel_edit') }}
                         </x-ui.button>
 
-                        <flux:button type="submit" color="primary" wire:loading.attr="disabled">
-                            {{ $formCategoryId ? __('categories.form.update') : __('categories.form.create') }}
+                        <flux:button type="submit" color="primary" wire:loading.attr="disabled" wire:target="saveCategory">
+                            <span wire:loading.remove wire:target="saveCategory">
+                                {{ $formCategoryId ? __('categories.form.update') : __('categories.form.create') }}
+                            </span>
+                            <span wire:loading wire:target="saveCategory" class="inline-flex items-center gap-2">
+                                <svg class="h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                {{ __('admin.saving') }}
+                            </span>
                         </flux:button>
                     </div>
                 </form>
@@ -432,14 +511,75 @@ new class extends Component {
             per-page-field="perPage"
             :per-page-options="$this->perPageOptions"
             :per-page-value="$perPage"
+            aria-label="{{ __('admin.categories.table.aria_label') }}"
         >
+            <x-slot name="toolbar">
+                <div class="flex w-full flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                    <div class="flex flex-1 flex-wrap items-center gap-3">
+                        <div class="relative w-full md:w-72">
+                            <label for="category-search" class="sr-only">{{ __('admin.categories.search.label') }}</label>
+                            <input
+                                id="category-search"
+                                type="search"
+                                wire:model.live.debounce.300ms="search"
+                                placeholder="{{ __('admin.categories.search.placeholder') }}"
+                                class="block w-full rounded-xl border border-slate-200 bg-white/80 px-4 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+                            >
+                            @if ($searchTerm !== '')
+                                <button
+                                    type="button"
+                                    wire:click="clearSearch"
+                                    class="absolute inset-y-0 right-3 flex items-center text-slate-400 transition hover:text-slate-600 dark:hover:text-slate-200"
+                                    aria-label="{{ __('admin.categories.search.clear') }}"
+                                >
+                                    &times;
+                                </button>
+                            @endif
+                        </div>
+
+                        @if ($searchTerm !== '')
+                            <flux:badge variant="ghost" size="sm" color="indigo">
+                                {{ __('admin.categories.searching', ['term' => $searchTerm]) }}
+                            </flux:badge>
+                            <flux:button type="button" size="sm" color="secondary" wire:click="clearFilters">
+                                {{ __('admin.categories.filters.clear') }}
+                            </flux:button>
+                        @endif
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <label for="category-sort" class="sr-only">{{ __('admin.categories.sort.label') }}</label>
+                        <select
+                            id="category-sort"
+                            wire:model.live="sortField"
+                            class="w-full rounded-xl border border-slate-200 bg-white/80 px-3 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100 md:w-48"
+                        >
+                            <option value="name">{{ __('admin.categories.table.name') }}</option>
+                            <option value="posts_count">{{ __('admin.categories.table.posts') }}</option>
+                            <option value="updated_at">{{ __('admin.categories.table.updated') }}</option>
+                        </select>
+
+                        <flux:button
+                            type="button"
+                            size="sm"
+                            variant="ghost"
+                            icon="arrows-up-down"
+                            wire:click="sortBy('{{ $sortField }}')"
+                            aria-label="{{ $sortDirection === 'asc' ? __('admin.categories.sort.asc') : __('admin.categories.sort.desc') }}"
+                        >
+                            {{ $sortDirection === 'asc' ? __('admin.categories.sort.asc') : __('admin.categories.sort.desc') }}
+                        </flux:button>
+                    </div>
+                </div>
+            </x-slot>
+
             <x-slot name="head">
                 <x-admin.table-head :columns="[
-                    ['label' => __('admin.categories.table.name')],
-                    ['label' => __('admin.categories.table.posts')],
-                    ['label' => __('admin.categories.table.updated')],
+                    ['label' => __('admin.categories.table.name'), 'sortable' => true, 'field' => 'name'],
+                    ['label' => __('admin.categories.table.posts'), 'sortable' => true, 'field' => 'posts_count'],
+                    ['label' => __('admin.categories.table.updated'), 'sortable' => true, 'field' => 'updated_at'],
                     ['label' => __('admin.categories.table.actions'), 'class' => 'text-right'],
-                ]" />
+                ]" :sort-field="$sortField" :sort-direction="$sortDirection" />
             </x-slot>
 
             @forelse ($categories as $category)
@@ -447,7 +587,12 @@ new class extends Component {
                     $isEditingName = $editingId === $category->id && $editingField === 'name';
                     $isEditingSlug = $editingId === $category->id && $editingField === 'slug';
                 @endphp
-                <x-admin.table-row wire:key="category-{{ $category->id }}">
+                <x-admin.table-row
+                    wire:key="category-{{ $category->id }}"
+                    :interactive="true"
+                    data-row-id="{{ $category->id }}"
+                    data-row-label="{{ $category->name }}"
+                >
                     <td class="px-4 py-4">
                         <div class="flex flex-col gap-2">
                             <div class="flex flex-col gap-2">
@@ -474,7 +619,13 @@ new class extends Component {
                                                 wire:target="saveInlineEdit"
                                                 wire:loading.attr="disabled"
                                             >
-                                                {{ __('admin.inline.save') }}
+                                                <span wire:loading.remove wire:target="saveInlineEdit">{{ __('admin.inline.save') }}</span>
+                                                <span wire:loading wire:target="saveInlineEdit" class="inline-flex items-center gap-1">
+                                                    <svg class="h-3 w-3 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                    </svg>
+                                                </span>
                                             </flux:button>
                                             <flux:button
                                                 size="sm"
@@ -524,7 +675,13 @@ new class extends Component {
                                                 wire:target="saveInlineEdit"
                                                 wire:loading.attr="disabled"
                                             >
-                                                {{ __('admin.inline.save') }}
+                                                <span wire:loading.remove wire:target="saveInlineEdit">{{ __('admin.inline.save') }}</span>
+                                                <span wire:loading wire:target="saveInlineEdit" class="inline-flex items-center gap-1">
+                                                    <svg class="h-3 w-3 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                    </svg>
+                                                </span>
                                             </flux:button>
                                             <flux:button
                                                 size="xs"
@@ -579,8 +736,18 @@ new class extends Component {
                                 icon="trash"
                                 wire:click="deleteCategory({{ $category->id }})"
                                 wire:confirm="{{ __('admin.categories.confirm_delete') }}"
+                                wire:loading.attr="disabled"
+                                wire:target="deleteCategory"
+                                data-row-delete
                             >
-                                {{ __('admin.categories.action_delete') }}
+                                <span wire:loading.remove wire:target="deleteCategory">{{ __('admin.categories.action_delete') }}</span>
+                                <span wire:loading.delay.500ms wire:target="deleteCategory" class="inline-flex items-center gap-1">
+                                    <svg class="h-3 w-3 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    {{ __('admin.deleting') }}
+                                </span>
                             </flux:button>
                         </div>
                     </td>
@@ -589,5 +756,8 @@ new class extends Component {
                 <x-admin.table-empty colspan="4" :message="__('admin.categories.empty')" />
             @endforelse
         </x-admin.table>
+        </div>
     </div>
+
+    <livewire:admin.categories.category-form wire:key="admin-category-form" />
 </div>

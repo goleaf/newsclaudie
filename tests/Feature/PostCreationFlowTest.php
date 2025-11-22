@@ -43,6 +43,46 @@ final class PostCreationFlowTest extends TestCase
         );
     }
 
+    public function test_removing_categories_does_not_affect_other_posts(): void
+    {
+        $admin = User::factory()->create([
+            'is_admin' => true,
+        ]);
+
+        $categories = Category::factory()->count(3)->create();
+
+        $firstPost = Post::factory()->create([
+            'user_id' => $admin->id,
+            'published_at' => now(),
+        ]);
+        $firstPost->categories()->sync([$categories[0]->id, $categories[1]->id]);
+
+        $secondPost = Post::factory()->create([
+            'user_id' => $admin->id,
+            'published_at' => now(),
+        ]);
+        $secondPost->categories()->sync([$categories[1]->id, $categories[2]->id]);
+
+        $this->actingAs($admin)
+            ->patch(route('posts.update', $firstPost), [
+                'title' => 'Retagged post',
+                'body' => 'Updated body',
+                'published_at' => now()->addDay()->format('Y-m-d\TH:i'),
+                'categories' => [$categories[0]->id],
+            ])
+            ->assertRedirect();
+
+        $this->assertEqualsCanonicalizing(
+            [$categories[0]->id],
+            $firstPost->fresh()->categories()->pluck('categories.id')->all()
+        );
+
+        $this->assertEqualsCanonicalizing(
+            [$categories[1]->id, $categories[2]->id],
+            $secondPost->fresh()->categories()->pluck('categories.id')->all()
+        );
+    }
+
     public function test_draft_posts_leave_published_at_null_for_admins(): void
     {
         $admin = User::factory()->create([

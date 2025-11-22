@@ -7,3 +7,4 @@ use NunoMaduro\Essentials\Configurables\Unguard;
 return [
     Unguard::class => true,
 ];
+

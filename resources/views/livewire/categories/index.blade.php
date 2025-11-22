@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Concerns\ManagesPerPage;
+use App\Livewire\Concerns\ManagesSearch;
 use App\Models\Category;
 use App\Support\Pagination\PageSize;
 use Illuminate\Support\Facades\Gate;
@@ -16,14 +17,13 @@ title(__('categories.title'));
 new class extends Component {
     use WithPagination;
     use ManagesPerPage;
+    use ManagesSearch;
 
     public ?string $statusMessage = null;
     public bool $canManage = false;
-    public ?string $search = null;
 
     protected array $queryString = [
         'page' => ['except' => 1],
-        'search' => ['except' => ''],
     ];
 
     protected function perPageContext(): string
@@ -54,23 +54,22 @@ new class extends Component {
         $this->resetPage();
     }
 
-    public function updatingSearch(): void
-    {
-        $this->resetPage();
-    }
-
     public function with(): array
     {
         $searchTerm = trim((string) $this->search);
 
-        $categories = Category::query()
-            ->when($searchTerm !== '', function ($query) use ($searchTerm) {
-                $query->where(function ($inner) use ($searchTerm) {
-                    $inner->where('name', 'like', '%'.$searchTerm.'%')
-                        ->orWhere('slug', 'like', '%'.$searchTerm.'%');
-                });
-            })
-            ->withCount('posts')
+        $query = Category::query()->withCount('posts');
+        
+        // Apply search if present
+        if ($searchTerm !== '') {
+            $query->where(function ($builder) use ($searchTerm) {
+                $builder->where('name', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('slug', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('description', 'like', '%' . $searchTerm . '%');
+            });
+        }
+
+        $categories = $query
             ->orderBy('name')
             ->paginate($this->perPage)
             ->withQueryString();

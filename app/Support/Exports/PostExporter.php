@@ -202,7 +202,9 @@ final class PostExporter
 
     private function ensureDirectory(): void
     {
-        Storage::disk($this->disk)->makeDirectory($this->directory);
+        if ($this->directory !== '') {
+            Storage::disk($this->disk)->makeDirectory($this->directory);
+        }
     }
 
     private function pathFor(DataExport $export, string $format): string

@@ -63,3 +63,4 @@ final class PageViewTest extends TestCase
         $this->assertNull($view->user_agent);
     }
 }
+

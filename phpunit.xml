@@ -39,5 +39,8 @@
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
+        
+        <!-- Property-Based Testing Configuration -->
+        <env name="PEST_FAKER_ITERATIONS" value="100"/>
     </php>
 </phpunit>
