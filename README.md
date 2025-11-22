@@ -2,154 +2,369 @@
 
 <p align="center">
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+<a href="https://github.com/goleaf/newsclaudie"><img src="https://img.shields.io/github/stars/goleaf/newsclaudie?style=social" alt="GitHub stars"></a>
 </p>
 
-# Laravel Blog Starter Kit
+# Laravel Blog News - Enhanced Blog Starter Kit
 
-## Kickstart the development of your Laravel Blog with this Starter Kit built on Laravel 11, TailwindCSS, and AlpineJS.
+## A modern, accessible, and feature-rich Laravel blog application built on Laravel 12, Livewire Volt, Flux UI, TailwindCSS, and AlpineJS.
 
 <img src="https://cdn.jsdelivr.net/gh/caendesilva/laravel-blogkit-static-demo@latest/storage/screenshots/devices/laptop_composite-min.png" />
 
-## Not actively maintained
-This project is currently not receiving new features as I am focusing on [HydePHP](https://github.com/hydephp/hyde), however,
-the project will continue to get security fixes as long as Laravel 11 is still supported. Open source contributions are welcome!
+## Overview
 
-## Features
-* **Tailwind-first UI:** Shared Blade components (`x-ui.*`, `x-navigation.main`) keep the public layout responsive and dark-mode-aware, while the admin panel runs on Livewire Volt + Flux UI for a modern workflow (dashboard, posts, categories, comments moderation, and user management).
-* **Category-aware archive:** Filter the public posts index by category with a localized dropdown (and matching on-page breadcrumbs that jump straight to the filtered feed).
-* **Localization-ready:** JSON translations (English + Spanish today) power every nav label, flash message, and validation error. Add locales by extending `config('app.supported_locales')`.
+This is an enhanced fork of the Laravel BlogKit with significant improvements to the admin interface, accessibility features, and user experience. The application provides a complete blogging solution with a powerful admin panel, comprehensive testing suite, and extensive documentation.
+
+## ✨ Key Features
+
+### Core Features
+* **Modern Admin Interface:** Livewire Volt + Flux UI powered admin panel with real-time updates, optimistic UI, and comprehensive CRUD operations for posts, categories, comments, and users.
+* **Tailwind-first UI:** Shared Blade components (`x-ui.*`, `x-navigation.main`) keep the public layout responsive and dark-mode-aware.
+* **Category-aware archive:** Filter the public posts index by category with a localized dropdown and matching on-page breadcrumbs.
+* **Localization-ready:** JSON translations (English + Spanish) power every nav label, flash message, and validation error. Easily extend by adding locales to `config('app.supported_locales')`.
 * **Security-focused CMS:** Posts, categories, users, and comments use dedicated FormRequests and policies so authorization rules live in one place.
-* **Smart Markdown editor:** EasyMDE ships by default for rich previews and autosave, but you can toggle it off in `config/blog.php` to fall back to the textarea component.
-* **Users & comments:** Email verification gates commenting, and the workflow now runs through classic controllers + Blade forms for easier customization.
+* **Smart Markdown editor:** EasyMDE ships by default for rich previews and autosave, configurable via `config/blog.php`.
+* **Users & comments:** Email verification gates commenting, with workflow running through classic controllers + Blade forms for easier customization.
 * **Semantic, SEO-friendly HTML:** Every post renders OG tags, schema.org metadata, and optional Torchlight highlighting.
 
-## Navigation & Localization
-The primary navigation lives in `resources/views/components/navigation/main.blade.php` and is hydrated entirely via translations, so both the desktop pills and the mobile drawer stay locale-aware.
+### Enhanced Admin Features
+* **Optimistic UI Updates:** Instant feedback for user actions with automatic rollback on errors.
+* **Advanced Search & Filtering:** Real-time search with debouncing across all admin tables.
+* **Sortable Columns:** Multi-column sorting with URL persistence for shareable filtered views.
+* **Bulk Actions:** Select and perform actions on multiple items with configurable limits.
+* **Inline Editing:** Edit categories and other entities directly in the table view.
+* **Accessibility First:** WCAG 2.1 compliant with keyboard navigation, ARIA labels, screen reader support, and focus management.
+* **Keyboard Shortcuts:** Power user shortcuts for common admin operations.
+* **Loading Indicators:** Smart loading states with configurable delays to prevent UI flicker.
+* **Responsive Design:** Fully responsive admin interface that works on all device sizes.
 
-1. **Dynamic route links** — extend the `$primaryLinks` collection to expose new named routes (home, posts, categories, readme, etc.).
-2. **Locale picker** — a POST form targeting `route('locale.update')`, backed by `App\Http\Middleware\SetLocaleFromSession` so preferences persist between requests.
-3. **Theme toggle & mobile drawer** — powered by `resources/js/app.js`, with no inline scripts or CDNs required.
+### Developer Experience
+* **Comprehensive Documentation:** Extensive documentation in the `docs/` directory covering architecture, components, traits, and best practices.
+* **Property-Based Testing:** Advanced testing suite using property-based testing for critical features.
+* **Type Safety:** Full TypeScript support for frontend code with comprehensive type definitions.
+* **Code Quality:** Integrated with Laravel Pint, PHPStan, and Rector for code quality and consistency.
 
-To add another language:
+## 🚀 Quick Start
 
-    cp lang/en.json lang/fr.json   # translate the copy
+### Prerequisites
+- PHP 8.3 or higher
+- Composer
+- Node.js and NPM
+- SQLite, MySQL, or PostgreSQL
 
-Then register the locale:
-
-    // config/app.php
-    'supported_locales' => ['en', 'es', 'fr'],
-
-The picker automatically renders a button for every locale in that array, and validation/errors follow suit because the copy all comes from the same JSON keys. Everything ships through Vite, so there are no remote font or Livewire assets to manage.
-
-## Full Documentation
-Full documentation is available at https://docs.desilva.se/blogkit/. Generated using my free [Laradocgen](https://github.com/caendesilva/laradocgen) package!
-
-## Demos:
-Static demo of the default install: https://caendesilva.github.io/laravel-blogkit-static-demo/
-Live blog (my own (customized) blog built with this kit): https://blog.desilva.se/
-
-## Get Started
-
-### Quick Install
+### Installation
 
 ```bash
-git clone https://github.com/caendesilva/laravel-blogkit.git
-cd laravel-blogkit
+# Clone the repository
+git clone https://github.com/goleaf/newsclaudie.git
+cd newsclaudie
+
+# Install PHP dependencies
 composer install
-npm install && npm run prod
+
+# Install NPM dependencies
+npm install
+
+# Copy environment file
 cp .env.example .env
-php artisan migrate
+
+# Generate application key
 php artisan key:generate
+
+# Run migrations
+php artisan migrate
+
+# Create storage link
 php artisan storage:link
+
+# Build frontend assets
+npm run build
+
+# Create admin account
 php artisan admin:create
 
+# Start development server
 php artisan serve
 ```
 
-Once you have installed the Laravel app you can use the helper command to create an admin account using `php artisan admin:create` in your terminal.
+After installation, visit `/admin/dashboard` to access the admin panel.
 
-After logging in, head to `/admin/dashboard` to use the Livewire + Flux admin workspace for drafts, categories, and moderation.
+### Demo Mode Setup
 
-### How to set up the blog using the demo settings
-**Important! This guide is just to demo the site. For production use you must follow the production guide as this guide allows anyone to log in as admin! **
+**Important!** Demo mode allows anyone to log in as admin. Only use for demonstration purposes.
 
-1. Clone the git repo
-2. In the config file `config\blog.php` change `demoMode` to `true`
-3. In your terminal, run `php artisan migrate --seed`
+1. Set `demoMode` to `true` in `config/blog.php`
+2. Run `php artisan migrate --seed`
 
-### How to set up the blog for production
-1. Clone the git repo
-2. In your terminal, run `php artisan migrate` (Note, if you have previously set up your app using demo data, use `migrate:fresh` to clear demo users instead!)
-3. In your terminal, run `php artisan admin:create` and follow the on-screen instructions to create an admin account. Make sure to set a strong password or passphrase!
-4. Next, follow the instructions in the [Official Deployment Documentation](https://laravel.com/docs/9.x/deployment) to ensure you are following the best practices.
+### Production Setup
 
-#### How to add authors
-It may be useful to add more authors to your blog. First, instruct the author to create a standard account and confirm their email. Then sign in as an administrator, visit `/admin/dashboard`, and verify they appear in the Flux admin tables. Until the dedicated user modal ships, promote that user by running `php artisan tinker` and setting `$user->is_author = true` (or by updating the record directly in your database). When `is_author` is enabled the author can access the post creation tools immediately.
+1. Clone the repository
+2. Run `php artisan migrate` (use `migrate:fresh` if you previously used demo data)
+3. Run `php artisan admin:create` to create an admin account with a strong password
+4. Follow [Laravel's deployment documentation](https://laravel.com/docs/deployment) for production best practices
 
-### Testing
-Browser, feature, and unit suites all run through Pest:
+### Adding Authors
+
+1. Have the author create a standard account and confirm their email
+2. Sign in as administrator and visit `/admin/dashboard`
+3. Promote the user by running `php artisan tinker`:
+   ```php
+   $user = User::where('email', 'author@example.com')->first();
+   $user->is_author = true;
+   $user->save();
+   ```
+
+## 📚 Documentation
+
+Comprehensive documentation is available in the `docs/` directory:
+
+### Quick Start Guides
+- **[Admin Documentation Index](docs/ADMIN_DOCUMENTATION_INDEX.md)** - Complete documentation overview
+- **[Admin Config Quick Reference](docs/ADMIN_CONFIG_QUICK_REFERENCE.md)** - Quick configuration lookup
+- **[Volt Component Guide](docs/VOLT_COMPONENT_GUIDE.md)** - Building Livewire Volt components
+- **[Livewire Traits Guide](docs/LIVEWIRE_TRAITS_GUIDE.md)** - Using shared traits
+
+### Feature Documentation
+- **[Admin Configuration](docs/ADMIN_CONFIGURATION.md)** - Complete configuration reference
+- **[Optimistic UI](docs/OPTIMISTIC_UI.md)** - Optimistic UI implementation guide
+- **[Admin Accessibility](docs/ADMIN_ACCESSIBILITY.md)** - Accessibility features and guidelines
+- **[Accessibility Testing Guide](docs/ACCESSIBILITY_TESTING_GUIDE.md)** - Testing accessibility features
+
+### Architecture
+- **[Interface Architecture](docs/INTERFACE_ARCHITECTURE.md)** - System architecture overview
+- **[Interface Migration Guide](docs/interface-migration-guide.md)** - Migration from traditional controllers
+
+## 🧪 Testing
+
+The project includes comprehensive test coverage using PestPHP and Playwright:
 
 ```bash
+# Install dependencies
 npm install
-npm run playwright:install   # once, downloads browser binaries
-php artisan test             # runs Playwright + Pest suites
+
+# Install Playwright browsers (one-time setup)
+npm run playwright:install
+
+# Run all tests
+php artisan test
+
+# Run tests in parallel
+php artisan test --parallel
+
+# Run specific test suite
+php artisan test --testsuite=Feature
+php artisan test --testsuite=Unit
+php artisan test --testsuite=Browser
 ```
 
-The Playwright-powered `tests/Browser/HomepageTest` now renders the real homepage to catch Tailwind/layout regressions, while the Feature + Unit folders continue to cover form requests, policies, and Markdown tooling.
-`tests/Browser/AdminNavigationTest` signs in through the login form and ensures each Flux admin screen responds once authenticated.
-`tests/Browser/AdminPostsPublishTest` goes a step further by publishing and unpublishing a draft directly from the Volt table to guard those Livewire actions.
+### Test Coverage
 
-### Writing blog posts
-Blog posts are a breeze to create using the Markdown editor!
+- **Browser Tests:** Playwright-powered tests for UI regressions and user flows
+- **Feature Tests:** Comprehensive feature testing for controllers, policies, and workflows
+- **Unit Tests:** Property-based testing for critical business logic
+- **Accessibility Tests:** Automated and manual accessibility testing
 
-#### Good cover images
-Each post has a featured cover image that is dynamically cropped using CSS background properties so that it looks smooth in all widths.
+See [Property Testing Guide](tests/PROPERTY_TESTING.md) for information on property-based testing.
 
-For best results, ensure that your cover images are 960 by 640 pixels as that is usually the max size. However, you should also remember that the images are cropped to a much narrower format in many places. Thus you need to make sure that all primary content such as text is contained within the center 640 by 340 pixels.
+## 🎨 Writing Blog Posts
 
-## Contribute!
-PRs are very much welcome!
+Blog posts are created using a Markdown editor with live preview.
 
-Current todo list:
-- [ ] Unify session flashes
-- [ ] Add "load more" style pagination to comments
-- [x] Add this readme as a page on the demo site
-- [ ] Add Markdown caching (and clear post cache when updating post)
-- [x] Add Artisan command to generate posts from frontmatter Markdown
-- [ ] Add theme color option
-- [ ] Image uploads
-- [ ] Write more tests
-- [x] Add option to disable the "last updated" feature in the frontend
-- [ ] Add option to disable the CMS (if one just wants to use plain markdown files)
-- [ ] Add drafts manager for the drafts stored in the user's localstorage
+### Cover Images
 
-## Open Source Attributions
-The Starter Kit is a modern Blade-first application built on top of [Laravel Breeze](https://github.com/laravel/breeze) (MIT) using:
-- [TailwindCSS 3](https://tailwindcss.com/) (MIT)
-- [AlpineJS 3](https://alpinejs.dev/) (MIT)
-- [Laravel 12](https://laravel.com/) (MIT)
-- [Blade components + Vite](https://laravel.com/docs/11.x/vite) (MIT)
+Each post has a featured cover image that is dynamically cropped using CSS background properties.
 
-Featured images on blog posts used by the seeder come from [Unsplash](https://unsplash.com/) via [picsum.photos](https://picsum.photos/) (Image License)[https://unsplash.com/license]
-Some of the frontend components are from [Flowbite](https://github.com/themesberg/flowbite) (MIT)
+**Best Practices:**
+- Recommended size: 960 × 640 pixels (maximum)
+- Keep important content within the center 640 × 340 pixels
+- Images are cropped to narrower formats on mobile devices
 
+## 🛠️ Technology Stack
 
-## Code of Conduct
+### Backend
+- **Laravel 12** - Modern PHP framework
+- **Livewire 3** - Full-stack framework for Laravel
+- **Livewire Volt** - Single-file Livewire components
+- **Livewire Flux** - Beautiful admin UI components
+- **Laravel Sanctum** - API authentication
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Frontend
+- **TailwindCSS 3** - Utility-first CSS framework
+- **AlpineJS 3** - Minimal JavaScript framework
+- **Vite** - Next-generation frontend tooling
+- **TypeScript** - Type-safe JavaScript
 
-## Security Vulnerabilities
+### Development Tools
+- **PestPHP** - Testing framework
+- **Playwright** - Browser automation
+- **Laravel Pint** - Code style fixer
+- **PHPStan** - Static analysis
+- **Rector** - Automated refactoring
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com).
+## 📁 Project Structure
 
-If you discover a security vulnerability within this package, please send an e-mail to the creator, Caen De Silva, via [caen@desilva.se](mailto:caen@desilva.se).
+```
+app/
+├── Http/
+│   ├── Controllers/        # Traditional controllers
+│   ├── Requests/            # Form request validation
+│   └── Middleware/         # Custom middleware
+├── Livewire/
+│   └── Concerns/            # Shared Livewire traits
+│       ├── ManagesSearch.php
+│       ├── ManagesSorting.php
+│       ├── ManagesBulkActions.php
+│       └── ManagesPerPage.php
+├── Models/                  # Eloquent models
+└── Support/                 # Helper classes
+    └── AdminConfig.php      # Admin configuration helper
 
-All security vulnerabilities will be promptly addressed.
+resources/
+├── views/
+│   ├── components/         # Blade components
+│   │   ├── admin/          # Admin-specific components
+│   │   └── ui/             # Shared UI components
+│   └── livewire/
+│       └── admin/          # Livewire Volt components
+└── js/                     # TypeScript/JavaScript
 
-## License
+docs/                       # Comprehensive documentation
+tests/                      # Test suites
+```
+
+## 🔧 Configuration
+
+### Admin Interface Configuration
+
+Configure the admin interface via `config/interface.php`:
+
+```php
+'search_debounce_ms' => 300,        // Search input debounce delay
+'form_debounce_ms' => 300,           // Form input debounce delay
+'bulk_action_limit' => 100,          // Maximum items for bulk actions
+'optimistic_ui_enabled' => true,     // Enable optimistic UI updates
+'loading_indicator_delay_ms' => 500,  // Loading spinner delay
+```
+
+See [Admin Configuration Guide](docs/ADMIN_CONFIGURATION.md) for complete configuration options.
+
+### Environment Variables
+
+Key environment variables:
+
+```env
+APP_NAME="Blog News"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost
+
+DB_CONNECTION=sqlite
+DB_DATABASE=database/database.sqlite
+
+# Admin Interface
+INTERFACE_SEARCH_DEBOUNCE_MS=300
+INTERFACE_BULK_ACTION_LIMIT=100
+INTERFACE_OPTIMISTIC_UI_ENABLED=true
+```
+
+## 🌍 Localization
+
+The application supports multiple languages through JSON translation files.
+
+### Adding a New Language
+
+1. Copy an existing language file:
+   ```bash
+   cp lang/en.json lang/fr.json
+   ```
+
+2. Translate the content in `lang/fr.json`
+
+3. Register the locale in `config/app.php`:
+   ```php
+   'supported_locales' => ['en', 'es', 'fr'],
+   ```
+
+The locale picker automatically renders buttons for all registered locales.
+
+## 🎯 Navigation & Localization
+
+The primary navigation is defined in `resources/views/components/navigation/main.blade.php` and is fully translation-aware.
+
+### Key Features
+1. **Dynamic Route Links** - Extend `$primaryLinks` to add new navigation items
+2. **Locale Picker** - POST form with session persistence via `SetLocaleFromSession` middleware
+3. **Theme Toggle** - Dark mode support with persistent preferences
+4. **Mobile Drawer** - Responsive mobile navigation
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+### Development Workflow
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run tests (`php artisan test`)
+5. Run code style checks (`./vendor/bin/pint --test`)
+6. Run static analysis (`./vendor/bin/phpstan analyse`)
+7. Commit your changes (`git commit -m 'Add amazing feature'`)
+8. Push to the branch (`git push origin feature/amazing-feature`)
+9. Open a Pull Request
+
+### Code Quality
+
+The project uses several tools to maintain code quality:
+
+```bash
+# Auto-format code
+./vendor/bin/pint
+
+# Check style compliance
+./vendor/bin/pint --test
+
+# Run static analysis
+./vendor/bin/phpstan analyse
+
+# Run tests
+php artisan test --parallel
+```
+
+## 📝 License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 This starter kit is also open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-Credit is not required, but it is highly appreciated. If this project helped you, please leave a star and let me know! I'd LOVE to see what you build using this. I'm happy to add a link to your site in this readme if you are using it.
+## 🙏 Acknowledgments
+
+This project is based on [Laravel BlogKit](https://github.com/caendesilva/laravel-blogkit) by [Caen De Silva](https://github.com/caendesilva).
+
+### Open Source Attributions
+
+Built on top of:
+- [Laravel Breeze](https://github.com/laravel/breeze) (MIT)
+- [TailwindCSS 3](https://tailwindcss.com/) (MIT)
+- [AlpineJS 3](https://alpinejs.dev/) (MIT)
+- [Laravel 12](https://laravel.com/) (MIT)
+- [Livewire](https://livewire.laravel.com/) (MIT)
+- [Livewire Flux](https://flux.livewireui.com/) (MIT)
+- [Flowbite](https://github.com/themesberg/flowbite) (MIT)
+
+Featured images from [Unsplash](https://unsplash.com/) via [picsum.photos](https://picsum.photos/) ([Image License](https://unsplash.com/license))
+
+## 🔒 Security Vulnerabilities
+
+If you discover a security vulnerability, please send an email to the maintainers. All security vulnerabilities will be promptly addressed.
+
+## 📞 Support
+
+For questions, issues, or contributions:
+- Open an issue on [GitHub](https://github.com/goleaf/newsclaudie/issues)
+- Check the [documentation](docs/ADMIN_DOCUMENTATION_INDEX.md)
+- Review existing issues and discussions
+
+---
+
+**Credit is not required, but it is highly appreciated.** If this project helped you, please leave a star! ⭐
