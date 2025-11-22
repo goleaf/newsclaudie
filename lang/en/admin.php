@@ -84,6 +84,7 @@ return [
             'closed_hint' => 'Click the button to create a new category.',
             'cancel_edit' => 'Cancel',
             'slug_locked' => 'Slug has been manually edited and will not auto-update.',
+            'slug_format_hint' => 'Use lowercase letters, numbers, and hyphens only (e.g., my-category-name)',
         ],
     ],
     
@@ -194,6 +195,8 @@ return [
         'field_password' => 'Password',
         'field_password_confirmation' => 'Confirm Password',
         'email_unique_hint' => 'Email must be unique.',
+        'email_format_hint' => 'Must be a valid email address (e.g., user@example.com)',
+        'password_format_hint' => 'Minimum 8 characters required',
         
         'delete_heading' => 'Delete :name',
         'delete_subheading' => 'Choose what to do with this user\'s content.',
@@ -303,6 +306,7 @@ return [
             'new_category' => 'New Category',
             'no_categories' => 'No categories available. Create one to get started.',
             'publication_heading' => 'Publication Settings',
+            'slug_format_hint' => 'Use lowercase letters, numbers, and hyphens only (e.g., my-post-title)',
         ],
     ],
     

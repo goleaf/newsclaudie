@@ -76,3 +76,4 @@ Replace raw `links()` calls with the shared component:
 - Flip per-page values in Volt admin tables and confirm the dropdown reflects the persisted `?perPage=` query parameter after refresh.
 - Try invalid `per_page` values and confirm the UI snaps back to the nearest allowed option without losing filters.
 
+

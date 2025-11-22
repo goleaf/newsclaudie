@@ -9,7 +9,7 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.ts'])
     </head>
     <body class="font-sans antialiased bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
         <div class="min-h-screen">

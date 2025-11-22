@@ -12,7 +12,7 @@
             {{ (isset($title) ? $title . ' - ' : '') . config('app.name', 'Laravel') }}
         </title>
 
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.ts'])
         @livewireStyles
     </head>
     <body class="font-sans antialiased text-slate-900 dark:text-slate-100 bg-slate-50 dark:bg-slate-950">

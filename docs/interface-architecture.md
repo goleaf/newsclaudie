@@ -64,3 +64,4 @@
 - Consider surfacing `perPageMode="livewire"` controls in admin tables once backend handlers support dynamic page-size updates.
 - Run `npm run typecheck` (already added) inside CI to keep Alpine helpers type-safe as new UI affordances land.
 
+

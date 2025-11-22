@@ -600,6 +600,10 @@ new class extends Component {
                         />
                         @error('createForm.email')
                             <p class="text-xs text-rose-500">{{ $message }}</p>
+                        @else
+                            <p class="text-xs text-slate-500 dark:text-slate-400">
+                                {{ __('admin.users.email_format_hint') }}
+                            </p>
                         @enderror
                     </div>
                 </div>
@@ -617,6 +621,10 @@ new class extends Component {
                         />
                         @error('createForm.password')
                             <p class="text-xs text-rose-500">{{ $message }}</p>
+                        @else
+                            <p class="text-xs text-slate-500 dark:text-slate-400">
+                                {{ __('admin.users.password_format_hint') }}
+                            </p>
                         @enderror
                     </div>
 

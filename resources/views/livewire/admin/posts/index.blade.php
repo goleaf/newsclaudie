@@ -1013,6 +1013,11 @@ new class extends Component {
                         description="{{ $slugManuallyEdited ? __('posts.form.slug_locked') : __('posts.form.slug_help') }}"
                     />
                     <flux:error name="form.slug" />
+                    @if (!$errors->has('form.slug'))
+                        <p class="text-xs text-slate-500 dark:text-slate-400">
+                            {{ __('admin.posts.form.slug_format_hint') }}
+                        </p>
+                    @endif
                 </div>
 
                 <div class="space-y-2">

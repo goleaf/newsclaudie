@@ -46,3 +46,4 @@ final class SetLocaleRequest extends FormRequest
     }
 }
 
+

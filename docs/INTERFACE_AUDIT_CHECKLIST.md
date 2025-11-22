@@ -63,3 +63,4 @@
 - ☑ Outline testing guidance (manual + automated) without modifying tests.  
   - Tracked in `docs/TEST_COVERAGE.md`; future test updates remain on hold.
 
+

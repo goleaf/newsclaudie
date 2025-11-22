@@ -74,3 +74,4 @@ final class NewsSeeder extends Seeder
 }
 
 
+
