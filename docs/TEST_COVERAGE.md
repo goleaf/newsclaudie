@@ -43,7 +43,7 @@ This document maps every PHP class under `app/` to its current automated coverag
 | --- | --- | --- |
 | `Category`, `Comment`, `Tag`, `User` | Not directly tested. | Add unit tests for relationships/scopes once domain logic is added. |
 | `PageView` | `tests/Unit/PageViewTest`. | Add coverage for `normalizeDomain` edge cases (e.g. missing protocol) and `anonymizeRequest` salted hashing. |
-| `Post` | `tests/Unit/PostModelTest` + `tests/Unit/PostQueryScopesTest` covers query scopes for news filtering. | Covered for helper methods and query scopes; add test for `scopePublished` once `PublishedScope` integrates. |
+| `Post` | `tests/Unit/PostModelTest` + `tests/Unit/PostQueryScopesTest` covers query scopes for news filtering. `tests/Unit/PostPersistencePropertyTest` (5 property-based tests, ~55 assertions) validates data persistence round-trip for creation, updates, null fields, timestamps, and JSON arrays. **Documentation**: [POST_PERSISTENCE_PROPERTY_TESTING.md](../tests/Unit/POST_PERSISTENCE_PROPERTY_TESTING.md) | Covered for helper methods, query scopes, and data persistence. |
 | `PublishedScope` | `tests/Unit/PublishedScopeTest`. | Covered for guest/author/admin visibility logic. |
 
 ## View Components
@@ -82,7 +82,8 @@ This document maps every PHP class under `app/` to its current automated coverag
 | `NewsViewRenderingPropertyTest` | 3 | ~226 | ~0.22s | ✅ | [Full Guide](../tests/Unit/NEWS_VIEW_RENDERING_TESTING.md) \| [Quick Ref](../tests/Unit/NEWS_VIEW_RENDERING_QUICK_REFERENCE.md) |
 | `NewsLocaleAwareNavigationPropertyTest` | 1 | 115 | ~0.08s | ✅ | [Full Guide](../tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_TESTING.md) \| [Quick Ref](../tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_QUICK_REFERENCE.md) |
 | `CommentStatusFilterPropertyTest` | 1 | ~495 | ~0.95s | ✅ | [Full Guide](../tests/Unit/COMMENT_STATUS_FILTER_TESTING.md) \| [Quick Ref](../tests/Unit/COMMENT_STATUS_FILTER_QUICK_REFERENCE.md) |
-| `CommentInlineEditPropertyTest` | 1 | ~150 | ~0.40s | ✅ | Inline documentation in test file |
+| `CommentInlineEditPropertyTest` | 1 | ~1,100 | ~1.70s | ✅ | [Full Guide](../tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md) \| [Quick Ref](../tests/Unit/COMMENT_INLINE_EDIT_QUICK_REFERENCE.md) |
+| `PostPersistencePropertyTest` | 1 | ~55 | ~0.30s | ✅ | [Full Guide](../tests/Unit/POST_PERSISTENCE_PROPERTY_TESTING.md) \| [Quick Ref](../tests/Unit/POST_PERSISTENCE_QUICK_REFERENCE.md) |
 
 ## Console Commands / Providers
 

@@ -95,6 +95,12 @@ New to the admin interface? Start here:
   - Breaking changes
   - Migration steps
 
+- **[Admin Comments Eager Loading](ADMIN_COMMENTS_EAGER_LOADING.md)** - Eager loading strategy
+  - Relationship loading optimization
+  - Performance considerations
+  - Authorization context
+  - Query efficiency
+
 ## Documentation by Task
 
 ### I want to...

@@ -96,9 +96,20 @@
   - Add rich text editor for body content
   - _Requirements: 1.2, 1.3, 1.4, 1.7_
 
-- [x] 3.3 Write property test for post persistence
+- [x] 3.3 Write property test for post persistence ✅ **DOCUMENTED**
   - **Property 1: Data persistence round-trip**
   - **Validates: Requirements 1.4**
+  - Tests created in `tests/Unit/PostPersistencePropertyTest.php`
+  - 5 tests with ~55 assertions covering:
+    - Post creation with random data (title, slug, body, description, featured_image, tags, published_at)
+    - Post updates with data integrity verification
+    - Null optional fields handling
+    - Automatic timestamp management (created_at, updated_at)
+    - JSON array field serialization (tags)
+    - Model accessor handling for default values
+    - Global scope bypass for unpublished posts
+  - **Documentation**: `tests/Unit/POST_PERSISTENCE_PROPERTY_TESTING.md`
+  - **Quick Reference**: `tests/Unit/POST_PERSISTENCE_QUICK_REFERENCE.md`
 
 - [x] 3.4 Write property test for post deletion
   - **Property 2: Deletion removes resource**
@@ -159,13 +170,14 @@
   - **Property 1: Data persistence round-trip** (inline edit aspect)
   - **Validates: Requirements 3.3**
   - Tests created in `tests/Unit/CommentInlineEditPropertyTest.php`
-  - 5 tests with ~150 assertions covering:
-    - Inline edit content persistence
-    - Inline edit status persistence
-    - Multiple sequential inline edits
-    - Empty content edge case
-    - Timestamp updates (updated_at changes, created_at preserved)
-  - **Documentation**: Inline documentation in test file
+  - 5 tests with ~1,100 assertions covering:
+    - Inline edit content persistence (100 iterations, ~300 assertions)
+    - Inline edit status persistence (100 iterations, ~200 assertions)
+    - Multiple sequential inline edits (50 × 3 edits, ~300 assertions)
+    - Empty content edge case (50 iterations, ~100 assertions)
+    - Timestamp updates (100 iterations, ~200 assertions)
+  - **Documentation**: `tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md`
+  - **Quick Reference**: `tests/Unit/COMMENT_INLINE_EDIT_QUICK_REFERENCE.md`
 
 - [ ]* 5.5 Write property test for comment status update
   - **Property 28: Comment status update**
@@ -182,18 +194,18 @@
   - **Validates: Requirements 3.6, 8.3**
   - Note: Requires using Comment::factory() to avoid password hashing issues
 
-- [ ] 6. Implement Users CRUD with Livewire
+- [x] 6. Implement Users CRUD with Livewire
   - Build users management with role and ban status controls
   - Includes email uniqueness validation and search
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
 
-- [ ] 6.1 Create UsersIndex Volt component
+- [x] 6.1 Create UsersIndex Volt component
   - Implement index with search, sorting, and pagination
   - Add role badge display and account status indicators
   - Implement delete functionality with content handling
   - _Requirements: 4.1, 4.5, 4.6_
 
-- [ ] 6.2 Create UserForm Volt component for modal
+- [x] 6.2 Create UserForm Volt component for modal
   - Implement create/edit form with email validation
   - Add role toggle switches (is_admin, is_author)
   - Add ban status toggle
@@ -219,12 +231,12 @@
   - **Property 10: Search filtering accuracy** (user aspect)
   - **Validates: Requirements 4.6**
 
-- [ ] 7. Implement inline editing functionality
+- [x] 7. Implement inline editing functionality
   - Add inline editing capabilities to all resource tables
   - Includes edit mode toggle, validation, and cancellation
   - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
 
-- [ ] 7.1 Implement inline editing in Categories and Comments
+- [x] 7.1 Implement inline editing in Categories and Comments
   - Categories has inline editing for name and slug fields
   - Comments has inline editing for content and status
   - Both include save/cancel functionality and validation
@@ -238,12 +250,12 @@
   - **Property 4: Invalid input rejection** (inline aspect)
   - **Validates: Requirements 5.2, 5.5**
 
-- [ ] 8. Implement modal workflows
+- [x] 8. Implement modal workflows
   - Modal behavior for create/edit operations implemented
   - Includes form state management and validation handling
   - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5_
 
-- [ ] 8.1 Modal workflows implemented across all resources
+- [x] 8.1 Modal workflows implemented across all resources
   - Categories uses side-panel form with open/close state
   - Posts uses Flux modal component with form state reset
   - Users uses custom modal with create/delete workflows
@@ -267,7 +279,7 @@
   - Includes filter reset and bookmarkable URLs
   - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
 
-- [x] 9.1 Advanced filtering implemented across resources
+- [ ] 9.1 Advanced filtering implemented across resources
   - Posts has status and author filters with search
   - Comments has status filter
   - Categories has search with sorting
@@ -322,7 +334,7 @@
   - Includes format hints and server-side error display
   - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5_
 
-- [x] 11.1 All forms have real-time validation
+- [ ] 11.1 All forms have real-time validation
   - Categories form validates name, slug format, and uniqueness
   - Posts form validates all fields with live feedback
   - Comments inline edit validates content
@@ -332,27 +344,27 @@
   - Format hints provided (e.g., slug format, email format)
   - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5_
 
-- [x] 11.2 Write property test for validation error display
+- [ ] 11.2 Write property test for validation error display
   - **Property 4: Invalid input rejection**
   - **Validates: Requirements 10.1, 10.4**
 
-- [x] 11.3 Write property test for error clearing
+- [ ] 11.3 Write property test for error clearing
   - **Property 5: Error clearing on correction**
   - **Validates: Requirements 10.2**
 
-- [x] 11.4 Write property test for validation success
+- [ ] 11.4 Write property test for validation success
   - **Property 6: Validation success enables submission**
   - **Validates: Requirements 10.5**
 
 - [ ] 12. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [x] 13. Enhance optimistic UI updates
+- [ ] 13. Enhance optimistic UI updates
   - Add more sophisticated optimistic updates for user actions
   - Includes loading indicators and error reversion
   - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5_
 
-- [x] 13.1 Add enhanced optimistic update logic
+- [ ] 13.1 Add enhanced optimistic update logic
   - Livewire already provides basic optimistic updates via wire:loading
   - Add explicit loading indicators for actions exceeding 500ms
   - Implement reversion logic for failed actions with error messages
@@ -360,32 +372,32 @@
   - Consider using wire:loading.delay.500ms for latency indicators
   - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5_
 
-- [x] 13.2 Write property test for optimistic UI immediate update
+- [ ] 13.2 Write property test for optimistic UI immediate update
   - **Property 34: Optimistic UI immediate update**
   - **Validates: Requirements 12.1**
 
-- [x] 13.3 Write property test for optimistic UI persistence
+- [ ] 13.3 Write property test for optimistic UI persistence
   - **Property 35: Optimistic UI persistence on success**
   - **Validates: Requirements 12.2**
 
-- [x] 13.4 Write property test for optimistic UI reversion
+- [ ] 13.4 Write property test for optimistic UI reversion
   - **Property 36: Optimistic UI reversion on failure**
   - **Validates: Requirements 12.3**
 
-- [x] 13.5 Write property test for loading indicators
+- [ ] 13.5 Write property test for loading indicators
   - **Property 37: Loading indicator display on latency**
   - **Validates: Requirements 12.4**
 
-- [x] 13.6 Write property test for sequential processing
+- [ ] 13.6 Write property test for sequential processing
   - **Property 38: Sequential action processing**
   - **Validates: Requirements 12.5**
 
-- [x] 14. UI components and styling
+- [ ] 14. UI components and styling
   - Reusable UI components implemented for admin interface
   - Consistent styling and accessibility features in place
   - _Requirements: All visual requirements_
 
-- [x] 14.1 Admin UI components implemented
+- [ ] 14.1 Admin UI components implemented
   - Data table component with sorting indicators (x-admin.table)
   - Badge components for status and roles (flux:badge)
   - Empty state components (x-admin.table-empty)
@@ -393,32 +405,32 @@
   - Consistent styling across all admin pages
   - _Requirements: 1.1, 2.1, 3.1, 4.1, 9.3_
 
-- [x] 14.2 Enhance accessibility features
+- [ ] 14.2 Enhance accessibility features
   - Review keyboard navigation for all interactions
   - Audit ARIA labels for screen readers
   - Verify focus management for modals
   - Add skip links for table navigation if needed
   - _Requirements: All requirements_
 
-- [x] 15. Configuration
+- [ ] 15. Configuration
   - Configuration already exists in config/interface.php
   - Per-page defaults configured via PageSize class
   - _Requirements: All requirements_
 
-- [x] 15.1 Review and enhance admin configuration
+- [ ] 15.1 Review and enhance admin configuration
   - Verify per-page defaults and options in config/interface.php
   - Review debounce timing (currently 300ms)
   - Consider adding bulk action limits if needed
   - Document configuration options
   - _Requirements: 7.1, 8.3_
 
-- [x] 15.2 Add comprehensive code documentation
+- [ ] 15.2 Add comprehensive code documentation
   - Add PHPDoc blocks to all Volt components
   - Document trait methods and properties
   - Add inline comments for complex logic
   - Document configuration options
   - _Requirements: All requirements_
 
-- [x] 16. Final checkpoint - Ensure all tests pass
+- [ ] 16. Final checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 

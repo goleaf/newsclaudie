@@ -175,12 +175,22 @@ php artisan test --testsuite=Browser
 ### Testing Documentation
 
 - **[Property Testing Guide](tests/PROPERTY_TESTING.md)** - Property-based testing approach and examples
-- **[News Property Tests Index](tests/Unit/NEWS_PROPERTY_TESTS_INDEX.md)** - Complete index of all news page property tests
+- **[Property Tests Index](tests/Unit/PROPERTY_TESTS_INDEX.md)** - Complete index of all property-based tests
+- **[Test Coverage](docs/TEST_COVERAGE.md)** - Complete test coverage inventory
+
+#### Admin CRUD Property Tests
+- **[Post Persistence Testing](tests/Unit/POST_PERSISTENCE_PROPERTY_TESTING.md)** - Property tests for post data persistence
+- **[Post Persistence Quick Reference](tests/Unit/POST_PERSISTENCE_QUICK_REFERENCE.md)** - Quick reference for post persistence tests
+
+#### Comment Management Property Tests
+- **[Comment Status Filter Testing](tests/Unit/COMMENT_STATUS_FILTER_TESTING.md)** - Property tests for comment status filtering
+- **[Comment Status Filter Quick Reference](tests/Unit/COMMENT_STATUS_FILTER_QUICK_REFERENCE.md)** - Quick reference for status filter tests
+
+#### News Feature Property Tests
 - **[News Filter Options Testing](tests/Unit/NEWS_FILTER_OPTIONS_TESTING.md)** - Property tests for news filters
 - **[News Clear Filters Testing](tests/Unit/NEWS_CLEAR_FILTERS_TESTING.md)** - Property tests for clear filters functionality
 - **[News View Rendering Testing](tests/Unit/NEWS_VIEW_RENDERING_TESTING.md)** - Property tests for view rendering
 - **[News Locale-Aware Navigation Testing](tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_TESTING.md)** - Property tests for locale-aware navigation
-- **[Test Coverage](docs/TEST_COVERAGE.md)** - Complete test coverage inventory
 
 ## 🎨 Writing Blog Posts
 

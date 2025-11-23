@@ -90,10 +90,14 @@ final class SecurityHeaders
      */
     private function buildContentSecurityPolicy(): string
     {
+        // Generate nonce for inline scripts/styles
+        $nonce = $this->generateNonce();
+        request()->attributes->set('csp_nonce', $nonce);
+        
         $directives = [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval'", // Note: unsafe-inline/eval needed for Alpine.js
-            "style-src 'self' 'unsafe-inline'", // Note: unsafe-inline needed for Tailwind
+            "script-src 'self' 'nonce-{$nonce}' 'unsafe-eval'", // nonce for inline scripts, unsafe-eval for Alpine.js
+            "style-src 'self' 'nonce-{$nonce}' 'unsafe-inline'", // nonce for inline styles, unsafe-inline for Tailwind
             "img-src 'self' data: https:",
             "font-src 'self' data:",
             "connect-src 'self'",
@@ -108,6 +112,14 @@ final class SecurityHeaders
         }
 
         return implode('; ', $directives);
+    }
+
+    /**
+     * Generate a cryptographically secure nonce for CSP.
+     */
+    private function generateNonce(): string
+    {
+        return base64_encode(random_bytes(16));
     }
 }
 

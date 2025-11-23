@@ -333,12 +333,38 @@ new class extends Component {
         $this->resetPage();
     }
 
+    /**
+     * Build the base query for comments with filters and eager loading.
+     *
+     * This method constructs the foundational query for retrieving comments with:
+     * - Eager loaded relationships (user, post) with selected columns for performance
+     * - Search filtering on comment content
+     * - Status filtering by CommentStatus enum
+     * - Applied sorting from ManagesSorting trait
+     *
+     * Eager Loading Strategy:
+     * - user:id,name - Minimal user data for display (author name)
+     * - post:id,title,slug,user_id - Post data including user_id for authorization checks
+     *   The user_id field is required to determine post ownership for permission checks
+     *   when displaying post author information or performing post-related actions.
+     *
+     * Performance Considerations:
+     * - Uses selective column loading to minimize data transfer
+     * - Applies indexes on content (for search) and status columns
+     * - Eager loading prevents N+1 queries when displaying comment lists
+     *
+     * @param array<string, mixed>|null $filters Optional filters array with 'search' and 'status' keys
+     * @return Builder<Comment> Query builder instance with filters and eager loading applied
+     *
+     * @see ManagesSorting::applySort() For sorting implementation
+     * @see Comment::scopeWithStatus() For status filtering scope
+     */
     private function baseQuery(?array $filters = null): Builder
     {
         $filters ??= $this->resolvedFilters();
 
         return Comment::query()
-            ->with(['user:id,name', 'post:id,title,slug'])
+            ->with(['user:id,name', 'post:id,title,slug,user_id'])
             ->when($filters['search'] !== '', function ($query) use ($filters) {
                 $query->where('content', 'like', '%'.$filters['search'].'%');
             })

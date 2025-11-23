@@ -6,231 +6,151 @@
 
 ```
 app/
-├── Console/
-│   └── Commands/          # Artisan commands (CreateAdminUser, ResetDemoApp, etc.)
-├── Contracts/             # Interfaces (Paginatable, TableDisplayable)
-├── Enums/                 # Enumerations (CommentStatus)
-├── Exceptions/            # Exception handlers
+├── Console/Commands/      # Artisan commands (CreateAdminUser, ResetDemoApp, etc.)
+├── Contracts/             # Interfaces (Paginatable, TableDisplayable, etc.)
+├── Enums/                 # Enums (CommentStatus)
 ├── Http/
-│   ├── Controllers/       # Traditional controllers
-│   │   ├── Auth/         # Authentication controllers
-│   │   └── Concerns/     # Controller traits
-│   ├── Middleware/        # Custom middleware
-│   └── Requests/          # Form request validation classes
+│   ├── Controllers/       # Traditional controllers (Category, Comment, Post, News, etc.)
+│   ├── Middleware/        # Custom middleware (SecurityHeaders, SetLocaleFromSession, etc.)
+│   └── Requests/          # Form request validation (Store*, Update*, *IndexRequest)
 ├── Jobs/                  # Queue jobs (RunPostExport)
-├── Livewire/
-│   └── Concerns/          # Shared Livewire traits (IMPORTANT)
-├── Models/                # Eloquent models
-├── Notifications/         # Email/notification classes
-├── Policies/              # Authorization policies
-├── Providers/             # Service providers
+├── Livewire/Concerns/     # Shared Livewire traits (ManagesSearch, ManagesSorting, etc.)
+├── Models/                # Eloquent models (Post, Category, Comment, User, etc.)
+├── Policies/              # Authorization policies (PostPolicy, CommentPolicy, etc.)
 ├── Scopes/                # Global query scopes (PublishedScope)
 ├── Services/              # Business logic services (NewsFilterService)
-├── Support/               # Helper classes
-│   ├── AdminConfig.php   # Admin configuration helper
-│   ├── Exports/          # Export classes
-│   └── Pagination/       # Pagination helpers
-└── View/
-    └── Components/        # Blade component classes
+├── Support/               # Helper classes (AdminConfig, DesignTokens, PageSize)
+└── View/Components/       # Blade components (AppLayout, PostCard, etc.)
 ```
 
-### Views & Frontend (`resources/`)
+### Views (`resources/views/`)
+
+```
+resources/views/
+├── auth/                  # Authentication views
+├── categories/            # Category CRUD views
+├── comments/              # Comment views
+├── components/            # Blade components
+│   ├── admin/            # Admin-specific components
+│   ├── navigation/       # Navigation components
+│   └── ui/               # Shared UI components
+├── livewire/             # Livewire Volt components
+│   ├── admin/            # Admin panel components (dashboard, posts, categories, users, comments)
+│   ├── categories/       # Category management
+│   ├── post/             # Post-related components
+│   └── posts/            # Posts index
+├── news/                 # News/archive views
+└── post/                 # Post display views
+```
+
+### Frontend Assets (`resources/`)
 
 ```
 resources/
 ├── css/
-│   └── app.css           # Main stylesheet (Tailwind imports)
-├── js/
-│   ├── app.ts            # Main JavaScript entry point
-│   ├── bootstrap.ts      # Axios setup
-│   ├── admin-*.ts        # Admin-specific scripts
-│   └── types/            # TypeScript type definitions
-├── markdown/             # Example markdown files
-└── views/
-    ├── auth/             # Authentication views
-    ├── categories/       # Category views
-    ├── comments/         # Comment views
-    ├── components/       # Blade components
-    │   ├── admin/        # Admin UI components
-    │   ├── categories/   # Category components
-    │   ├── comments/     # Comment components
-    │   ├── layouts/      # Layout components
-    │   ├── navigation/   # Navigation components
-    │   ├── news/         # News components
-    │   └── ui/           # Shared UI components (IMPORTANT)
-    ├── flux/             # Flux component overrides
-    ├── layouts/          # Base layouts
-    ├── livewire/         # Livewire Volt components
-    │   └── admin/        # Admin Volt pages
-    ├── news/             # News views
-    ├── post/             # Post views
-    └── vendor/           # Vendor view overrides
+│   └── app.css           # Main Tailwind entry point
+└── js/
+    ├── admin-optimistic-ui.ts    # Optimistic UI implementation
+    ├── admin-post-actions.ts     # Admin post actions
+    ├── app.ts                    # Main JS entry
+    ├── bootstrap.ts              # Bootstrap (Axios, Alpine)
+    └── types/                    # TypeScript definitions
 ```
 
 ### Configuration (`config/`)
 
-Key configuration files:
-- `blog.php` - Blog-specific settings (tags, comments, demo mode)
-- `interface.php` - Admin interface configuration (pagination, debounce, bulk actions)
-- `app.php` - Application settings (locales, timezone)
-- `database.php` - Database connections
-- `markdown.php` - Markdown parser settings
+Key config files:
+- `blog.php` - Blog features (tags, comments, demo mode, EasyMDE)
+- `interface.php` - Admin UI settings (debounce, bulk limits, optimistic UI)
+- `design-tokens.php` - Design system tokens
+- `security.php` - Security headers and CSP
+- `analytics.php` - Analytics configuration
 
 ### Database (`database/`)
 
 ```
 database/
 ├── factories/            # Model factories for testing
-├── migrations/           # Database migrations
-└── seeders/              # Database seeders
+├── migrations/           # Database migrations (chronological)
+└── seeders/             # Database seeders (AdminUser, Category, Post, News, Demo)
 ```
 
 ### Tests (`tests/`)
 
 ```
 tests/
-├── Browser/              # Playwright E2E tests
-├── Feature/              # Feature tests (controllers, policies)
-│   ├── Admin/           # Admin-specific feature tests
-│   └── Auth/            # Authentication tests
-├── Unit/                 # Unit tests (models, services, traits)
-├── Helpers/              # Test helper classes
-└── js/                   # Frontend tests
+├── Browser/             # Playwright browser tests
+├── Feature/             # Feature tests (controllers, policies, workflows)
+│   └── Admin/          # Admin-specific feature tests
+├── Unit/                # Unit tests (models, services, property tests)
+├── Helpers/             # Test helpers (PropertyTesting)
+└── js/                  # JavaScript/TypeScript tests
 ```
 
 ### Documentation (`docs/`)
 
 Comprehensive documentation organized by topic:
-- `ADMIN_*.md` - Admin interface documentation
-- `ACCESSIBILITY_*.md` - Accessibility guides
-- `INTERFACE_*.md` - Interface architecture
-- `NEWS_*.md` - News feature documentation
-- `OPTIMISTIC_UI*.md` - Optimistic UI implementation
-- `api/` - API documentation
+- Admin features and configuration
+- Accessibility guidelines
+- Architecture and design patterns
+- API references
+- Testing guides
+- Quick reference guides
 
-## Key Architectural Patterns
+## Architectural Patterns
 
-### Livewire Volt Components
+### Controllers
+- Traditional controllers for public routes
+- Livewire Volt components for admin panel
+- Form Requests for validation
+- Policies for authorization
 
-Admin pages use single-file Volt components in `resources/views/livewire/admin/`:
-- `posts.index.blade.php` - Posts listing
-- `categories.index.blade.php` - Categories listing
-- `comments.index.blade.php` - Comments listing
-- `users.index.blade.php` - Users listing
+### Models
+- Eloquent ORM with relationships
+- Query scopes for reusable filters (`scopeFilterByCategories`, `scopePublished`, etc.)
+- Accessors/Mutators for computed attributes
+- Global scopes for default behavior (PublishedScope)
 
-Each Volt component:
-1. Declares `layout('components.layouts.admin')`
-2. Uses traits from `app/Livewire/Concerns/`
-3. Implements table display with search, sort, and bulk actions
+### Livewire Components
+- Single-file Volt components in `resources/views/livewire/`
+- Shared traits in `app/Livewire/Concerns/` (ManagesSearch, ManagesSorting, ManagesBulkActions, etc.)
+- Optimistic UI for instant feedback
+- Real-time updates without page refresh
 
-### Shared Livewire Traits
-
-Located in `app/Livewire/Concerns/`, these provide reusable functionality:
-- `ManagesSearch.php` - Search functionality with debouncing
-- `ManagesSorting.php` - Multi-column sorting with URL persistence
-- `ManagesBulkActions.php` - Bulk action handling
-- `ManagesPerPage.php` - Per-page selection
-- `InteractsWithBulkSelection.php` - Bulk selection state
-
-### Blade Component System
-
-**UI Components** (`resources/views/components/ui/`):
-- `badge.blade.php` - Status badges
-- `card.blade.php` - Card containers
-- `data-table.blade.php` - HTTP-based tables
-- `empty-state.blade.php` - Empty state messages
-- `page-header.blade.php` - Page headers
-- `pagination.blade.php` - Pagination controls
-- `section.blade.php` - Content sections
-- `surface.blade.php` - Base surface container
-
-**Admin Components** (`resources/views/components/admin/`):
-- `table.blade.php` - Livewire-based admin tables
-- `bulk-actions.blade.php` - Bulk action toolbar
-- `search-input.blade.php` - Search input with debouncing
-
-### Form Request Validation
-
-All form validation uses dedicated FormRequest classes in `app/Http/Requests/`:
-- `Store*Request.php` - Creation validation
-- `Update*Request.php` - Update validation
-- `*IndexRequest.php` - Index/filtering validation
-
-### Authorization
-
-Policies in `app/Policies/` handle all authorization:
-- `PostPolicy.php` - Post permissions
-- `CommentPolicy.php` - Comment permissions
-- `UserPolicy.php` - User management permissions
-
-### Service Layer
-
-Business logic extracted to services in `app/Services/`:
-- `NewsFilterService.php` - News filtering and sorting logic
+### Frontend
+- Tailwind utility-first CSS
+- Alpine.js for lightweight interactivity
+- TypeScript for type safety
+- Vite for fast builds
 
 ## Naming Conventions
 
 ### PHP
-- **Classes:** PascalCase (`PostController`, `ManagesSearch`)
-- **Methods:** camelCase (`index()`, `bulkDelete()`)
-- **Properties:** camelCase (`$perPage`, `$searchTerm`)
-- **Constants:** SCREAMING_SNAKE_CASE (`BULK_ACTION_LIMIT`)
-- **Strict types:** Always declare `declare(strict_types=1);`
-
-### Blade
-- **Components:** kebab-case (`<x-ui.card>`, `<x-admin.table>`)
-- **Slots:** camelCase (`{{ $headerActions }}`)
-- **Props:** kebab-case (`per-page-mode="livewire"`)
-
-### JavaScript/TypeScript
-- **Files:** kebab-case (`admin-post-actions.ts`)
-- **Functions:** camelCase (`initThemeToggle()`)
-- **Classes:** PascalCase (`AdminConfig`)
-- **Constants:** SCREAMING_SNAKE_CASE (`DEBOUNCE_MS`)
+- **Classes**: PascalCase, final by default
+- **Methods**: camelCase
+- **Properties**: camelCase
+- **Constants**: UPPER_SNAKE_CASE
+- **Strict types**: Always declare `declare(strict_types=1);`
 
 ### Database
-- **Tables:** snake_case plural (`posts`, `categories`, `category_post`)
-- **Columns:** snake_case (`created_at`, `is_published`)
-- **Foreign keys:** `{model}_id` (`user_id`, `post_id`)
+- **Tables**: plural snake_case (`posts`, `categories`, `category_post`)
+- **Columns**: snake_case (`published_at`, `user_id`)
+- **Foreign keys**: `{model}_id` pattern
 
-## File Locations
+### Views
+- **Blade files**: kebab-case (`index.blade.php`, `admin-dashboard.blade.php`)
+- **Components**: kebab-case with dot notation (`x-ui.button`, `x-navigation.main`)
 
-### When to create new files:
+### Routes
+- **Public**: RESTful resource routes (`/posts`, `/categories/{category}`)
+- **Admin**: Prefixed with `/admin` (`/admin/dashboard`, `/admin/posts`)
 
-**Controllers:** `app/Http/Controllers/` for traditional request/response
-**Livewire Components:** `resources/views/livewire/` for Volt single-file components
-**Blade Components:** `resources/views/components/` with class in `app/View/Components/`
-**Traits:** `app/Livewire/Concerns/` for Livewire, `app/Http/Controllers/Concerns/` for controllers
-**Services:** `app/Services/` for complex business logic
-**Helpers:** `app/Support/` for utility classes
-**Tests:** Mirror the `app/` structure in `tests/Unit/` or `tests/Feature/`
+## Key Files
 
-## Import Paths
-
-### PHP
-```php
-use App\Models\Post;
-use App\Http\Requests\StorePostRequest;
-use App\Livewire\Concerns\ManagesSearch;
-use App\Support\AdminConfig;
-```
-
-### TypeScript
-```typescript
-import Alpine from 'alpinejs';
-import axios from 'axios';
-// Relative imports for local modules
-import { initThemeToggle } from './utils';
-```
-
-## Configuration Access
-
-Use helper classes for type-safe config access:
-```php
-// Preferred
-AdminConfig::searchDebounceMs()
-AdminConfig::bulkActionLimit()
-
-// Avoid direct config() calls in components
-config('interface.admin.search_debounce_ms') // Less type-safe
-```
+- `app/Support/helpers.php` - Global helper functions
+- `app/Support/AdminConfig.php` - Admin configuration helper
+- `app/Support/DesignTokens.php` - Design token management
+- `routes/web.php` - Web routes
+- `routes/volt.php` - Livewire Volt routes (admin panel)
+- `lang/en.json` - JSON translations
+- `lang/en/*.php` - PHP translation files
