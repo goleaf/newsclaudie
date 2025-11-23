@@ -134,4 +134,118 @@
         animation: optimistic-error 0.4s ease-in-out;
         background-color: rgb(239 68 68 / 0.1);
     }
+
+    /* Surface component glassmorphism support */
+    .surface-glass {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+
+    /* Icon component - ensure proper alignment */
+    .icon-inline {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    /* Smooth transitions for interactive surfaces */
+    .surface-interactive {
+        transition-property: transform, box-shadow;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 200ms;
+    }
+
+    .surface-interactive:hover {
+        transform: translateY(-2px);
+    }
+
+    .surface-interactive:active {
+        transform: translateY(0);
+    }
+
+    /* Animation keyframes for component transitions */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(10px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes scaleIn {
+        from {
+            transform: scale(0.95);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideOutRight {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+
+    /* Animation utility classes */
+    .animate-fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .animate-slide-up {
+        animation: slideUp 0.3s ease-out;
+    }
+
+    .animate-scale-in {
+        animation: scaleIn 0.2s ease-out;
+    }
+
+    .animate-slide-in-right {
+        animation: slideInRight 0.3s ease-out;
+    }
+
+    .animate-slide-out-right {
+        animation: slideOutRight 0.2s ease-in;
+    }
+
+    /* Focus visible styles for accessibility */
+    *:focus-visible {
+        outline: 2px solid rgb(99 102 241);
+        outline-offset: 2px;
+        border-radius: 0.25rem;
+    }
+
+    /* Dark mode focus styles */
+    .dark *:focus-visible {
+        outline-color: rgb(129 140 248);
+    }
 }
