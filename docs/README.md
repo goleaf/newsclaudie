@@ -16,4 +16,4 @@ Markdown documentation now lives inside function-scoped folders under `docs/`:
 Rules of thumb:
 - Do not add Markdown to the repository root; place new docs in an existing function folder or create a new one under `docs/`.
 - Keep cross-links relative to the current file (the repo includes updated relative paths).
-- Run `npm run docs:verify` to ensure Markdown stays inside the `docs/` tree and out of disallowed locations.
+- Run `npm run docs:verify` to automatically move stray Markdown into the right docs folders, update links, and verify nothing is left outside the `docs/` tree.

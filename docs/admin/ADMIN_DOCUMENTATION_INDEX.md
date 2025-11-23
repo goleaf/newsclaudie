@@ -69,6 +69,21 @@ New to the admin interface? Start here:
 
 ### Features
 
+- **[Bulk Actions Architecture](BULK_ACTIONS_ARCHITECTURE.md)** - Complete bulk actions system
+  - Architecture overview
+  - Component structure
+  - Usage patterns
+  - Authorization and security
+  - Performance considerations
+  - Testing strategy
+  - Troubleshooting
+
+- **[Bulk Actions Quick Reference](BULK_ACTIONS_QUICK_REFERENCE.md)** - Quick lookup
+  - Common patterns
+  - Code snippets
+  - Configuration
+  - Testing examples
+
 - **[Optimistic UI Implementation](OPTIMISTIC_UI.md)** - Optimistic UI updates
   - Implementation details
   - Loading indicators
@@ -149,6 +164,8 @@ New to the admin interface? Start here:
 #### Add Bulk Actions
 
 → See [ManagesBulkActions](LIVEWIRE_TRAITS_GUIDE.md#managesbulkactions) in Traits Guide
+→ Architecture: [Bulk Actions Architecture](BULK_ACTIONS_ARCHITECTURE.md)
+→ Quick Reference: [Bulk Actions Quick Reference](BULK_ACTIONS_QUICK_REFERENCE.md)
 → Configuration: [Bulk Action Limits](ADMIN_CONFIGURATION.md#bulk-action-limit)
 
 #### Add Sortable Columns
@@ -311,12 +328,12 @@ See [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#component-reference) for deta
 
 ### Available Traits
 
-| Trait | Location | Purpose |
-|-------|----------|---------|
-| ManagesPerPage | `app/Livewire/Concerns/ManagesPerPage.php` | Pagination |
-| ManagesBulkActions | `app/Livewire/Concerns/ManagesBulkActions.php` | Bulk operations |
-| ManagesSearch | `app/Livewire/Concerns/ManagesSearch.php` | Search functionality |
-| ManagesSorting | `app/Livewire/Concerns/ManagesSorting.php` | Sortable columns |
+| Trait | Location | Purpose | Documentation |
+|-------|----------|---------|---------------|
+| ManagesPerPage | `app/Livewire/Concerns/ManagesPerPage.php` | Pagination | [Traits Guide](LIVEWIRE_TRAITS_GUIDE.md#managesperpage) |
+| ManagesBulkActions | `app/Livewire/Concerns/ManagesBulkActions.php` | Bulk operations | [Architecture](BULK_ACTIONS_ARCHITECTURE.md), [Quick Ref](BULK_ACTIONS_QUICK_REFERENCE.md) |
+| ManagesSearch | `app/Livewire/Concerns/ManagesSearch.php` | Search functionality | [Traits Guide](LIVEWIRE_TRAITS_GUIDE.md#managessearch) |
+| ManagesSorting | `app/Livewire/Concerns/ManagesSorting.php` | Sortable columns | [Traits Guide](LIVEWIRE_TRAITS_GUIDE.md#managessorting) |
 
 See [Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md) for detailed documentation.
 
@@ -354,7 +371,7 @@ All documentation supports the requirements defined in:
 | 5.1-5.5 (Inline Editing) | [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#common-patterns) |
 | 6.1-6.5 (Modal Workflows) | [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#common-patterns) |
 | 7.1-7.5 (Search/Filtering) | [Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md#managessearch) |
-| 8.1-8.5 (Bulk Actions) | [Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md#managesbulkactions) |
+| 8.1-8.5 (Bulk Actions) | [Bulk Actions Architecture](BULK_ACTIONS_ARCHITECTURE.md), [Traits Guide](LIVEWIRE_TRAITS_GUIDE.md#managesbulkactions) |
 | 9.1-9.5 (Sorting) | [Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md#managessorting) |
 | 10.1-10.5 (Validation) | [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#validation-rules-documentation) |
 | 11.1-11.5 (Relationships) | [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#posts-index-component) |

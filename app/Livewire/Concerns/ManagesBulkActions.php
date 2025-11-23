@@ -193,6 +193,10 @@ trait ManagesBulkActions
 
     /**
      * Select all items on the current page.
+     * 
+     * Merges current page IDs with existing selections and normalizes.
+     * 
+     * @return void
      */
     protected function selectCurrentPage(): void
     {
@@ -208,6 +212,11 @@ trait ManagesBulkActions
 
     /**
      * Deselect all items on the current page.
+     * 
+     * Removes current page IDs from selections while preserving
+     * selections from other pages.
+     * 
+     * @return void
      */
     protected function deselectCurrentPage(): void
     {
@@ -223,6 +232,11 @@ trait ManagesBulkActions
 
     /**
      * Update the selectAll state based on current selections.
+     * 
+     * Sets selectAll to true only if all items on the current page are selected.
+     * Called automatically after selection changes.
+     * 
+     * @return void
      */
     protected function updateSelectAllState(): void
     {
@@ -239,9 +253,12 @@ trait ManagesBulkActions
 
     /**
      * Normalize selection array to ensure all values are integers.
+     * 
+     * Filters out falsy values, removes duplicates, and ensures integer types.
+     * This prevents issues with string IDs from URL parameters.
      *
-     * @param  array<int>  $ids
-     * @return array<int>
+     * @param array<int> $ids Raw array of IDs
+     * @return array<int> Normalized array of unique integer IDs
      */
     protected function normalizeSelection(array $ids): array
     {

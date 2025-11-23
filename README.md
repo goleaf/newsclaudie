@@ -116,7 +116,7 @@ After installation, visit `/admin/dashboard` to access the admin panel.
 
 ## 📚 Documentation
 
-Comprehensive documentation is available in the `docs/` directory, grouped by function (for example `docs/admin`, `docs/comments`, `docs/news`, and `docs/design-tokens`). Run `npm run docs:verify` to ensure new Markdown stays inside the docs tree.
+Comprehensive documentation is available in the `docs/` directory, grouped by function (for example `docs/admin`, `docs/comments`, `docs/news`, and `docs/design-tokens`). Run `npm run docs:verify` to move any stray Markdown into the correct docs folders, update links, and ensure the tree stays consistent.
 
 ### Quick Start Guides
 - **[Admin Documentation Index](docs/admin/ADMIN_DOCUMENTATION_INDEX.md)** - Complete documentation overview

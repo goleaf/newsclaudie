@@ -346,9 +346,20 @@
   - Selection state managed with checkboxes and select-all
   - _Requirements: 8.1, 8.3, 8.4, 8.5_
 
-- [x] 10.2 Write property test for bulk selection display
+- [x] 10.2 Write property test for bulk selection display ✅ **DOCUMENTED**
   - **Property 17: Bulk selection accuracy**
   - **Validates: Requirements 8.1, 8.4**
+  - Tests created in `tests/Unit/BulkSelectionDisplayPropertyTest.php`
+  - 5 tests with ~4,300 assertions covering:
+    - Bulk selection count accuracy (100 iterations, ~800 assertions)
+    - Empty selection displays zero count (100 iterations, ~200 assertions)
+    - Toggle selection updates count (100 iterations, ~400 assertions)
+    - Selection persists across toggles (100 iterations, ~2,500 assertions)
+    - Duplicate IDs are normalized (100 iterations, ~400 assertions)
+  - **Documentation**: `tests/Unit/BULK_SELECTION_DISPLAY_TESTING.md`
+  - **Quick Reference**: `tests/Unit/BULK_SELECTION_DISPLAY_QUICK_REFERENCE.md`
+  - **Architecture**: `docs/admin/BULK_ACTIONS_ARCHITECTURE.md`
+  - **Quick Reference**: `docs/admin/BULK_ACTIONS_QUICK_REFERENCE.md`
 
 - [x] 10.3 Write property test for bulk operation success
   - **Property 19: Bulk operation completeness**
@@ -358,12 +369,12 @@
   - **Property 20: Bulk operation partial failure reporting**
   - **Validates: Requirements 8.5**
 
-- [ ] 11. Implement comprehensive validation
+- [-] 11. Implement comprehensive validation
   - Real-time validation with error clearing implemented
   - Includes format hints and server-side error display
   - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5_
 
-- [ ] 11.1 All forms have real-time validation
+- [x] 11.1 All forms have real-time validation
   - Categories form validates name, slug format, and uniqueness
   - Posts form validates all fields with live feedback
   - Comments inline edit validates content
@@ -373,7 +384,7 @@
   - Format hints provided (e.g., slug format, email format)
   - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5_
 
-- [ ] 11.2 Write property test for validation error display
+- [-] 11.2 Write property test for validation error display
   - **Property 4: Invalid input rejection**
   - **Validates: Requirements 10.1, 10.4**
 
