@@ -333,12 +333,12 @@
   - **Property 16: Sort state restoration**
   - **Validates: Requirements 9.5**
 
-- [ ] 10. Implement bulk actions
+- [-] 10. Implement bulk actions
   - Bulk action support implemented for Posts and Comments
   - Includes selection management and error handling
   - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
 
-- [ ] 10.1 Bulk actions implemented in Posts and Comments
+- [x] 10.1 Bulk actions implemented in Posts and Comments
   - Posts has bulk publish/unpublish with selection UI
   - Comments has bulk approve/reject/delete with selection UI
   - Both show success/error messaging with counts

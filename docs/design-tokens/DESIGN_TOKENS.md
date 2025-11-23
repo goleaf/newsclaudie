@@ -630,10 +630,42 @@ For detailed performance information, see [Design Tokens Performance Guide](DESI
 3. **Test color contrast** in both modes
 4. **Verify shadow adjustments** for dark mode
 
+## Component Integration
+
+### Surface Component
+
+The `x-ui.surface` component is the first component to fully leverage the design token system. It demonstrates best practices for token usage:
+
+**Token Usage**:
+- Border Radius: `radius.2xl` (32px)
+- Shadows: `elevation.sm`, `elevation.md`, `elevation.lg`, `elevation.xl`
+- Colors: `colors.neutral.*` for backgrounds and borders
+- Transitions: `transitions.base` (200ms) for interactive states
+
+**Example**:
+```blade
+<x-ui.surface 
+    variant="default" 
+    elevation="md" 
+    :interactive="true"
+    class="p-6"
+>
+    <h2>Card Title</h2>
+    <p>Card content using design tokens</p>
+</x-ui.surface>
+```
+
+**Documentation**:
+- [Surface Component Reference](SURFACE_COMPONENT.md)
+- [Surface Quick Reference](SURFACE_COMPONENT_QUICK_REFERENCE.md)
+- [Component API Reference](COMPONENT_API_REFERENCE.md)
+
 ## Related Documentation
 
 - [Design System Architecture](DESIGN_SYSTEM_ARCHITECTURE.md)
 - [Component Library](COMPONENT_LIBRARY.md)
+- [Surface Component](SURFACE_COMPONENT.md)
+- [Component API Reference](COMPONENT_API_REFERENCE.md)
 - [Tailwind Configuration](../tailwind.config.js)
 - [Accessibility Guidelines](ACCESSIBILITY_GUIDELINES.md)
 - [Dark Mode Implementation](DARK_MODE.md)
