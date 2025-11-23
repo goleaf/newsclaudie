@@ -12,6 +12,14 @@ The system will provide:
 - Glassmorphism and modern visual effects
 - Optimized dark mode implementation
 
+### Design Intent & Metrics
+
+- Single source of truth for spacing/color/typography via `config/design-tokens.php` and Tailwind theme extensions.
+- Visual consistency: admin/public components share primitives; no ad-hoc utility sprawl.
+- Accessibility: WCAG 2.1 AA contrast on default + dark themes; reduced-motion friendly animations.
+- Performance: minimal bundle growth; lean component markup; prefer CSS effects over JS.
+- Documentation: usage guidance captured in `docs/` and component-level examples to keep drift low.
+
 ## Architecture
 
 ### Design Token System

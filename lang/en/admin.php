@@ -212,6 +212,16 @@ return [
         'transfer_hint' => 'Select the user who will receive the posts.',
         'delete_warning' => 'This action cannot be undone.',
         
+        'sort' => [
+            'label' => 'Sort by',
+            'name' => 'Name',
+            'email' => 'Email',
+            'joined' => 'Join Date',
+            'posts' => 'Posts',
+            'asc' => 'Ascending',
+            'desc' => 'Descending',
+        ],
+        
         'table' => [
             'aria_label' => 'Users table',
             'user' => 'User',

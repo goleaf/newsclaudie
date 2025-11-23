@@ -4,6 +4,14 @@
 
 This document specifies the requirements for a dedicated News Page feature in the BlogNews Laravel application. The news page will provide a curated, filterable view of published posts optimized for news consumption, with enhanced filtering, sorting, and pagination capabilities. The feature will leverage the existing Post model and relationships while providing a news-focused user experience distinct from the general blog posts archive.
 
+## Scope & Guardrails
+
+- Scope limited to published posts; drafts/unpublished remain excluded even if directly linked.
+- Filters: categories, authors, date range; all state lives in query string for shareable URLs.
+- Accessibility: filter controls keyboard accessible with visible focus; screen readers get live region updates on result counts.
+- Localization: all labels/messages sourced from `lang` files; date formatting respects locale.
+- Performance: queries eager load categories/authors; indexes on `published_at` and foreign keys must exist.
+
 ## Glossary
 
 - **News System**: The subsystem responsible for displaying and filtering published posts in a news-oriented format

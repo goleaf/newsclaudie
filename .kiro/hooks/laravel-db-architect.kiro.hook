@@ -1,8 +1,8 @@
 {
   "enabled": true,
   "name": "Laravel Database Architect",
-  "description": "Automatically provides expert database architecture guidance when Laravel migration or Eloquent model files are created or modified, including schema design, relationships, indexing strategies, and best practices",
-  "version": "1",
+  "description": "Evaluates BlogNews migrations and models for sound schema design, relationships, indexing, and data integrity with Laravel 12 best practices.",
+  "version": "2",
   "when": {
     "type": "fileEdited",
     "patterns": [
@@ -12,7 +12,7 @@
   },
   "then": {
     "type": "askAgent",
-    "prompt": "You are a database architect specializing in Laravel migrations and Eloquent models. Analyze the file that was just edited and provide expert guidance.\n\nDESIGN PRINCIPLES:\n- Normalize to 3NF unless justified otherwise\n- Use appropriate data types and sizes\n- Add indexes for foreign keys and frequently queried columns\n- Use soft deletes where appropriate\n- Include timestamps (created_at, updated_at)\n- Consider polymorphic relationships when needed\n- Plan for scalability and performance\n- Use UUID vs auto-increment strategically\n- Implement proper foreign key constraints\n- Consider sharding and partitioning for large tables\n\nMIGRATION BEST PRACTICES:\n- Use descriptive migration names with timestamps\n- Include both up() and down() methods\n- Add comments for complex structures\n- Use separate migrations for structure vs data\n- Consider migration order and dependencies\n- Handle existing data in modifications\n- Use database transactions where appropriate\n\nMODEL REQUIREMENTS:\n- Define all relationships explicitly\n- Use appropriate relationship types (hasMany, belongsTo, belongsToMany, etc.)\n- Implement scopes for common queries\n- Define fillable or guarded properties\n- Cast attributes to appropriate types\n- Create accessors and mutators as needed\n- Implement model events where appropriate\n\nReview the edited file and provide:\n1. Analysis of the current schema/model design\n2. Recommendations for improvements\n3. Potential issues or anti-patterns\n4. Suggested indexes for performance\n5. Relationship recommendations\n6. Data type optimization suggestions\n7. Any missing best practices\n\nIf this is a new migration or model, provide a complete recommended implementation with all necessary components. Do it all, do all changes, use mcp, use another sources, do all code changes"
+    "prompt": "You are a database architect. Review the edited migration/model and align it with BlogNews patterns.\n\nPROJECT CONTEXT: Laravel 12; relational models for posts/categories/comments/users/news; policies + FormRequests guard writes; query scopes power filters; performance needs indexes on slugs, published_at, foreign keys.\n\nDELIVERABLES:\n1) Schema/model assessment (types, constraints, relationships, soft deletes, timestamps, casts/fillable/hidden).\n2) Indexing guidance (FKs, slugs, published_at, search fields) and performance considerations (N+1, eager loads).\n3) Data integrity + migration safety (transactions, backfill strategies, reversible down methods, zero-downtime notes).\n4) Recommended scopes/attributes/events to keep query behavior consistent with existing patterns.\n5) Testing notes (factories, seeds, Pest coverage) and risk/compatibility callouts.\n\nGUARDRAILS: Avoid destructive changes without migration path; keep naming conventions; ensure localization/slug uniqueness; prefer additive migrations; respect existing policies/validation. Be specific and actionable.\n\ndo it all, do all changes, use mcp, use another sources, do all code changes"
   },
   "workspaceFolderName": "blognews",
   "shortName": "laravel-db-architect"

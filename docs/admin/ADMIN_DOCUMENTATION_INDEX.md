@@ -38,6 +38,27 @@ New to the admin interface? Start here:
   - Best practices
   - Accessibility guidelines
 
+- **[Admin Users Management](ADMIN_USERS_MANAGEMENT.md)** - Complete users management guide
+  - User roles and permissions
+  - CRUD operations
+  - Role management
+  - Delete strategies
+  - Authorization rules
+  - Search and sorting
+
+- **[Admin Users API Reference](api/ADMIN_USERS_API.md)** - API documentation
+  - Component properties
+  - Methods reference
+  - Events and listeners
+  - Query string parameters
+  - Database queries
+
+- **[Admin Users Quick Reference](ADMIN_USERS_QUICK_REFERENCE.md)** - Quick lookup
+  - Common tasks
+  - Code snippets
+  - Configuration
+  - Testing examples
+
 - **[Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md)** - Shared trait documentation
   - ManagesPerPage
   - ManagesBulkActions
@@ -114,7 +135,11 @@ New to the admin interface? Start here:
 
 1. Read [Volt Component Guide](VOLT_COMPONENT_GUIDE.md) - Component structure
 2. Read [Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md) - Available traits
-3. Reference existing components in `resources/views/livewire/admin/`
+3. Reference existing components:
+   - [Categories](VOLT_COMPONENT_GUIDE.md#categories-index-component)
+   - [Posts](VOLT_COMPONENT_GUIDE.md#posts-index-component)
+   - [Comments](VOLT_COMPONENT_GUIDE.md#comments-index-component)
+   - [Users](ADMIN_USERS_MANAGEMENT.md)
 
 #### Add Search Functionality
 
@@ -130,6 +155,7 @@ New to the admin interface? Start here:
 
 → See [ManagesSorting](LIVEWIRE_TRAITS_GUIDE.md#managessorting) in Traits Guide
 → Configuration: [URL Persistence](ADMIN_CONFIGURATION.md#query-string-persistence)
+→ Example: [Users Sorting](ADMIN_USERS_MANAGEMENT.md#sorting)
 
 #### Implement Inline Editing
 
@@ -272,12 +298,12 @@ See [Admin Configuration Guide](ADMIN_CONFIGURATION.md) for complete reference.
 
 ### Available Components
 
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| Categories Index | `livewire/admin/categories/index.blade.php` | Manage categories |
-| Posts Index | `livewire/admin/posts/index.blade.php` | Manage posts |
-| Comments Index | `livewire/admin/comments/index.blade.php` | Manage comments |
-| Users Index | `livewire/admin/users/index.blade.php` | Manage users |
+| Component | Location | Purpose | Documentation |
+|-----------|----------|---------|---------------|
+| Categories Index | `livewire/admin/categories/index.blade.php` | Manage categories | [Volt Guide](VOLT_COMPONENT_GUIDE.md#categories-index-component) |
+| Posts Index | `livewire/admin/posts/index.blade.php` | Manage posts | [Volt Guide](VOLT_COMPONENT_GUIDE.md#posts-index-component) |
+| Comments Index | `livewire/admin/comments/index.blade.php` | Manage comments | [Volt Guide](VOLT_COMPONENT_GUIDE.md#comments-index-component) |
+| Users Index | `livewire/admin/users/index.blade.php` | Manage users | [Users Management](ADMIN_USERS_MANAGEMENT.md) |
 
 See [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#component-reference) for detailed documentation.
 
@@ -324,7 +350,7 @@ All documentation supports the requirements defined in:
 | 1.1-1.7 (Posts) | [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#posts-index-component) |
 | 2.1-2.7 (Categories) | [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#categories-index-component) |
 | 3.1-3.6 (Comments) | [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#comments-index-component) |
-| 4.1-4.6 (Users) | [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#users-index-component) |
+| 4.1-4.6 (Users) | [Admin Users Management](ADMIN_USERS_MANAGEMENT.md) |
 | 5.1-5.5 (Inline Editing) | [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#common-patterns) |
 | 6.1-6.5 (Modal Workflows) | [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#common-patterns) |
 | 7.1-7.5 (Search/Filtering) | [Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md#managessearch) |

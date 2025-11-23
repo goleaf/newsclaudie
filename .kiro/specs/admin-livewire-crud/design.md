@@ -12,6 +12,14 @@ The system will provide comprehensive CRUD operations for Posts, Categories, Com
 - Sortable data tables
 - Optimistic UI updates
 
+### Context & Success Criteria
+
+- Keep 95% of admin operations inline or modal-based with no full page reloads.
+- Median Livewire interaction latency under 400ms with explicit loading/error/rollback states.
+- Accessibility-first: keyboard navigation through tables and modals, focus traps in place, ARIA labels for all actionable elements.
+- URL-driven state (filters/search/sort/pagination) preserved for shareable views; reset flows documented.
+- Localization-ready: no hardcoded strings; reuse translations from `lang` files across actions and flash messages.
+
 ## Architecture
 
 ### Component Structure
@@ -631,4 +639,3 @@ Add to `config/interface.php`:
 - Monitor Livewire component render times
 - Track validation error rates
 - Alert on high failure rates for optimistic updates
-

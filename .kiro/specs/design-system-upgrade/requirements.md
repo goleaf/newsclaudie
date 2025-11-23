@@ -4,6 +4,14 @@
 
 This feature upgrades the admin portal and public site with a modern, cohesive design system leveraging Tailwind CSS 4's latest features, enhanced Livewire components, and improved accessibility. The goal is to create a visually stunning, performant, and maintainable interface that maximizes Tailwind's utility-first approach while maintaining the existing Livewire architecture.
 
+## Scope & Guardrails
+
+- Tokens are single source of truth across Tailwind config and Blade/Livewire components; no inline magic numbers.
+- WCAG 2.1 AA contrast for light/dark; prefers-reduced-motion respected for all animations.
+- Localization ready: no baked-in English copy within components; rely on translation files.
+- Performance budget: minimal bundle delta; prefer CSS/Alpine interactions over heavy JS.
+- Backward compatible: existing components migrate incrementally with feature flags where needed.
+
 ## Glossary
 
 - **Design System**: A comprehensive set of reusable components, patterns, and guidelines that ensure visual and functional consistency

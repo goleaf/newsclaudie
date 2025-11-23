@@ -1,5 +1,13 @@
 # Implementation Plan
 
+## Status & Quality Gates
+
+- Token changes must update Tailwind config + `config/design-tokens.php` + docs in lockstep.
+- Visual changes require contrast check (WCAG 2.1 AA) for light/dark; respect prefers-reduced-motion.
+- Add Story/usage snippets in docs for any new component variant; avoid one-off utility drift.
+- Performance: keep CSS size delta minimal; prefer composable classes over custom CSS.
+- Tests: property tests for variants, Playwright snapshots for critical primitives (button, modal), Pint/ESLint/TypeScript clean.
+
 - [x] 1. Set up design token system and configuration ✅ **DOCUMENTED**
   - Create config/design-tokens.php with color, spacing, typography, and radius tokens
   - Update tailwind.config.js with extended theme configuration
@@ -14,7 +22,7 @@
   - **Property 1: Color contrast compliance**
   - **Validates: Requirements 16.4, 17.4**
 
-- [ ] 2. Create base UI component primitives
+- [-] 2. Create base UI component primitives
   - Enhance resources/views/components/ui/surface.blade.php with variants, elevation, glass effect
   - Create resources/views/components/ui/icon.blade.php for SVG icon system
   - Create resources/views/components/ui/spacer.blade.php for consistent spacing

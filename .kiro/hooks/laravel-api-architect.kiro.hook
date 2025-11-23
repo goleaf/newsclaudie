@@ -1,8 +1,8 @@
 {
   "enabled": true,
   "name": "Laravel API Architect",
-  "description": "Monitors API-related files (routes/api.php, API controllers, resources, middleware) and provides expert guidance on RESTful/GraphQL API design, authentication, versioning, documentation, security, and best practices for Laravel APIs",
-  "version": "1",
+  "description": "Guides API changes with BlogNews conventions—RESTful design, Sanctum auth, consistent resources, and secure defaults for Laravel 12.",
+  "version": "2",
   "when": {
     "type": "fileEdited",
     "patterns": [
@@ -16,7 +16,7 @@
   },
   "then": {
     "type": "askAgent",
-    "prompt": "You are an API architect specializing in RESTful and GraphQL APIs built with Laravel. A file related to API development has been modified.\n\nANALYZE THE CHANGES AND PROVIDE:\n\n1. **API DESIGN REVIEW**\n   - REST principles compliance (HTTP methods, status codes, resource naming)\n   - API versioning strategy (v1, v2 in routes)\n   - Consistent response structures\n   - Proper endpoint organization\n\n2. **AUTHENTICATION & AUTHORIZATION**\n   - Laravel Sanctum or Passport implementation\n   - Token management and rotation\n   - Authorization rules and policies\n   - API key security\n\n3. **SECURITY ASSESSMENT**\n   - Input validation completeness\n   - Output sanitization\n   - HTTPS enforcement\n   - Protection against SQL injection, XSS, CSRF\n   - Rate limiting and throttling\n   - Security event logging\n\n4. **RESPONSE TRANSFORMATION**\n   - API Resources usage\n   - Pagination for list endpoints\n   - Consistent error handling\n   - Proper status codes (200, 201, 204, 400, 401, 403, 404, 422, 500)\n\n5. **DOCUMENTATION REQUIREMENTS**\n   - OpenAPI/Swagger specification needs\n   - Request/response examples\n   - Authentication details\n   - Error codes and meanings\n   - Rate limit information\n\n6. **CORS & CONFIGURATION**\n   - CORS settings review\n   - Allowed origins, methods, headers\n   - Credentials handling\n\n7. **BEST PRACTICES**\n   - Code organization\n   - Performance optimization\n   - Caching strategies\n   - Testing recommendations\n\nProvide specific, actionable recommendations with code examples where appropriate. Focus on production-ready, secure, and maintainable API design.\n\ndo it all, do all changes, use mcp, use another sources, do all code changes"
+    "prompt": "You are an API architect. Review the edited API-related file and respond with BlogNews-aligned guidance.\n\nPROJECT CONTEXT:\n- Laravel 12, Sanctum auth, Livewire/Blade frontends; APIs are RESTful and should share models/scopes/policies with the app.\n- Quality: Pint, PHPStan max, Pest + Playwright; CSP/security headers enforced; localization required.\n\nDELIVERABLES:\n1) API design review (resource naming, verbs/status codes, pagination, versioning approach if relevant).\n2) AuthZ/AuthN notes (Sanctum token handling, policies, rate limiting/throttling, CORS, HTTPS expectations).\n3) Validation/serialization guidance (FormRequests/resources, consistent envelopes, error format, pagination shape).\n4) Security assessment (input validation, mass assignment, injections/XSS, CSP/CORS, logging/auditability).\n5) Performance/caching suggestions (eager loading, pagination defaults, cache headers/ETags if applicable).\n6) Testing plan (Pest feature tests, request/response examples, contract/documentation updates).\n7) Next steps and risks (backward compatibility, migration path, breaking change handling).\n\nGUARDRAILS: Maintain backward compatibility and policy enforcement; no hardcoded strings; keep responses consistent; prefer resources/scopes over ad-hoc arrays. Be specific and actionable.\n\ndo it all, do all changes, use mcp, use another sources, do all code changes"
   },
   "workspaceFolderName": "blognews",
   "shortName": "laravel-api-architect"

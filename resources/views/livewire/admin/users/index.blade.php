@@ -19,6 +19,67 @@ use function Livewire\Volt\title;
 layout('components.layouts.admin');
 title(__('admin.users.title'));
 
+/**
+ * Admin Users Index Component
+ *
+ * Livewire Volt component for managing user accounts in the admin panel.
+ * Provides comprehensive CRUD operations, role management, and user moderation.
+ *
+ * @component
+ * @package App\Livewire\Admin\Users
+ *
+ * Features:
+ * - User listing with search and sorting
+ * - Create new users with role assignment
+ * - Toggle admin, author, and ban status
+ * - Delete users with content transfer options
+ * - Real-time validation and feedback
+ * - Keyboard shortcuts (⌘K for search)
+ * - URL-persisted state (search, sort, pagination)
+ *
+ * Traits:
+ * @uses AuthorizesRequests For policy-based authorization
+ * @uses ManagesPerPage For pagination configuration
+ * @uses ManagesSearch For search functionality with debouncing
+ * @uses ManagesSorting For sortable columns with URL persistence
+ * @uses WithPagination For Livewire pagination
+ *
+ * Authorization:
+ * - viewAny: All authenticated users
+ * - create: Admin only
+ * - update: Admin only
+ * - delete: Admin only (cannot delete self or other admins)
+ * - ban: Admin only (cannot ban self or other admins)
+ *
+ * @see \App\Models\User
+ * @see \App\Policies\UserPolicy
+ * @see \App\Livewire\Concerns\ManagesPerPage
+ * @see \App\Livewire\Concerns\ManagesSearch
+ * @see \App\Livewire\Concerns\ManagesSorting
+ *
+ * @property int $page Current page number
+ * @property bool $showCreateModal Create modal visibility state
+ * @property bool $showDeleteModal Delete modal visibility state
+ * @property array $createForm Create form data
+ * @property int|null $deletingUserId User ID being deleted
+ * @property array $deleteContext Delete operation context
+ * @property string $deleteStrategy Delete strategy (transfer|delete)
+ * @property int|null $transferTarget Target user for content transfer
+ * @property array $transferOptions Available users for transfer
+ *
+ * @method void mount(int $page = 1) Initialize component state
+ * @method void openCreateModal() Open create user modal
+ * @method void createUser() Create new user
+ * @method void confirmDelete(User $user) Confirm user deletion
+ * @method void deleteUser() Execute user deletion
+ * @method void toggleAdmin(User $user) Toggle admin role
+ * @method void toggleAuthor(User $user) Toggle author role
+ * @method void toggleBan(User $user) Toggle ban status
+ * @method array with() Provide data to view
+ *
+ * @version 1.0.0
+ * @since 2025-11-23
+ */
 new class extends Component {
     use AuthorizesRequests;
     use ManagesPerPage;

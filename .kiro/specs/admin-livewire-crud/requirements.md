@@ -4,6 +4,14 @@
 
 This feature transforms the admin portal into a fully Livewire-powered CRUD (Create, Read, Update, Delete) interface for managing all blog resources. The goal is to maximize the use of Livewire components, eliminate traditional controller-based forms, and provide a modern, reactive admin experience with inline editing, real-time validation, modal-based workflows, and comprehensive data management capabilities.
 
+## Scope & Constraints
+
+- Applies to Posts, Categories, Comments, Users; future resources must follow the same patterns/traits.
+- Must respect existing authorization policies and per-action flash messaging; no bypasses for demo mode.
+- Filters/sort/search state persists in the query string; reset actions clear both UI and URL.
+- Loading, empty, and error states are mandatory for each grid; bulk actions capped by `config('interface.bulk')`.
+- Accessibility parity across all tables (keyboard navigation, focus visibility, ARIA labeling).
+
 ## Glossary
 
 - **Admin Portal**: The `/admin` section of the application accessible only to authenticated administrators

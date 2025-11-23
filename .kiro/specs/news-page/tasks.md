@@ -1,5 +1,12 @@
 # Implementation Plan
 
+## Status & Quality Gates
+
+- Filters/search/sort state must round-trip via query string; add tests for URL persistence and reset flows.
+- Accessibility: keyboard access to filters and pagination; announce result counts via live region.
+- Performance: eager load authors/categories; verify indexes exist; target < 350ms server processing per request.
+- Tests: Pest feature coverage for filtering/sorting/pagination; Playwright smoke for UX; localization assertions for labels.
+
 - [x] 1. Set up core infrastructure and routing
   - Create NewsController with index method
   - Add `/news` route to web.php

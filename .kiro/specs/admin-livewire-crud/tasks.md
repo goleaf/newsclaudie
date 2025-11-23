@@ -1,5 +1,12 @@
 # Implementation Plan
 
+## Status & Quality Gates
+
+- Finish table UX parity across posts/categories/comments/users before adding new variants.
+- Each task must include Pest coverage (unit/feature) plus Playwright smoke for modal + inline edit flows.
+- Localization and accessibility checks (keyboard navigation, focus traps, ARIA labels) required before closing.
+- Performance guard: median Livewire action < 400ms; no N+1 queries (assert eager loading per resource).
+
 - [x] 1. Set up shared Livewire traits and utilities
   - Create reusable traits for common admin functionality
   - Establish patterns for pagination, search, sorting, and bulk actions
@@ -194,22 +201,44 @@
   - **Validates: Requirements 3.6, 8.3**
   - Note: Requires using Comment::factory() to avoid password hashing issues
 
-- [x] 6. Implement Users CRUD with Livewire
+- [x] 6. Implement Users CRUD with Livewire ✅ **DOCUMENTED**
   - Build users management with role and ban status controls
   - Includes email uniqueness validation and search
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
+  - **Documentation**: 
+    - `docs/ADMIN_USERS_MANAGEMENT.md` - Complete guide
+    - `docs/api/ADMIN_USERS_API.md` - API reference
+    - `docs/ADMIN_USERS_QUICK_REFERENCE.md` - Quick reference
+  - **Component**: `resources/views/livewire/admin/users/index.blade.php`
+  - **Features**:
+    - User listing with search and sorting
+    - Create users with role assignment
+    - Toggle admin, author, and ban status inline
+    - Delete users with transfer/delete strategies
+    - Real-time validation
+    - URL-persisted state
+    - Keyboard shortcuts (⌘K)
+    - Full accessibility support
 
-- [x] 6.1 Create UsersIndex Volt component
+- [x] 6.1 Create UsersIndex Volt component ✅ **DOCUMENTED**
   - Implement index with search, sorting, and pagination
   - Add role badge display and account status indicators
   - Implement delete functionality with content handling
   - _Requirements: 4.1, 4.5, 4.6_
+  - Uses `ManagesPerPage`, `ManagesSearch`, `ManagesSorting` traits
+  - Eager loads posts and comments counts
+  - Supports sortable columns: name, email, created_at, posts_count
+  - Search across name and email fields
 
-- [x] 6.2 Create UserForm Volt component for modal
+- [x] 6.2 Create UserForm Volt component for modal ✅ **DOCUMENTED**
   - Implement create/edit form with email validation
   - Add role toggle switches (is_admin, is_author)
   - Add ban status toggle
   - _Requirements: 4.2, 4.3, 4.4_
+  - Modal-based create workflow
+  - Real-time validation with helpful hints
+  - Role toggles inline in table
+  - Ban toggle with policy enforcement
 
 - [ ]* 6.3 Write property test for email uniqueness
   - **Property 9: Email uniqueness validation**
@@ -274,12 +303,12 @@
   - **Property 24: Successful save modal closure**
   - **Validates: Requirements 6.4**
 
-- [-] 9. Implement advanced filtering and search
+- [x] 9. Implement advanced filtering and search
   - Combined filter support and URL state management implemented
   - Includes filter reset and bookmarkable URLs
   - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
 
-- [ ] 9.1 Advanced filtering implemented across resources
+- [x] 9.1 Advanced filtering implemented across resources
   - Posts has status and author filters with search
   - Comments has status filter
   - Categories has search with sorting
@@ -433,4 +462,3 @@
 
 - [ ] 16. Final checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
-
