@@ -163,7 +163,7 @@ Comprehensive documentation added for the News Filter Options property-based tes
 - `app/Models/Post.php` (tested)
 
 ### Specifications
-- `.kiro/specs/news-page/requirements.md` (referenced)
+- `../../../.kiro/specs/news-page/requirements.md` (referenced)
 - `.kiro/specs/news-page/tasks.md` (updated)
 
 ## Next Steps
@@ -237,7 +237,7 @@ Comprehensive documentation added for the News Filter Options property-based tes
 ## References
 
 - [Property-Based Testing Guide](../../../tests/PROPERTY_TESTING.md)
-- [News Feature Requirements](.kiro/specs/news-page/requirements.md)
+- [News Feature Requirements](../../../.kiro/specs/news-page/requirements.md)
 - [Test Coverage Inventory](../../testing/TEST_COVERAGE.md)
 - [Laravel Testing Documentation](https://laravel.com/docs/testing)
 - [PestPHP Documentation](https://pestphp.com)

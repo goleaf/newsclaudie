@@ -361,4 +361,4 @@ The News Locale-Aware Navigation feature now has comprehensive, professional-gra
 - [Property Tests Index](../../tests/Unit/NEWS_PROPERTY_TESTS_INDEX.md)
 - [Test Coverage](../testing/TEST_COVERAGE.md)
 - [Property Testing Guide](../../tests/PROPERTY_TESTING.md)
-- [News Requirements](.kiro/specs/news-page/requirements.md)
+- [News Requirements](../../.kiro/specs/news-page/requirements.md)

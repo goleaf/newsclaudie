@@ -20,7 +20,7 @@ use Tests\Helpers\PropertyTesting;
  */
 
 test('property: invalid category name displays error and prevents persistence', function () {
-    $admin = User::factory()->create(['is_admin' => true]);
+    $admin = User::factory()->admin()->create();
     
     PropertyTesting::run(function ($faker) use ($admin) {
         // Generate invalid names (empty, too long, etc.)
@@ -48,16 +48,16 @@ test('property: invalid category name displays error and prevents persistence', 
 })->group('property', 'validation', 'admin-crud');
 
 test('property: invalid category slug format displays error and prevents persistence', function () {
-    $admin = User::factory()->create(['is_admin' => true]);
+    $admin = User::factory()->admin()->create();
     
     PropertyTesting::run(function ($faker) use ($admin) {
-        // Generate invalid slug formats that remain invalid after Str::slug() normalization
+        // Only test slugs that remain invalid AFTER Str::slug() normalization
         $invalidSlug = $faker->randomElement([
             '', // Empty
-            '   ', // Whitespace only
-            '!!!', // Only special characters (becomes empty after normalization)
-            '---', // Only hyphens (invalid pattern)
-            Str::random(256), // Too long (max 255)
+            '   ', // Whitespace only (normalizes to empty)
+            '!!!', // Special chars only (normalizes to empty)
+            '---', // Only hyphens (normalizes to empty)
+            Str::random(256), // Too long (exceeds 255 even after normalization)
         ]);
         
         $initialCount = Category::count();
@@ -74,11 +74,11 @@ test('property: invalid category slug format displays error and prevents persist
         
         // Should not persist invalid data
         expect(Category::count())->toBe($initialCount);
-    }, 50);
+    }, 100);
 })->group('property', 'validation', 'admin-crud');
 
 test('property: duplicate category slug displays uniqueness error', function () {
-    $admin = User::factory()->create(['is_admin' => true]);
+    $admin = User::factory()->admin()->create();
     
     PropertyTesting::run(function ($faker) use ($admin) {
         // Create an existing category
@@ -98,11 +98,11 @@ test('property: duplicate category slug displays uniqueness error', function () 
         
         // Should not create duplicate
         expect(Category::count())->toBe($initialCount);
-    }, 50);
+    }, 100);
 })->group('property', 'validation', 'admin-crud');
 
 test('property: invalid post title displays error and prevents persistence', function () {
-    $admin = User::factory()->create(['is_admin' => true]);
+    $admin = User::factory()->admin()->create();
     
     PropertyTesting::run(function ($faker) use ($admin) {
         // Generate invalid titles
@@ -130,16 +130,16 @@ test('property: invalid post title displays error and prevents persistence', fun
 })->group('property', 'validation', 'admin-crud');
 
 test('property: invalid post slug format displays error and prevents persistence', function () {
-    $admin = User::factory()->create(['is_admin' => true]);
+    $admin = User::factory()->admin()->create();
     
     PropertyTesting::run(function ($faker) use ($admin) {
-        // Generate invalid slug formats that remain invalid after Str::slug() normalization
+        // Only test slugs that remain invalid AFTER Str::slug() normalization
         $invalidSlug = $faker->randomElement([
             '', // Empty
-            '   ', // Whitespace only
-            '!!!', // Only special characters (becomes empty after normalization)
-            '---', // Only hyphens (invalid pattern)
-            Str::random(256), // Too long (max 255)
+            '   ', // Whitespace only (normalizes to empty)
+            '!!!', // Special chars only (normalizes to empty)
+            '---', // Only hyphens (normalizes to empty)
+            Str::random(256), // Too long (exceeds 255 even after normalization)
         ]);
         
         $initialCount = Post::withoutGlobalScopes()->count();
@@ -156,19 +156,18 @@ test('property: invalid post slug format displays error and prevents persistence
         
         // Should not persist invalid data
         expect(Post::withoutGlobalScopes()->count())->toBe($initialCount);
-    }, 50);
+    }, 100);
 })->group('property', 'validation', 'admin-crud');
 
 test('property: invalid user email displays error and prevents persistence', function () {
-    $admin = User::factory()->create(['is_admin' => true]);
+    $admin = User::factory()->admin()->create();
     
     PropertyTesting::run(function ($faker) use ($admin) {
-        // Generate invalid emails that will definitely fail validation
-        // Using only the most obviously invalid formats
+        // Generate invalid emails
         $invalidEmail = $faker->randomElement([
-            '', // Empty - required validation
-            'not-an-email', // No @ symbol - email format validation
-            '@example.com', // Missing local part - email format validation
+            '', // Empty
+            'not-an-email', // No @ symbol
+            '@example.com', // Missing local part
         ]);
         
         $initialCount = User::count();
@@ -187,11 +186,11 @@ test('property: invalid user email displays error and prevents persistence', fun
         
         // Should not persist invalid data
         expect(User::count())->toBe($initialCount);
-    }, 50);
+    }, 100);
 })->group('property', 'validation', 'admin-crud');
 
 test('property: duplicate user email displays uniqueness error', function () {
-    $admin = User::factory()->create(['is_admin' => true]);
+    $admin = User::factory()->admin()->create();
     
     PropertyTesting::run(function ($faker) use ($admin) {
         // Create an existing user
@@ -212,11 +211,11 @@ test('property: duplicate user email displays uniqueness error', function () {
         
         // Should not create duplicate
         expect(User::count())->toBe($initialCount);
-    }, 50);
+    }, 100);
 })->group('property', 'validation', 'admin-crud');
 
 test('property: mismatched password confirmation displays error', function () {
-    $admin = User::factory()->create(['is_admin' => true]);
+    $admin = User::factory()->admin()->create();
     
     PropertyTesting::run(function ($faker) use ($admin) {
         $initialCount = User::count();
@@ -234,5 +233,5 @@ test('property: mismatched password confirmation displays error', function () {
         
         // Should not persist invalid data
         expect(User::count())->toBe($initialCount);
-    }, 50);
+    }, 100);
 })->group('property', 'validation', 'admin-crud');

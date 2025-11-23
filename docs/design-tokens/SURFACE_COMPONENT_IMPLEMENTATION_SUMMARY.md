@@ -159,7 +159,7 @@ php artisan test --group=property,surface
 ## Spec Updates
 
 ### Tasks Updated ✅
-- **File:** `.kiro/specs/design-system-upgrade/tasks.md`
+- **File:** `../../.kiro/specs/design-system-upgrade/tasks.md`
 - **Task:** 2. Create base UI component primitives
 - **Status:** Marked as complete with documentation links
 - **Added:**
@@ -285,9 +285,9 @@ These instances need to be updated to:
 - Config: `config/design-tokens.php`
 
 ### Specs
-- Design System Upgrade: `.kiro/specs/design-system-upgrade/`
-- Requirements: `.kiro/specs/design-system-upgrade/requirements.md`
-- Tasks: `.kiro/specs/design-system-upgrade/tasks.md`
+- Design System Upgrade: `../../.kiro/specs/design-system-upgrade/`
+- Requirements: `../../.kiro/specs/design-system-upgrade/requirements.md`
+- Tasks: `../../.kiro/specs/design-system-upgrade/tasks.md`
 
 ---
 

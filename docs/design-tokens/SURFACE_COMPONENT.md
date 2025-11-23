@@ -572,7 +572,7 @@ test('interactive surface responds to hover', function () {
 
 ## References
 
-- **Design System Spec:** `.kiro/specs/design-system-upgrade/requirements.md`
+- **Design System Spec:** `../../.kiro/specs/design-system-upgrade/requirements.md`
 - **Design Tokens:** `config/design-tokens.php`
 - **Design Tokens Helper:** `app/Support/DesignTokens.php`
 - **Design Tokens Docs:** `DESIGN_TOKENS.md`

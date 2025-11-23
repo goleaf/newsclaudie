@@ -236,7 +236,7 @@ Add test to this index with:
 
 ### Step 3: Update Spec
 
-Mark corresponding task as complete in `.kiro/specs/design-system-upgrade/tasks.md`.
+Mark corresponding task as complete in `../../.kiro/specs/design-system-upgrade/tasks.md`.
 
 ---
 
@@ -264,7 +264,7 @@ Mark corresponding task as complete in `.kiro/specs/design-system-upgrade/tasks.
 - [Surface Component Tests](../tests/Unit/SurfaceComponentPropertyTest.php)
 - [Property Testing Helper](../tests/Helpers/PropertyTesting.php)
 - [Surface Component Docs](SURFACE_COMPONENT.md)
-- [Design System Spec](.kiro/specs/design-system-upgrade/)
+- [Design System Spec](../../.kiro/specs/design-system-upgrade/)
 
 ---
 

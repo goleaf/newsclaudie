@@ -259,8 +259,8 @@ Sets application locale from session on each request.
 - [Property Testing Guide](../../../tests/PROPERTY_TESTING.md)
 - [News Property Tests Index](../../../tests/Unit/NEWS_PROPERTY_TESTS_INDEX.md)
 - [Test Coverage](../../testing/TEST_COVERAGE.md)
-- [News Requirements](../.kiro/specs/news-page/requirements.md)
-- [News Tasks](../.kiro/specs/news-page/tasks.md)
+- [News Requirements](../../../.kiro/specs/news-page/requirements.md)
+- [News Tasks](../../../.kiro/specs/news-page/tasks.md)
 
 ## Conclusion
 

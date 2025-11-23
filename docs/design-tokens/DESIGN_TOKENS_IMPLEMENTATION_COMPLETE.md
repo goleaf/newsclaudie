@@ -111,7 +111,7 @@ The design token system has been successfully implemented, providing a comprehen
 
 ### 5. Updated Task Documentation ✅
 
-**File**: `.kiro/specs/design-system-upgrade/tasks.md`
+**File**: `../../.kiro/specs/design-system-upgrade/tasks.md`
 
 - ✅ Marked task 1 as complete and documented
 - ✅ Added documentation file references
@@ -558,9 +558,9 @@ php artisan cache:clear
 - [Helper Class](app/Support/DesignTokens.php)
 
 ### Specifications
-- [Design System Requirements](.kiro/specs/design-system-upgrade/requirements.md)
-- [Design System Design](.kiro/specs/design-system-upgrade/design.md)
-- [Design System Tasks](.kiro/specs/design-system-upgrade/tasks.md)
+- [Design System Requirements](../../.kiro/specs/design-system-upgrade/requirements.md)
+- [Design System Design](../../.kiro/specs/design-system-upgrade/design.md)
+- [Design System Tasks](../../.kiro/specs/design-system-upgrade/tasks.md)
 
 ## Suggested README Updates
 
@@ -610,7 +610,7 @@ Or use Tailwind classes:
 
 ## Files Updated Summary
 
-1. ✅ `.kiro/specs/design-system-upgrade/tasks.md` - Marked task 1 as documented
+1. ✅ `../../.kiro/specs/design-system-upgrade/tasks.md` - Marked task 1 as documented
 
 ## Quality Checklist
 

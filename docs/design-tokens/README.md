@@ -260,7 +260,7 @@ php artisan test --group=property,surface
 ### Documentation
 - **Design Tokens:** `docs/design-tokens/`
 - **API Reference:** `docs/api/`
-- **Specs:** `.kiro/specs/design-system-upgrade/`
+- **Specs:** `../../.kiro/specs/design-system-upgrade/`
 
 ---
 
@@ -273,9 +273,9 @@ php artisan test --group=property,surface
 - [Operating Principles](../../.kiro/steering/operating-principles.md)
 
 ### Design System
-- [Design System Spec](.kiro/specs/design-system-upgrade/requirements.md)
-- [Design System Tasks](.kiro/specs/design-system-upgrade/tasks.md)
-- [Design System Design](.kiro/specs/design-system-upgrade/design.md)
+- [Design System Spec](../../.kiro/specs/design-system-upgrade/requirements.md)
+- [Design System Tasks](../../.kiro/specs/design-system-upgrade/tasks.md)
+- [Design System Design](../../.kiro/specs/design-system-upgrade/design.md)
 
 ### Interface Documentation
 - [Interface Architecture](../interface/INTERFACE_ARCHITECTURE.md)
@@ -296,7 +296,7 @@ php artisan test --group=property,surface
    - Quick reference
    - Update API reference
    - Add changelog
-5. **Update specs** in `.kiro/specs/design-system-upgrade/tasks.md`
+5. **Update specs** in `../../.kiro/specs/design-system-upgrade/tasks.md`
 
 ### Documentation Standards
 

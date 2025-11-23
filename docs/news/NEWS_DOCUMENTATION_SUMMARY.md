@@ -251,9 +251,9 @@ This document summarizes all documentation created for the News feature implemen
 - [Livewire Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md)
 
 ### Spec Documentation
-- [News Page Requirements](../.kiro/specs/news-page/requirements.md)
-- [News Page Design](../.kiro/specs/news-page/design.md)
-- [News Page Tasks](../.kiro/specs/news-page/tasks.md)
+- [News Page Requirements](../../.kiro/specs/news-page/requirements.md)
+- [News Page Design](../../.kiro/specs/news-page/design.md)
+- [News Page Tasks](../../.kiro/specs/news-page/tasks.md)
 
 ### Test Documentation
 - [Property Testing Guide](../../tests/PROPERTY_TESTING.md)

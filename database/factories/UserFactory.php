@@ -44,4 +44,46 @@ final class UserFactory extends Factory
             ];
         });
     }
+
+    /**
+     * Indicate that the user is an admin.
+     *
+     * @return static
+     */
+    public function admin()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_admin' => true,
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the user is an author.
+     *
+     * @return static
+     */
+    public function author()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_author' => true,
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the user is banned.
+     *
+     * @return static
+     */
+    public function banned()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_banned' => true,
+            ];
+        });
+    }
 }

@@ -399,9 +399,9 @@ public function test_pagination_preserves_filters(): void
 ## Related Documentation
 
 - [NEWS_CONTROLLER_REFACTORING.md](./NEWS_CONTROLLER_REFACTORING.md) - Refactoring notes and service layer alternative
-- [.kiro/specs/news-page/requirements.md](../.kiro/specs/news-page/requirements.md) - Feature requirements
-- [.kiro/specs/news-page/design.md](../.kiro/specs/news-page/design.md) - Design decisions and properties
-- [.kiro/specs/news-page/tasks.md](../.kiro/specs/news-page/tasks.md) - Implementation tasks
+- [.kiro/specs/news-page/requirements.md](../../.kiro/specs/news-page/requirements.md) - Feature requirements
+- [.kiro/specs/news-page/design.md](../../.kiro/specs/news-page/design.md) - Design decisions and properties
+- [.kiro/specs/news-page/tasks.md](../../.kiro/specs/news-page/tasks.md) - Implementation tasks
 
 ## API Reference
 
