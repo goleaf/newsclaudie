@@ -51,6 +51,7 @@ This document maps every PHP class under `app/` to its current automated coverag
 | Component | Current Coverage | Gap / Required Test |
 | --- | --- | --- |
 | `resources/views/components/news/news-card.blade.php` | `tests/Unit/NewsViewRenderingPropertyTest` (5 property-based tests, 226 assertions) validates required fields display, post detail links, lazy loading images, and edge cases. **Documentation**: [NEWS_VIEW_RENDERING_TESTING.md](../tests/Unit/NEWS_VIEW_RENDERING_TESTING.md) | Covered for news card rendering. Add tests for filter panel component when created. |
+| `resources/views/components/navigation/main.blade.php` | `tests/Unit/NewsLocaleAwareNavigationPropertyTest` (4 property-based tests, 115 assertions) validates locale-aware navigation, locale switching, fallback behavior, and idempotence. **Documentation**: [NEWS_LOCALE_AWARE_NAVIGATION_TESTING.md](../tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_TESTING.md) | Covered for News link translation. Add tests for other navigation links when internationalized. |
 | Other Blade components under `resources/views/components/**` | None. | Once Tailwind refactor stabilizes, add Laravel view component tests to ensure props render expected markup. |
 
 ## Volt Components
@@ -71,6 +72,17 @@ This document maps every PHP class under `app/` to its current automated coverag
 | `tests/Browser/HomepageTest` | Playwright spec seeds a published post, visits `/`, and asserts the hero + latest posts heading render. | Extend to cover theme toggle/locale interactions if they receive regressions. |
 | `tests/Browser/AdminNavigationTest` | Logs in via UI and visits each Flux admin route to confirm dashboards/posts/categories/comments/users render as expected. | Future enhancement: interact with Flux sidebar directly once the component exposes stable selectors. |
 | `tests/Browser/AdminPostsPublishTest` | Publishes and unpublishes a draft from the Volt posts table to assert Livewire actions succeed. | Extend to comment moderation/user toggles when those table actions stabilize. |
+
+## Property-Based Tests
+
+| Test File | Properties | Assertions | Duration | Status | Documentation |
+|-----------|-----------|-----------|----------|--------|---------------|
+| `NewsFilterOptionsPropertyTest` | 2 | ~238 | ~0.36s | ✅ | [Full Guide](../tests/Unit/NEWS_FILTER_OPTIONS_TESTING.md) \| [Quick Ref](../tests/Unit/NEWS_FILTER_OPTIONS_QUICK_REFERENCE.md) |
+| `NewsClearFiltersPropertyTest` | 2 | ~343 | ~1.27s | ✅ | [Full Guide](../tests/Unit/NEWS_CLEAR_FILTERS_TESTING.md) \| [Quick Ref](../tests/Unit/NEWS_CLEAR_FILTERS_QUICK_REFERENCE.md) |
+| `NewsViewRenderingPropertyTest` | 3 | ~226 | ~0.22s | ✅ | [Full Guide](../tests/Unit/NEWS_VIEW_RENDERING_TESTING.md) \| [Quick Ref](../tests/Unit/NEWS_VIEW_RENDERING_QUICK_REFERENCE.md) |
+| `NewsLocaleAwareNavigationPropertyTest` | 1 | 115 | ~0.08s | ✅ | [Full Guide](../tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_TESTING.md) \| [Quick Ref](../tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_QUICK_REFERENCE.md) |
+| `CommentStatusFilterPropertyTest` | 1 | ~495 | ~0.95s | ✅ | [Full Guide](../tests/Unit/COMMENT_STATUS_FILTER_TESTING.md) \| [Quick Ref](../tests/Unit/COMMENT_STATUS_FILTER_QUICK_REFERENCE.md) |
+| `CommentInlineEditPropertyTest` | 1 | ~150 | ~0.40s | ✅ | Inline documentation in test file |
 
 ## Console Commands / Providers
 

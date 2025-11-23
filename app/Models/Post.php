@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Throwable;
 
 final class Post extends Model
@@ -19,9 +22,16 @@ final class Post extends Model
     use HasFactory;
 
     /**
+     * The relationships that should always be eager loaded.
+     *
+     * @var array<int, string>
+     */
+    protected $with = ['author'];
+
+    /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'user_id',
@@ -37,7 +47,7 @@ final class Post extends Model
     /**
      * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'tags' => 'array',
@@ -46,10 +56,8 @@ final class Post extends Model
 
     /**
      * Get the route key for the model.
-     *
-     * @return string
      */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'slug';
     }
@@ -106,25 +114,37 @@ final class Post extends Model
         return false;
     }
 
-    public function author(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    /**
+     * Get the author of the post.
+     */
+    public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
-     * Get all of the comments for the Post
+     * Get all comments for the post.
      */
-    public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function comments(): HasMany
     {
-        return $this->hasMany(Comment::class, 'post_id', 'id');
+        return $this->hasMany(Comment::class);
     }
 
     /**
-     * Get all categories associated with this post
+     * Get all approved comments for the post.
      */
-    public function categories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function approvedComments(): HasMany
     {
-        return $this->belongsToMany(Category::class);
+        return $this->hasMany(Comment::class)->approved();
+    }
+
+    /**
+     * Get all categories associated with this post.
+     */
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class)
+            ->withTimestamps();
     }
 
     /**
@@ -163,15 +183,13 @@ final class Post extends Model
 
     /**
      * The "booted" method of the model.
-     *
-     * @return void
      */
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
         // Order by latest posts by default, with draft posts first
-        self::addGlobalScope('order', function (Builder $builder) {
+        self::addGlobalScope('order', function (Builder $builder): void {
             $builder->orderByRaw('-published_at');
         });
 
@@ -204,13 +222,16 @@ final class Post extends Model
      * Filters posts that belong to ANY of the specified categories.
      * Uses whereHas with whereIn for efficient querying.
      *
-     * @param Builder $query The query builder instance
+     * @param Builder<Post> $query The query builder instance
      * @param array<int> $categoryIds Array of category IDs to filter by
-     * @return void
      */
     public function scopeFilterByCategories(Builder $query, array $categoryIds): void
     {
-        $query->whereHas('categories', function (Builder $q) use ($categoryIds) {
+        if (empty($categoryIds)) {
+            return;
+        }
+
+        $query->whereHas('categories', function (Builder $q) use ($categoryIds): void {
             $q->whereIn('categories.id', $categoryIds);
         });
     }
@@ -219,14 +240,17 @@ final class Post extends Model
      * Scope a query to filter posts by authors (OR logic).
      *
      * Filters posts authored by ANY of the specified users.
-     * Uses whereIn for efficient querying.
+     * Uses whereIn for efficient querying with index.
      *
-     * @param Builder $query The query builder instance
+     * @param Builder<Post> $query The query builder instance
      * @param array<int> $authorIds Array of user IDs to filter by
-     * @return void
      */
     public function scopeFilterByAuthors(Builder $query, array $authorIds): void
     {
+        if (empty($authorIds)) {
+            return;
+        }
+
         $query->whereIn('user_id', $authorIds);
     }
 
@@ -235,20 +259,20 @@ final class Post extends Model
      *
      * Filters posts published within the specified date range.
      * Both from_date and to_date are optional and inclusive.
+     * Uses indexed published_at column for performance.
      *
-     * @param Builder $query The query builder instance
+     * @param Builder<Post> $query The query builder instance
      * @param string|null $fromDate Start date (Y-m-d format), null for no lower bound
      * @param string|null $toDate End date (Y-m-d format), null for no upper bound
-     * @return void
      */
     public function scopeFilterByDateRange(Builder $query, ?string $fromDate, ?string $toDate): void
     {
         if ($fromDate !== null) {
-            $query->whereDate('published_at', '>=', $fromDate);
+            $query->where('published_at', '>=', $fromDate.' 00:00:00');
         }
 
         if ($toDate !== null) {
-            $query->whereDate('published_at', '<=', $toDate);
+            $query->where('published_at', '<=', $toDate.' 23:59:59');
         }
     }
 
@@ -256,10 +280,10 @@ final class Post extends Model
      * Scope a query to sort posts by publication date.
      *
      * Sorts posts by their published_at timestamp in the specified direction.
+     * Uses indexed published_at column for performance.
      *
-     * @param Builder $query The query builder instance
+     * @param Builder<Post> $query The query builder instance
      * @param string $direction Sort direction ('asc' or 'desc')
-     * @return void
      */
     public function scopeSortByPublishedDate(Builder $query, string $direction = 'desc'): void
     {
@@ -271,13 +295,24 @@ final class Post extends Model
      *
      * Filters posts that have a published_at date set and are not scheduled for the future.
      * This is a convenience scope for security and consistency.
+     * Uses indexed published_at column for performance.
      *
-     * @param Builder $query The query builder instance
-     * @return void
+     * @param Builder<Post> $query The query builder instance
      */
     public function scopePublished(Builder $query): void
     {
         $query->whereNotNull('published_at')
             ->where('published_at', '<=', now());
+    }
+
+    /**
+     * Scope a query to only include draft posts.
+     *
+     * @param Builder<Post> $query The query builder instance
+     */
+    public function scopeDraft(Builder $query): void
+    {
+        $query->whereNull('published_at')
+            ->orWhere('published_at', '>', now());
     }
 }

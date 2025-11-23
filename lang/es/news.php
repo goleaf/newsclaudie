@@ -3,45 +3,54 @@
 declare(strict_types=1);
 
 return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | News Page Language Lines (Spanish)
+    |--------------------------------------------------------------------------
+    |
+    | Las siguientes líneas de idioma se utilizan en la página de noticias
+    | para mostrar elementos de noticias filtrados y ordenados. Estas
+    | traducciones admiten la experiencia de navegación de noticias,
+    | incluidos filtros, ordenación y paginación.
+    |
+    */
+
     'title' => 'Noticias',
-    'subtitle' => 'Mantente informado con las últimas actualizaciones e historias.',
-    
-    // Filter panel
-    'filters' => [
-        'heading' => 'Filtrar Noticias',
-        'categories_label' => 'Categorías',
-        'categories_placeholder' => 'Seleccionar categorías',
-        'authors_label' => 'Autores',
-        'authors_placeholder' => 'Seleccionar autores',
-        'date_range_label' => 'Rango de Fechas',
-        'from_date_label' => 'Desde',
-        'to_date_label' => 'Hasta',
-        'sort_label' => 'Ordenar Por',
-        'sort_newest' => 'Más Recientes',
-        'sort_oldest' => 'Más Antiguos',
-        'clear_all' => 'Limpiar Todos los Filtros',
-        'apply' => 'Aplicar Filtros',
-    ],
-    
-    // Results
-    'results_count' => '{0} No se encontraron resultados|{1} :count resultado|[2,*] :count resultados',
+    'subtitle' => 'Mantente informado con las últimas historias y actualizaciones.',
+
+    // Results count and pagination
+    'results_count' => '{0} 0 resultados encontrados|{1} :count resultado|[2,*] :count resultados',
     'showing_range' => 'Mostrando :from a :to de :total resultados',
+
+    // Empty state
     'empty_title' => 'No se encontraron noticias',
     'empty_message' => 'Intenta ajustar tus filtros para ver más resultados.',
-    'empty_suggestion' => 'Limpia los filtros para ver todas las noticias',
-    
-    // Pagination
-    'pagination_summary' => 'Mostrando :from a :to de :total noticias',
-    'pagination_label' => 'Paginación de noticias',
-    
+
+    // Filter panel
+    'filters' => [
+        'heading' => 'Filtros',
+        'clear_all' => 'Limpiar todos los filtros',
+        
+        // Sort options
+        'sort_label' => 'Ordenar por',
+        'sort_newest' => 'Más recientes primero',
+        'sort_oldest' => 'Más antiguos primero',
+        
+        // Category filter
+        'categories_label' => 'Categorías',
+        
+        // Author filter
+        'authors_label' => 'Autores',
+        
+        // Date range filter
+        'date_range_label' => 'Rango de fechas',
+        'from_date_label' => 'Desde fecha',
+        'to_date_label' => 'Hasta fecha',
+    ],
+
     // News card
-    'read_more' => 'Leer más',
     'by_author' => 'Por :author',
-    'published_on' => 'Publicado :date',
-    'filed_under' => 'Archivado en',
-    
-    // Mobile
-    'toggle_filters' => 'Alternar filtros',
-    'show_filters' => 'Mostrar filtros',
-    'hide_filters' => 'Ocultar filtros',
+    'read_more' => 'Leer más',
+
 ];

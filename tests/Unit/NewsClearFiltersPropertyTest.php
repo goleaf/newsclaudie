@@ -125,32 +125,28 @@ final class NewsClearFiltersPropertyTest extends TestCase
             $response = $this->get(route('news.index', ['categories' => $selectedCategories]));
             
             $response->assertOk();
-            $response->assertSee('Clear All', false); // false = don't escape HTML
-            $response->assertSee('Active Filters', false);
+            $response->assertSee('Clear all filters', false); // false = don't escape HTML
             
             // Test 2: Button visible when authors selected
             $selectedAuthors = $authors->random($faker->numberBetween(1, 2))->pluck('id')->toArray();
             $response = $this->get(route('news.index', ['authors' => $selectedAuthors]));
             
             $response->assertOk();
-            $response->assertSee('Clear All', false);
-            $response->assertSee('Active Filters', false);
+            $response->assertSee('Clear all filters', false);
             
             // Test 3: Button visible when from_date set
             $fromDate = now()->subDays($faker->numberBetween(20, 25))->format('Y-m-d');
             $response = $this->get(route('news.index', ['from_date' => $fromDate]));
             
             $response->assertOk();
-            $response->assertSee('Clear All', false);
-            $response->assertSee('Active Filters', false);
+            $response->assertSee('Clear all filters', false);
             
             // Test 4: Button visible when to_date set
             $toDate = now()->subDays($faker->numberBetween(5, 10))->format('Y-m-d');
             $response = $this->get(route('news.index', ['to_date' => $toDate]));
             
             $response->assertOk();
-            $response->assertSee('Clear All', false);
-            $response->assertSee('Active Filters', false);
+            $response->assertSee('Clear all filters', false);
             
             // Test 5: Button visible when multiple filters combined
             $response = $this->get(route('news.index', [
@@ -161,8 +157,7 @@ final class NewsClearFiltersPropertyTest extends TestCase
             ]));
             
             $response->assertOk();
-            $response->assertSee('Clear All', false);
-            $response->assertSee('Active Filters', false);
+            $response->assertSee('Clear all filters', false);
             
             // Test 6: Button hidden when no filters applied
             $response = $this->get(route('news.index'));

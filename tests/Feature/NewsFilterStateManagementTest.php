@@ -169,7 +169,7 @@ class NewsFilterStateManagementTest extends TestCase
         ]));
 
         $response->assertOk();
-        $response->assertSee('Clear All');
+        $response->assertSee('Clear all filters');
     }
 
     /**
@@ -269,7 +269,7 @@ class NewsFilterStateManagementTest extends TestCase
         $content = $response->getContent();
         
         // Should show page 2 results (items 16-20)
-        $this->assertStringContainsString('Showing 16-20', $content);
+        $this->assertStringContainsString('Showing 16 to 20', $content);
         
         // Filter should still be applied
         $response->assertSee('value="' . $category->id . '"', false);

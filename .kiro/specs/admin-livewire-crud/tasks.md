@@ -141,25 +141,46 @@
   - Include validation for inline edits
   - _Requirements: 3.3_
 
-- [ ]* 5.3 Write property test for comment status filtering
+- [x] 5.3 Write property test for comment status filtering ✅ **DOCUMENTED**
   - **Property 11: Status filter accuracy**
   - **Validates: Requirements 3.2**
+  - Tests created in `tests/Unit/CommentStatusFilterPropertyTest.php`
+  - 3 tests with ~495 assertions covering:
+    - Status filter returns only matching comments (Approved, Pending, Rejected)
+    - withStatus scope filters correctly with enum values
+    - Empty results return empty collection (not null)
+    - All status values tested with random distributions
+    - Edge cases: empty database, no matches
+  - **Documentation**: `tests/Unit/COMMENT_STATUS_FILTER_TESTING.md`
+  - **Quick Reference**: `tests/Unit/COMMENT_STATUS_FILTER_QUICK_REFERENCE.md`
+  - **Test Coverage**: Updated in `docs/TEST_COVERAGE.md`
 
-- [ ]* 5.4 Write property test for inline edit persistence
+- [x] 5.4 Write property test for inline edit persistence ✅ **DOCUMENTED**
   - **Property 1: Data persistence round-trip** (inline edit aspect)
   - **Validates: Requirements 3.3**
+  - Tests created in `tests/Unit/CommentInlineEditPropertyTest.php`
+  - 5 tests with ~150 assertions covering:
+    - Inline edit content persistence
+    - Inline edit status persistence
+    - Multiple sequential inline edits
+    - Empty content edge case
+    - Timestamp updates (updated_at changes, created_at preserved)
+  - **Documentation**: Inline documentation in test file
 
 - [ ]* 5.5 Write property test for comment status update
   - **Property 28: Comment status update**
   - **Validates: Requirements 3.4**
+  - Note: Requires using Comment::factory() to avoid password hashing issues
 
 - [ ]* 5.6 Write property test for comment deletion count update
   - **Property 32: Comment deletion count update**
   - **Validates: Requirements 3.5**
+  - Note: Requires using Comment::factory() to avoid password hashing issues
 
 - [ ]* 5.7 Write property test for bulk actions
   - **Property 19: Bulk operation completeness**
   - **Validates: Requirements 3.6, 8.3**
+  - Note: Requires using Comment::factory() to avoid password hashing issues
 
 - [ ] 6. Implement Users CRUD with Livewire
   - Build users management with role and ban status controls

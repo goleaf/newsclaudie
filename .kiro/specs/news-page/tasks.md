@@ -200,15 +200,24 @@
     - Apply active styling when on news page
     - _Requirements: 9.2_
   
-  - [-] 7.3 Add translation support
+  - [x] 7.3 Add translation support
     - Create lang/en/news.php with all translatable strings
     - Add "nav.news" key to lang/en.json
     - Use __() helper in all views
     - _Requirements: 9.4_
   
-  - [ ] 7.4 Write property test for locale-aware navigation
+  - [x] 7.4 Write property test for locale-aware navigation ✅ **DOCUMENTED**
     - **Property 21: Locale-aware navigation**
     - **Validates: Requirements 9.4**
+    - Tests created in `tests/Unit/NewsLocaleAwareNavigationPropertyTest.php`
+    - 4 tests with 115 assertions covering:
+      - News link displays in current locale (en, es)
+      - Locale switching updates navigation label
+      - Unsupported locale falls back gracefully to English
+      - Multiple renders produce consistent labels (idempotence)
+    - **Documentation**: `tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_TESTING.md`
+    - **Quick Reference**: `tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_QUICK_REFERENCE.md`
+    - **Test Coverage**: Updated in `docs/TEST_COVERAGE.md`
 
 - [x] 8. Add database indexes for performance
   - [x] 8.1 Create migration for indexes
@@ -222,49 +231,49 @@
     - Verify indexes with EXPLAIN queries
     - _Requirements: 10.1_
 
-- [ ] 9. Write example tests for specific scenarios
-  - [ ]* 9.1 Test news page route and title
+- [x] 9. Write example tests for specific scenarios
+  - [x]* 9.1 Test news page route and title
     - Verify /news displays page with "News" title
     - **Validates: Requirements 1.1**
   
-  - [ ]* 9.2 Test pagination threshold
+  - [x]* 9.2 Test pagination threshold
     - Verify 16 posts results in 15 on page 1, 1 on page 2
     - **Validates: Requirements 1.5**
   
-  - [ ]* 9.3 Test date range filter controls display
+  - [x]* 9.3 Test date range filter controls display
     - Verify from_date and to_date inputs are present
     - **Validates: Requirements 3.1**
   
-  - [ ]* 9.4 Test default states
+  - [x]* 9.4 Test default states
     - Verify all posts shown when no category filters applied
     - Verify all posts shown when no author filters applied
     - **Validates: Requirements 2.4, 4.4**
   
-  - [ ]* 9.5 Test sort controls display
+  - [x]* 9.5 Test sort controls display
     - Verify "Newest First" and "Oldest First" options present
     - **Validates: Requirements 5.1**
   
-  - [ ]* 9.6 Test clear filters button states
+  - [x]* 9.6 Test clear filters button states
     - Verify button hidden when no filters applied
     - Verify default view after clearing filters
     - **Validates: Requirements 6.2, 6.4**
   
-  - [ ]* 9.7 Test results count display
+  - [x]* 9.7 Test results count display
     - Verify count equals total published posts when no filters
     - **Validates: Requirements 7.2**
   
-  - [ ]* 9.8 Test navigation integration
+  - [x]* 9.8 Test navigation integration
     - Verify "News" link present in navigation
     - Verify active state on news page
     - Verify link in mobile navigation
     - Verify clean URL without query parameters
     - **Validates: Requirements 9.1, 9.2, 9.3, 9.5**
   
-  - [ ]* 9.9 Test pagination info display
+  - [x]* 9.9 Test pagination info display
     - **Property 18: Pagination info display**
     - **Validates: Requirements 7.5**
   
-  - [ ]* 9.10 Test empty results edge case
+  - [x]* 9.10 Test empty results edge case
     - Verify empty state message when no results match filters
     - **Validates: Requirements 7.4**
 
@@ -283,5 +292,5 @@
     - Test non-existent category/author IDs
     - Test invalid sort values
 
-- [ ] 12. Final checkpoint - Verify all requirements
+- [x] 12. Final checkpoint - Verify all requirements
   - Ensure all tests pass, ask the user if questions arise.
