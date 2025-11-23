@@ -8,7 +8,7 @@
 
 ### Documentation Files (5)
 
-1. ✅ `docs/ADMIN_USERS_MANAGEMENT.md` (931 lines, 21KB)
+1. ✅ `docs/admin/ADMIN_USERS_MANAGEMENT.md` (931 lines, 21KB)
    - Complete user guide
    - All features documented
    - Configuration and troubleshooting
@@ -18,7 +18,7 @@
    - All methods and properties
    - Code examples
 
-3. ✅ `docs/ADMIN_USERS_QUICK_REFERENCE.md` (477 lines, 10KB)
+3. ✅ `docs/admin/ADMIN_USERS_QUICK_REFERENCE.md` (477 lines, 10KB)
    - Quick lookup guide
    - Common tasks
    - Code snippets
@@ -40,7 +40,7 @@
    - Component overview and features
    - Property and method documentation
 
-2. ✅ `docs/ADMIN_DOCUMENTATION_INDEX.md`
+2. ✅ `docs/admin/ADMIN_DOCUMENTATION_INDEX.md`
    - Added Users Management section
    - Updated component reference
    - Updated requirements coverage

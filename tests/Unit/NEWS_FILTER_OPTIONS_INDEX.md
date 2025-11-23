@@ -28,7 +28,7 @@
 - **[Property Testing Guide](../PROPERTY_TESTING.md)** - General property-based testing approach
 
 ### 📊 Project Documentation
-- **[Test Coverage Inventory](../../docs/TEST_COVERAGE.md)** - Overall test coverage status
+- **[Test Coverage Inventory](../../docs/testing/TEST_COVERAGE.md)** - Overall test coverage status
 - **[README](../../README.md)** - Project overview with testing section
 
 ### 📝 Change Tracking
@@ -97,7 +97,7 @@ Root/
 → **Comprehensive Guides** - Deep dive
 
 ### 📊 I need coverage information
-→ **[Test Coverage Inventory](../../docs/TEST_COVERAGE.md)** - Overall coverage  
+→ **[Test Coverage Inventory](../../docs/testing/TEST_COVERAGE.md)** - Overall coverage  
 → **[Complete Summary](../../DOCUMENTATION_NEWS_COMPLETE.md)** - Full statistics  
 → **Quick References** - Test summaries
 
@@ -183,7 +183,7 @@ Testing universal properties that should hold true across all valid inputs by ru
 1. Check the **[Quick Reference](NEWS_FILTER_OPTIONS_QUICK_REFERENCE.md)** first
 2. Read the **[Comprehensive Guide](NEWS_FILTER_OPTIONS_TESTING.md)** for details
 3. Review the **[Property Testing Guide](../PROPERTY_TESTING.md)** for concepts
-4. Check the **[Test Coverage](../../docs/TEST_COVERAGE.md)** for context
+4. Check the **[Test Coverage](../../docs/testing/TEST_COVERAGE.md)** for context
 
 ### Found an Issue?
 1. Check **[Common Failures](NEWS_FILTER_OPTIONS_QUICK_REFERENCE.md#common-failures)**

@@ -136,7 +136,7 @@ php artisan test --filter=test_rate_limiting_prevents_excessive_comment_creation
 ### For Developers
 - [Security Audit](SECURITY_AUDIT_COMMENT_MODEL.md) - Vulnerability details
 - [Implementation Guide](SECURITY_IMPLEMENTATION_COMPLETE.md) - How it works
-- [API Documentation](docs/COMMENT_MODEL_API.md) - Model API reference
+- [API Documentation](docs/comments/COMMENT_MODEL_API.md) - Model API reference
 
 ### For Security Teams
 - [Security Fixes Summary](SECURITY_FIXES_SUMMARY.md) - Executive summary

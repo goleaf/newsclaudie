@@ -333,7 +333,7 @@ public function index(NewsIndexRequest $request)
 - [Property Testing Guide](../PROPERTY_TESTING.md) - General property testing approach
 - [News Filter Options Testing](NEWS_FILTER_OPTIONS_TESTING.md) - Related news feature tests
 - [News Feature Requirements](../../.kiro/specs/news-page/requirements.md) - Feature requirements
-- [Test Coverage](../../docs/TEST_COVERAGE.md) - Overall test coverage
+- [Test Coverage](../../docs/testing/TEST_COVERAGE.md) - Overall test coverage
 
 ## Maintenance Notes
 
@@ -436,5 +436,5 @@ When contributing to these tests:
 For questions about these tests, see:
 - [Quick Reference](NEWS_VIEW_RENDERING_QUICK_REFERENCE.md)
 - [Property Testing Guide](../PROPERTY_TESTING.md)
-- [Test Coverage Documentation](../../docs/TEST_COVERAGE.md)
+- [Test Coverage Documentation](../../docs/testing/TEST_COVERAGE.md)
 - Project maintainers

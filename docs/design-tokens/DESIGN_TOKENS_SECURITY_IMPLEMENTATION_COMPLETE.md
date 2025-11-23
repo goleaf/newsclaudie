@@ -214,7 +214,7 @@ function csp_nonce(): string
    - Exploitation scenarios
    - Mitigation strategies
 
-2. ✅ `docs/DESIGN_TOKENS_SECURITY.md` (400+ lines)
+2. ✅ `docs/design-tokens/DESIGN_TOKENS_SECURITY.md` (400+ lines)
    - Security usage guide
    - Best practices
    - Safe usage patterns
@@ -530,9 +530,9 @@ grep "Unsafe font family name detected" storage/logs/laravel.log
 
 ### Documentation
 - [Security Audit Report](DESIGN_TOKENS_SECURITY_AUDIT.md)
-- [Security Usage Guide](docs/DESIGN_TOKENS_SECURITY.md)
-- [Design Tokens Reference](docs/DESIGN_TOKENS.md)
-- [Performance Guide](docs/DESIGN_TOKENS_PERFORMANCE.md)
+- [Security Usage Guide](docs/design-tokens/DESIGN_TOKENS_SECURITY.md)
+- [Design Tokens Reference](docs/design-tokens/DESIGN_TOKENS.md)
+- [Performance Guide](docs/design-tokens/DESIGN_TOKENS_PERFORMANCE.md)
 
 ### External Resources
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)

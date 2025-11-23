@@ -8,10 +8,10 @@
 
 | Document | Purpose | Lines |
 |----------|---------|-------|
-| [User Guide](docs/ADMIN_USERS_MANAGEMENT.md) | Complete feature documentation | 1,200+ |
+| [User Guide](docs/admin/ADMIN_USERS_MANAGEMENT.md) | Complete feature documentation | 1,200+ |
 | [API Reference](docs/api/ADMIN_USERS_API.md) | Technical API documentation | 800+ |
-| [Quick Reference](docs/ADMIN_USERS_QUICK_REFERENCE.md) | Quick lookup guide | 400+ |
-| [Documentation Index](docs/ADMIN_DOCUMENTATION_INDEX.md) | Main documentation hub | Updated |
+| [Quick Reference](docs/admin/ADMIN_USERS_QUICK_REFERENCE.md) | Quick lookup guide | 400+ |
+| [Documentation Index](docs/admin/ADMIN_DOCUMENTATION_INDEX.md) | Main documentation hub | Updated |
 
 ## What Was Documented
 
@@ -181,12 +181,12 @@ All requirements from `.kiro/specs/admin-livewire-crud/requirements.md`:
 
 | Requirement | Status | Documentation |
 |-------------|--------|---------------|
-| 4.1 - User listing | ✅ Complete | [User Interface](docs/ADMIN_USERS_MANAGEMENT.md#user-interface) |
-| 4.2 - Create users | ✅ Complete | [Create User](docs/ADMIN_USERS_MANAGEMENT.md#create-user) |
-| 4.3 - Edit roles | ✅ Complete | [Role Management](docs/ADMIN_USERS_MANAGEMENT.md#role-management-methods) |
-| 4.4 - Ban status | ✅ Complete | [Toggle Ban](docs/ADMIN_USERS_MANAGEMENT.md#toggle-ban-status) |
-| 4.5 - Delete users | ✅ Complete | [Delete User](docs/ADMIN_USERS_MANAGEMENT.md#delete-user) |
-| 4.6 - Search users | ✅ Complete | [Search](docs/ADMIN_USERS_MANAGEMENT.md#search-and-filtering) |
+| 4.1 - User listing | ✅ Complete | [User Interface](docs/admin/ADMIN_USERS_MANAGEMENT.md#user-interface) |
+| 4.2 - Create users | ✅ Complete | [Create User](docs/admin/ADMIN_USERS_MANAGEMENT.md#create-user) |
+| 4.3 - Edit roles | ✅ Complete | [Role Management](docs/admin/ADMIN_USERS_MANAGEMENT.md#role-management-methods) |
+| 4.4 - Ban status | ✅ Complete | [Toggle Ban](docs/admin/ADMIN_USERS_MANAGEMENT.md#toggle-ban-status) |
+| 4.5 - Delete users | ✅ Complete | [Delete User](docs/admin/ADMIN_USERS_MANAGEMENT.md#delete-user) |
+| 4.6 - Search users | ✅ Complete | [Search](docs/admin/ADMIN_USERS_MANAGEMENT.md#search-and-filtering) |
 
 ## Integration
 
@@ -227,20 +227,20 @@ All documentation properly linked:
 
 ### For New Developers
 
-1. Start with [Documentation Index](docs/ADMIN_DOCUMENTATION_INDEX.md)
-2. Read [User Guide](docs/ADMIN_USERS_MANAGEMENT.md) overview
-3. Review [Quick Reference](docs/ADMIN_USERS_QUICK_REFERENCE.md) for common tasks
+1. Start with [Documentation Index](docs/admin/ADMIN_DOCUMENTATION_INDEX.md)
+2. Read [User Guide](docs/admin/ADMIN_USERS_MANAGEMENT.md) overview
+3. Review [Quick Reference](docs/admin/ADMIN_USERS_QUICK_REFERENCE.md) for common tasks
 4. Check [API Reference](docs/api/ADMIN_USERS_API.md) for technical details
 
 ### For Experienced Developers
 
-1. Use [Quick Reference](docs/ADMIN_USERS_QUICK_REFERENCE.md) for fast lookups
+1. Use [Quick Reference](docs/admin/ADMIN_USERS_QUICK_REFERENCE.md) for fast lookups
 2. Check [API Reference](docs/api/ADMIN_USERS_API.md) for method signatures
-3. Review [User Guide](docs/ADMIN_USERS_MANAGEMENT.md) for complex workflows
+3. Review [User Guide](docs/admin/ADMIN_USERS_MANAGEMENT.md) for complex workflows
 
 ### For Maintainers
 
-1. Review [Architecture](docs/ADMIN_USERS_MANAGEMENT.md#architecture) section
+1. Review [Architecture](docs/admin/ADMIN_USERS_MANAGEMENT.md#architecture) section
 2. Check [Database Queries](docs/api/ADMIN_USERS_API.md#database-queries)
 3. Review [Performance](docs/api/ADMIN_USERS_API.md#performance-considerations)
 4. Check [Security](docs/api/ADMIN_USERS_API.md#security)
@@ -249,7 +249,7 @@ All documentation properly linked:
 
 ### New Documentation Files (3)
 
-1. **docs/ADMIN_USERS_MANAGEMENT.md**
+1. **docs/admin/ADMIN_USERS_MANAGEMENT.md**
    - 1,200+ lines
    - Complete user guide
    - All features documented
@@ -259,7 +259,7 @@ All documentation properly linked:
    - Complete API reference
    - All methods and properties
 
-3. **docs/ADMIN_USERS_QUICK_REFERENCE.md**
+3. **docs/admin/ADMIN_USERS_QUICK_REFERENCE.md**
    - 400+ lines
    - Quick lookup guide
    - Common tasks and snippets
@@ -271,7 +271,7 @@ All documentation properly linked:
    - Component overview
    - Property and method documentation
 
-2. **docs/ADMIN_DOCUMENTATION_INDEX.md**
+2. **docs/admin/ADMIN_DOCUMENTATION_INDEX.md**
    - Added Users Management section
    - Updated component reference table
    - Updated requirements coverage
@@ -381,10 +381,10 @@ All documentation properly linked:
 
 ### Getting Help
 
-1. **Documentation**: Start with [Documentation Index](docs/ADMIN_DOCUMENTATION_INDEX.md)
-2. **Quick Lookup**: Use [Quick Reference](docs/ADMIN_USERS_QUICK_REFERENCE.md)
+1. **Documentation**: Start with [Documentation Index](docs/admin/ADMIN_DOCUMENTATION_INDEX.md)
+2. **Quick Lookup**: Use [Quick Reference](docs/admin/ADMIN_USERS_QUICK_REFERENCE.md)
 3. **Technical Details**: Check [API Reference](docs/api/ADMIN_USERS_API.md)
-4. **Troubleshooting**: See [Troubleshooting](docs/ADMIN_USERS_MANAGEMENT.md#troubleshooting)
+4. **Troubleshooting**: See [Troubleshooting](docs/admin/ADMIN_USERS_MANAGEMENT.md#troubleshooting)
 
 ### Contributing
 

@@ -67,7 +67,7 @@ Comprehensive documentation has been created for the News View Rendering propert
 - Expanded "What to read when" guide
 
 #### Test Coverage Inventory
-**File**: `docs/TEST_COVERAGE.md`
+**File**: `docs/testing/TEST_COVERAGE.md`
 
 **Updates**:
 - Added documentation link for news-card component
@@ -209,7 +209,7 @@ cat tests/Unit/NewsViewRenderingPropertyTest.php
 ### Troubleshooting
 ```bash
 # Check test coverage inventory
-cat docs/TEST_COVERAGE.md
+cat docs/testing/TEST_COVERAGE.md
 
 # Review property testing guide
 cat tests/PROPERTY_TESTING.md
@@ -326,7 +326,7 @@ This documentation provides everything needed to understand, run, maintain, and 
 
 ### Updated Documentation
 1. `tests/Unit/NEWS_FILTER_OPTIONS_INDEX.md`
-2. `docs/TEST_COVERAGE.md`
+2. `docs/testing/TEST_COVERAGE.md`
 3. `tests/PROPERTY_TESTING.md`
 4. `.kiro/specs/news-page/tasks.md`
 

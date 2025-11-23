@@ -499,7 +499,7 @@ php -d memory_limit=128M artisan test --filter=DesignTokensMemoryEfficiency
    - Memory efficiency tests
    - Correctness validation
 
-2. ✅ `docs/DESIGN_TOKENS_PERFORMANCE.md`
+2. ✅ `docs/design-tokens/DESIGN_TOKENS_PERFORMANCE.md`
    - Performance guide
    - Benchmarks
    - Best practices
@@ -534,8 +534,8 @@ The optimizations are **backward compatible** and require no changes to existing
 ## Questions?
 
 For questions about performance optimizations:
-- Review [Performance Guide](docs/DESIGN_TOKENS_PERFORMANCE.md)
-- Check [Usage Guide](docs/DESIGN_TOKENS_USAGE_GUIDE.md)
+- Review [Performance Guide](docs/design-tokens/DESIGN_TOKENS_PERFORMANCE.md)
+- Check [Usage Guide](docs/design-tokens/DESIGN_TOKENS_USAGE_GUIDE.md)
 - Run performance tests
 - Contact performance team
 

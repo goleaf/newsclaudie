@@ -14,9 +14,9 @@
   - Add custom animations and keyframes
   - Configure dark mode with class strategy
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6_
-  - **Documentation**: `docs/DESIGN_TOKENS.md` (comprehensive reference)
+  - **Documentation**: `docs/design-tokens/DESIGN_TOKENS.md` (comprehensive reference)
   - **Helper Class**: `app/Support/DesignTokens.php` (type-safe access)
-  - **Usage Guide**: `docs/DESIGN_TOKENS_USAGE_GUIDE.md` (practical examples)
+  - **Usage Guide**: `docs/design-tokens/DESIGN_TOKENS_USAGE_GUIDE.md` (practical examples)
 
 - [ ]* 1.1 Write property test for design token configuration
   - **Property 1: Color contrast compliance**

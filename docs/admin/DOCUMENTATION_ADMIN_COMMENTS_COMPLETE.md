@@ -45,7 +45,7 @@ This document summarizes the complete documentation created for the admin commen
 
 ### 2. Architecture Documentation
 
-**File:** `docs/ADMIN_COMMENTS_EAGER_LOADING.md`
+**File:** `docs/admin/ADMIN_COMMENTS_EAGER_LOADING.md`
 
 **Contents:**
 - Overview of eager loading strategy
@@ -136,7 +136,7 @@ This document summarizes the complete documentation created for the admin commen
 
 ### 5. Index Updates
 
-**File:** `docs/ADMIN_DOCUMENTATION_INDEX.md`
+**File:** `docs/admin/ADMIN_DOCUMENTATION_INDEX.md`
 
 **Changes:**
 - Added reference to eager loading documentation in Architecture section
@@ -268,7 +268,7 @@ DOCUMENTATION_ADMIN_COMMENTS_COMPLETE.md    # This summary
    - Quick reference for what changed and why
 
 2. **Understanding the Architecture:**
-   - Read: `docs/ADMIN_COMMENTS_EAGER_LOADING.md`
+   - Read: `docs/admin/ADMIN_COMMENTS_EAGER_LOADING.md`
    - Deep dive into eager loading strategy
 
 3. **Using the API:**
@@ -276,7 +276,7 @@ DOCUMENTATION_ADMIN_COMMENTS_COMPLETE.md    # This summary
    - Complete method reference and examples
 
 4. **Finding Related Docs:**
-   - Start: `docs/ADMIN_DOCUMENTATION_INDEX.md`
+   - Start: `docs/admin/ADMIN_DOCUMENTATION_INDEX.md`
    - Navigate to related documentation
 
 ### For Code Review
@@ -286,7 +286,7 @@ DOCUMENTATION_ADMIN_COMMENTS_COMPLETE.md    # This summary
    - Focus: `baseQuery()` method DocBlock
 
 2. **Review Documentation:**
-   - Architecture: `docs/ADMIN_COMMENTS_EAGER_LOADING.md`
+   - Architecture: `docs/admin/ADMIN_COMMENTS_EAGER_LOADING.md`
    - API: `docs/api/ADMIN_COMMENTS_API.md`
    - Changelog: `CHANGELOG_ADMIN_COMMENTS_EAGER_LOADING.md`
 
@@ -372,8 +372,8 @@ DOCUMENTATION_ADMIN_COMMENTS_COMPLETE.md    # This summary
 
 ### Internal Documentation
 
-- [Admin Documentation Index](docs/ADMIN_DOCUMENTATION_INDEX.md)
-- [Admin Comments Eager Loading](docs/ADMIN_COMMENTS_EAGER_LOADING.md)
+- [Admin Documentation Index](docs/admin/ADMIN_DOCUMENTATION_INDEX.md)
+- [Admin Comments Eager Loading](docs/admin/ADMIN_COMMENTS_EAGER_LOADING.md)
 - [Admin Comments API](docs/api/ADMIN_COMMENTS_API.md)
 - [Changelog](CHANGELOG_ADMIN_COMMENTS_EAGER_LOADING.md)
 

@@ -34,12 +34,12 @@ use Illuminate\View\View;
  * - Uses query scopes on the Post model for reusable filtering logic
  * - Extracts filter option loading to avoid code duplication
  * - Maintains published post constraint consistency across queries
- * - For larger applications, consider using NewsFilterService (see docs/NEWS_CONTROLLER_REFACTORING.md)
+ * - For larger applications, consider using NewsFilterService (see docs/news/NEWS_CONTROLLER_REFACTORING.md)
  *
  * @see NewsIndexRequest For request validation rules and parameters
  * @see Post For model query scopes (filterByCategories, filterByAuthors, etc.)
  * @see resources/views/news/index.blade.php For the view template
- * @see docs/NEWS_CONTROLLER_REFACTORING.md For refactoring notes and service layer alternative
+ * @see docs/news/NEWS_CONTROLLER_REFACTORING.md For refactoring notes and service layer alternative
  *
  * @package App\Http\Controllers
  * @author Laravel Blog Application

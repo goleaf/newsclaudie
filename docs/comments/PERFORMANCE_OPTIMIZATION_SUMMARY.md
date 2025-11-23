@@ -111,7 +111,7 @@ Tests: 9 passed (25 assertions)
    - Memory efficiency tests
    - Correctness verification
 
-2. ✅ `docs/DESIGN_TOKENS_PERFORMANCE.md`
+2. ✅ `docs/design-tokens/DESIGN_TOKENS_PERFORMANCE.md`
    - Complete performance guide
    - Benchmarks and metrics
    - Best practices
@@ -130,12 +130,12 @@ Tests: 9 passed (25 assertions)
 
 ### Updated Documentation
 
-1. ✅ `docs/DESIGN_TOKENS.md`
+1. ✅ `docs/design-tokens/DESIGN_TOKENS.md`
    - Added performance section
    - Updated with optimization details
    - Added benchmarks
 
-2. ✅ `docs/DESIGN_TOKENS_USAGE_GUIDE.md`
+2. ✅ `docs/design-tokens/DESIGN_TOKENS_USAGE_GUIDE.md`
    - Updated performance tips
    - Added caching examples
    - Enhanced best practices
@@ -355,7 +355,7 @@ The Design Tokens system is now **production-ready** with:
 
 For questions about performance optimizations:
 - Review [Performance Analysis](DESIGN_TOKENS_PERFORMANCE_ANALYSIS.md)
-- Check [Performance Guide](docs/DESIGN_TOKENS_PERFORMANCE.md)
+- Check [Performance Guide](docs/design-tokens/DESIGN_TOKENS_PERFORMANCE.md)
 - Run performance tests: `php artisan test --filter=DesignTokensPerformanceTest`
 - Contact performance team
 

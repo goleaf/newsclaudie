@@ -119,28 +119,28 @@ After installation, visit `/admin/dashboard` to access the admin panel.
 Comprehensive documentation is available in the `docs/` directory:
 
 ### Quick Start Guides
-- **[Admin Documentation Index](docs/ADMIN_DOCUMENTATION_INDEX.md)** - Complete documentation overview
-- **[Admin Config Quick Reference](docs/ADMIN_CONFIG_QUICK_REFERENCE.md)** - Quick configuration lookup
-- **[Volt Component Guide](docs/VOLT_COMPONENT_GUIDE.md)** - Building Livewire Volt components
-- **[Livewire Traits Guide](docs/LIVEWIRE_TRAITS_GUIDE.md)** - Using shared traits
-- **[Post Query Scopes Onboarding](docs/POST_QUERY_SCOPES_ONBOARDING.md)** - 10-minute guide to query scopes
+- **[Admin Documentation Index](docs/admin/ADMIN_DOCUMENTATION_INDEX.md)** - Complete documentation overview
+- **[Admin Config Quick Reference](docs/admin/ADMIN_CONFIG_QUICK_REFERENCE.md)** - Quick configuration lookup
+- **[Volt Component Guide](docs/volt/VOLT_COMPONENT_GUIDE.md)** - Building Livewire Volt components
+- **[Livewire Traits Guide](docs/livewire/LIVEWIRE_TRAITS_GUIDE.md)** - Using shared traits
+- **[Post Query Scopes Onboarding](docs/query-scopes/POST_QUERY_SCOPES_ONBOARDING.md)** - 10-minute guide to query scopes
 
 ### Feature Documentation
-- **[Admin Configuration](docs/ADMIN_CONFIGURATION.md)** - Complete configuration reference
-- **[Optimistic UI](docs/OPTIMISTIC_UI.md)** - Optimistic UI implementation guide
-- **[Admin Accessibility](docs/ADMIN_ACCESSIBILITY.md)** - Accessibility features and guidelines
-- **[Accessibility Testing Guide](docs/ACCESSIBILITY_TESTING_GUIDE.md)** - Testing accessibility features
-- **[News Controller Usage](docs/NEWS_CONTROLLER_USAGE.md)** - News page filtering and sorting guide
-- **[News Controller Refactoring](docs/NEWS_CONTROLLER_REFACTORING.md)** - Refactoring notes and service layer
-- **[Post Query Scopes](docs/POST_QUERY_SCOPES.md)** - Reusable query scopes for filtering and sorting
-- **[Post Query Scopes Quick Reference](docs/POST_QUERY_SCOPES_QUICK_REFERENCE.md)** - Quick lookup guide for query scopes
+- **[Admin Configuration](docs/admin/ADMIN_CONFIGURATION.md)** - Complete configuration reference
+- **[Optimistic UI](docs/optimistic-ui/OPTIMISTIC_UI.md)** - Optimistic UI implementation guide
+- **[Admin Accessibility](docs/admin/ADMIN_ACCESSIBILITY.md)** - Accessibility features and guidelines
+- **[Accessibility Testing Guide](docs/accessibility/ACCESSIBILITY_TESTING_GUIDE.md)** - Testing accessibility features
+- **[News Controller Usage](docs/news/NEWS_CONTROLLER_USAGE.md)** - News page filtering and sorting guide
+- **[News Controller Refactoring](docs/news/NEWS_CONTROLLER_REFACTORING.md)** - Refactoring notes and service layer
+- **[Post Query Scopes](docs/query-scopes/POST_QUERY_SCOPES.md)** - Reusable query scopes for filtering and sorting
+- **[Post Query Scopes Quick Reference](docs/query-scopes/POST_QUERY_SCOPES_QUICK_REFERENCE.md)** - Quick lookup guide for query scopes
 
 ### API Documentation
 - **[News API](docs/api/NEWS_API.md)** - News endpoint API reference
 
 ### Architecture
-- **[Interface Architecture](docs/INTERFACE_ARCHITECTURE.md)** - System architecture overview
-- **[Interface Migration Guide](docs/interface-migration-guide.md)** - Migration from traditional controllers
+- **[Interface Architecture](docs/interface/INTERFACE_ARCHITECTURE.md)** - System architecture overview
+- **[Interface Migration Guide](docs/interface/interface-migration-guide.md)** - Migration from traditional controllers
 
 ## 🧪 Testing
 
@@ -176,7 +176,7 @@ php artisan test --testsuite=Browser
 
 - **[Property Testing Guide](tests/PROPERTY_TESTING.md)** - Property-based testing approach and examples
 - **[Property Tests Index](tests/Unit/PROPERTY_TESTS_INDEX.md)** - Complete index of all property-based tests
-- **[Test Coverage](docs/TEST_COVERAGE.md)** - Complete test coverage inventory
+- **[Test Coverage](docs/testing/TEST_COVERAGE.md)** - Complete test coverage inventory
 
 #### Admin CRUD Property Tests
 - **[Post Persistence Testing](tests/Unit/POST_PERSISTENCE_PROPERTY_TESTING.md)** - Property tests for post data persistence
@@ -272,7 +272,7 @@ Configure the admin interface via `config/interface.php`:
 'loading_indicator_delay_ms' => 500,  // Loading spinner delay
 ```
 
-See [Admin Configuration Guide](docs/ADMIN_CONFIGURATION.md) for complete configuration options.
+See [Admin Configuration Guide](docs/admin/ADMIN_CONFIGURATION.md) for complete configuration options.
 
 ### Environment Variables
 
@@ -388,7 +388,7 @@ If you discover a security vulnerability, please send an email to the maintainer
 
 For questions, issues, or contributions:
 - Open an issue on [GitHub](https://github.com/goleaf/newsclaudie/issues)
-- Check the [documentation](docs/ADMIN_DOCUMENTATION_INDEX.md)
+- Check the [documentation](docs/admin/ADMIN_DOCUMENTATION_INDEX.md)
 - Review existing issues and discussions
 
 ---

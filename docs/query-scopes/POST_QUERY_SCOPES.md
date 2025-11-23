@@ -357,7 +357,7 @@ These scopes are separate from global scopes because:
 
 - **Requirements**: `.kiro/specs/news-page/requirements.md`
 - **Implementation Tasks**: `.kiro/specs/news-page/tasks.md`
-- **Controller Documentation**: `docs/NEWS_CONTROLLER_USAGE.md`
+- **Controller Documentation**: `docs/news/NEWS_CONTROLLER_USAGE.md`
 - **API Documentation**: `docs/api/NEWS_API.md`
 - **Testing Guide**: `tests/PROPERTY_TESTING.md`
 - **Model Documentation**: See `app/Models/Post.php` DocBlocks

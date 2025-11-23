@@ -32,7 +32,7 @@
   - Useful when global scopes are disabled
 
 #### Documentation
-- **`docs/POST_QUERY_SCOPES.md`** - Comprehensive documentation
+- **`docs/query-scopes/POST_QUERY_SCOPES.md`** - Comprehensive documentation
   - Overview and design decisions
   - Complete API reference for all scopes
   - Usage examples (basic, combined, with pagination)
@@ -40,7 +40,7 @@
   - Testing guide and coverage information
   - Future enhancement suggestions
 
-- **`docs/POST_QUERY_SCOPES_QUICK_REFERENCE.md`** - Quick lookup guide
+- **`docs/query-scopes/POST_QUERY_SCOPES_QUICK_REFERENCE.md`** - Quick lookup guide
   - Scopes at a glance table
   - Quick examples for common patterns
   - Performance tips
@@ -146,7 +146,7 @@ None.
 
 ### Future Enhancements
 
-Potential improvements documented in `docs/POST_QUERY_SCOPES.md`:
+Potential improvements documented in `docs/query-scopes/POST_QUERY_SCOPES.md`:
 
 1. Full-text search scope for titles and content
 2. Tag filtering scope
@@ -163,8 +163,8 @@ Potential improvements documented in `docs/POST_QUERY_SCOPES.md`:
 - `README.md` - Added documentation links
 
 #### Created
-- `docs/POST_QUERY_SCOPES.md` - Full documentation
-- `docs/POST_QUERY_SCOPES_QUICK_REFERENCE.md` - Quick reference guide
+- `docs/query-scopes/POST_QUERY_SCOPES.md` - Full documentation
+- `docs/query-scopes/POST_QUERY_SCOPES_QUICK_REFERENCE.md` - Quick reference guide
 - `CHANGELOG_QUERY_SCOPES.md` - This changelog
 
 #### Related (Not Modified)

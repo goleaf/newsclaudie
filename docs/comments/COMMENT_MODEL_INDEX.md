@@ -10,12 +10,12 @@
 
 ### For Developers
 - 🚀 **[Quick Reference](COMMENT_MODEL_QUICK_REFERENCE.md)** - Start here for quick lookups
-- 📖 **[Usage Guide](docs/COMMENT_MODEL_USAGE_GUIDE.md)** - Practical examples and patterns
-- 🔧 **[API Reference](docs/COMMENT_MODEL_API.md)** - Complete method documentation
+- 📖 **[Usage Guide](docs/comments/COMMENT_MODEL_USAGE_GUIDE.md)** - Practical examples and patterns
+- 🔧 **[API Reference](docs/comments/COMMENT_MODEL_API.md)** - Complete method documentation
 - ⚡ **[Performance Guide](COMMENT_MODEL_PERFORMANCE_GUIDE.md)** - Optimization strategies
 
 ### For Architects
-- 🏗️ **[Architecture](docs/COMMENT_MODEL_ARCHITECTURE.md)** - Database design and patterns
+- 🏗️ **[Architecture](docs/comments/COMMENT_MODEL_ARCHITECTURE.md)** - Database design and patterns
 - 📊 **[Schema Diagram](COMMENT_MODEL_SCHEMA_DIAGRAM.md)** - Visual database schema
 - 📈 **[Analysis](COMMENT_MODEL_ANALYSIS.md)** - Expert analysis and recommendations
 - 🎯 **[Performance Summary](COMMENT_MODEL_PERFORMANCE_SUMMARY.md)** - Performance improvements
@@ -54,11 +54,11 @@
 
 ### Getting Started
 1. [Quick Reference](COMMENT_MODEL_QUICK_REFERENCE.md) - 5 min read
-2. [Usage Guide](docs/COMMENT_MODEL_USAGE_GUIDE.md) - 15 min read
-3. [API Reference](docs/COMMENT_MODEL_API.md) - Reference material
+2. [Usage Guide](docs/comments/COMMENT_MODEL_USAGE_GUIDE.md) - 15 min read
+3. [API Reference](docs/comments/COMMENT_MODEL_API.md) - Reference material
 
 ### Understanding the System
-1. [Architecture](docs/COMMENT_MODEL_ARCHITECTURE.md) - Database design
+1. [Architecture](docs/comments/COMMENT_MODEL_ARCHITECTURE.md) - Database design
 2. [Schema Diagram](COMMENT_MODEL_SCHEMA_DIAGRAM.md) - Visual reference
 3. [Analysis](COMMENT_MODEL_ANALYSIS.md) - Expert insights
 
@@ -81,7 +81,7 @@ $comment = Comment::create([
     'user_agent' => $request->userAgent(),
 ]);
 ```
-📖 See: [Usage Guide - Creating Comments](docs/COMMENT_MODEL_USAGE_GUIDE.md#creating-a-comment)
+📖 See: [Usage Guide - Creating Comments](docs/comments/COMMENT_MODEL_USAGE_GUIDE.md#creating-a-comment)
 
 ### Spam Detection
 ```php
@@ -89,19 +89,19 @@ if ($comment->isPotentialSpam()) {
     $comment->reject();
 }
 ```
-📖 See: [API Reference - Spam Detection](docs/COMMENT_MODEL_API.md#spam-detection)
+📖 See: [API Reference - Spam Detection](docs/comments/COMMENT_MODEL_API.md#spam-detection)
 
 ### Approving with Audit Trail
 ```php
 $comment->approve(auth()->user());
 ```
-📖 See: [Usage Guide - Moderation](docs/COMMENT_MODEL_USAGE_GUIDE.md#single-comment-approval)
+📖 See: [Usage Guide - Moderation](docs/comments/COMMENT_MODEL_USAGE_GUIDE.md#single-comment-approval)
 
 ### Query Scopes
 ```php
 Comment::forPost($post)->approved()->latest()->get();
 ```
-📖 See: [API Reference - Query Scopes](docs/COMMENT_MODEL_API.md#query-scopes)
+📖 See: [API Reference - Query Scopes](docs/comments/COMMENT_MODEL_API.md#query-scopes)
 
 ---
 
@@ -159,7 +159,7 @@ composer test:types
 | User History | 23x faster |
 | IP Lookup | 22x faster |
 
-📖 See: [Architecture - Performance](docs/COMMENT_MODEL_ARCHITECTURE.md#performance-benchmarks)
+📖 See: [Architecture - Performance](docs/comments/COMMENT_MODEL_ARCHITECTURE.md#performance-benchmarks)
 
 ---
 
@@ -211,7 +211,7 @@ php artisan test --filter=Comment
 - ❌ Don't forget to eager load relationships
 - ❌ Don't use raw SQL queries
 
-📖 See: [Usage Guide - Best Practices](docs/COMMENT_MODEL_USAGE_GUIDE.md#best-practices)
+📖 See: [Usage Guide - Best Practices](docs/comments/COMMENT_MODEL_USAGE_GUIDE.md#best-practices)
 
 ---
 
@@ -221,15 +221,15 @@ php artisan test --filter=Comment
 
 **Issue**: Comments not appearing  
 **Solution**: Check if using `approved()` scope  
-📖 See: [Usage Guide - Troubleshooting](docs/COMMENT_MODEL_USAGE_GUIDE.md#troubleshooting)
+📖 See: [Usage Guide - Troubleshooting](docs/comments/COMMENT_MODEL_USAGE_GUIDE.md#troubleshooting)
 
 **Issue**: N+1 query problem  
 **Solution**: Use eager loading with `with()`  
-📖 See: [Architecture - N+1 Prevention](docs/COMMENT_MODEL_ARCHITECTURE.md#avoiding-n1-queries)
+📖 See: [Architecture - N+1 Prevention](docs/comments/COMMENT_MODEL_ARCHITECTURE.md#avoiding-n1-queries)
 
 **Issue**: Soft deleted comments appearing  
 **Solution**: Soft deletes are automatic, check query scopes  
-📖 See: [API Reference - Soft Deletes](docs/COMMENT_MODEL_API.md#soft-deletes)
+📖 See: [API Reference - Soft Deletes](docs/comments/COMMENT_MODEL_API.md#soft-deletes)
 
 ---
 
@@ -237,9 +237,9 @@ php artisan test --filter=Comment
 
 ### Getting Help
 1. Check the [Quick Reference](COMMENT_MODEL_QUICK_REFERENCE.md)
-2. Search the [Usage Guide](docs/COMMENT_MODEL_USAGE_GUIDE.md)
-3. Review the [API Reference](docs/COMMENT_MODEL_API.md)
-4. Check [Troubleshooting](docs/COMMENT_MODEL_USAGE_GUIDE.md#troubleshooting)
+2. Search the [Usage Guide](docs/comments/COMMENT_MODEL_USAGE_GUIDE.md)
+3. Review the [API Reference](docs/comments/COMMENT_MODEL_API.md)
+4. Check [Troubleshooting](docs/comments/COMMENT_MODEL_USAGE_GUIDE.md#troubleshooting)
 
 ### Contributing
 - Report issues with `comment-model` label
@@ -274,16 +274,16 @@ php artisan test --filter=Comment
 
 ### Beginner (30 minutes)
 1. Read [Quick Reference](COMMENT_MODEL_QUICK_REFERENCE.md) (5 min)
-2. Review [Usage Guide - Common Workflows](docs/COMMENT_MODEL_USAGE_GUIDE.md#common-workflows) (15 min)
+2. Review [Usage Guide - Common Workflows](docs/comments/COMMENT_MODEL_USAGE_GUIDE.md#common-workflows) (15 min)
 3. Try examples in your local environment (10 min)
 
 ### Intermediate (1 hour)
-1. Study [API Reference](docs/COMMENT_MODEL_API.md) (30 min)
+1. Study [API Reference](docs/comments/COMMENT_MODEL_API.md) (30 min)
 2. Review [Schema Diagram](COMMENT_MODEL_SCHEMA_DIAGRAM.md) (15 min)
 3. Explore test files (15 min)
 
 ### Advanced (2 hours)
-1. Deep dive into [Architecture](docs/COMMENT_MODEL_ARCHITECTURE.md) (45 min)
+1. Deep dive into [Architecture](docs/comments/COMMENT_MODEL_ARCHITECTURE.md) (45 min)
 2. Study [Analysis](COMMENT_MODEL_ANALYSIS.md) (45 min)
 3. Review [Code Review Summary](COMMENT_MODEL_CODE_REVIEW_SUMMARY.md) (30 min)
 

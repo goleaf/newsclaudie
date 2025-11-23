@@ -76,7 +76,7 @@
       - Filter options consistency across multiple calls (idempotence)
       - Empty database edge case
     - **Documentation**: `tests/Unit/NEWS_FILTER_OPTIONS_TESTING.md`
-    - **Test Coverage**: Updated in `docs/TEST_COVERAGE.md`
+    - **Test Coverage**: Updated in `docs/testing/TEST_COVERAGE.md`
   
   - [x] 3.4 Implement pagination
     - Paginate results with 15 items per page
@@ -135,7 +135,7 @@
       - Edge case: Posts without categories
     - **Documentation**: `tests/Unit/NEWS_VIEW_RENDERING_TESTING.md`
     - **Quick Reference**: `tests/Unit/NEWS_VIEW_RENDERING_QUICK_REFERENCE.md`
-    - **Test Coverage**: Updated in `docs/TEST_COVERAGE.md`
+    - **Test Coverage**: Updated in `docs/testing/TEST_COVERAGE.md`
   
   - [x] 4.5 Create empty state view
     - Display "0 results found" message when no results
@@ -172,7 +172,7 @@
       - Pagination state during clear
       - Draft/future post exclusion
     - **Documentation**: `tests/Unit/NEWS_CLEAR_FILTERS_TESTING.md`
-    - **Test Coverage**: Updated in `docs/TEST_COVERAGE.md`
+    - **Test Coverage**: Updated in `docs/testing/TEST_COVERAGE.md`
 
 - [x] 6. Add responsive design and styling
   - [x] 6.1 Implement mobile layout (< 768px)
@@ -224,7 +224,7 @@
       - Multiple renders produce consistent labels (idempotence)
     - **Documentation**: `tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_TESTING.md`
     - **Quick Reference**: `tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_QUICK_REFERENCE.md`
-    - **Test Coverage**: Updated in `docs/TEST_COVERAGE.md`
+    - **Test Coverage**: Updated in `docs/testing/TEST_COVERAGE.md`
 
 - [x] 8. Add database indexes for performance
   - [x] 8.1 Create migration for indexes

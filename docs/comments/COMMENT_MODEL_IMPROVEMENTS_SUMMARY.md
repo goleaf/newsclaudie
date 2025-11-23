@@ -214,7 +214,7 @@ All new columns that are frequently queried have appropriate indexes:
 ## 📚 Documentation Updates
 
 ### Created
-1. **`docs/COMMENT_MODEL_ARCHITECTURE.md`** - Comprehensive architecture documentation
+1. **`docs/comments/COMMENT_MODEL_ARCHITECTURE.md`** - Comprehensive architecture documentation
    - Complete schema reference
    - Index strategy and performance benchmarks
    - Security considerations
@@ -333,7 +333,7 @@ php artisan migrate
 
 ## 📞 Support & Questions
 
-- **Architecture Questions**: See `docs/COMMENT_MODEL_ARCHITECTURE.md`
+- **Architecture Questions**: See `docs/comments/COMMENT_MODEL_ARCHITECTURE.md`
 - **Quick Reference**: See `COMMENT_MODEL_QUICK_REFERENCE.md`
 - **Testing**: See `tests/Unit/Comment*PropertyTest.php`
 - **Issues**: Create GitHub issue with `comment-model` label

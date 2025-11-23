@@ -575,7 +575,7 @@ test('interactive surface responds to hover', function () {
 - **Design System Spec:** `.kiro/specs/design-system-upgrade/requirements.md`
 - **Design Tokens:** `config/design-tokens.php`
 - **Design Tokens Helper:** `app/Support/DesignTokens.php`
-- **Design Tokens Docs:** `docs/DESIGN_TOKENS.md`
+- **Design Tokens Docs:** `docs/design-tokens/DESIGN_TOKENS.md`
 - **Tailwind Config:** `tailwind.config.js`
 
 ---

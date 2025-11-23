@@ -102,7 +102,7 @@ php artisan test --filter=test_filter_by_categories
 
 ## See Also
 
-- Full documentation: `docs/POST_QUERY_SCOPES.md`
+- Full documentation: `docs/query-scopes/POST_QUERY_SCOPES.md`
 - Unit tests: `tests/Unit/PostQueryScopesTest.php`
 - Controller usage: `app/Http/Controllers/NewsController.php`
 - Requirements: `.kiro/specs/news-page/requirements.md`

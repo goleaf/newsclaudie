@@ -209,8 +209,8 @@ php artisan test --filter=Comment
 
 ### Updated Documentation
 - **`COMMENT_MODEL_INDEX.md`** - Added performance section
-- **`docs/COMMENT_MODEL_API.md`** - Added new methods
-- **`docs/COMMENT_MODEL_USAGE_GUIDE.md`** - Added performance examples
+- **`docs/comments/COMMENT_MODEL_API.md`** - Added new methods
+- **`docs/comments/COMMENT_MODEL_USAGE_GUIDE.md`** - Added performance examples
 
 ---
 
@@ -349,7 +349,7 @@ Comment::clearStatsCaches(); // Private method
 
 **Performance Issues**: Create GitHub issue with `performance` label  
 **Questions**: See `COMMENT_MODEL_PERFORMANCE_GUIDE.md`  
-**API Reference**: See `docs/COMMENT_MODEL_API.md`
+**API Reference**: See `docs/comments/COMMENT_MODEL_API.md`
 
 ---
 

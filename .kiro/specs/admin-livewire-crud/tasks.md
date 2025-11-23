@@ -171,7 +171,7 @@
     - Edge cases: empty database, no matches
   - **Documentation**: `tests/Unit/COMMENT_STATUS_FILTER_TESTING.md`
   - **Quick Reference**: `tests/Unit/COMMENT_STATUS_FILTER_QUICK_REFERENCE.md`
-  - **Test Coverage**: Updated in `docs/TEST_COVERAGE.md`
+  - **Test Coverage**: Updated in `docs/testing/TEST_COVERAGE.md`
 
 - [x] 5.4 Write property test for inline edit persistence ✅ **DOCUMENTED**
   - **Property 1: Data persistence round-trip** (inline edit aspect)
@@ -206,9 +206,9 @@
   - Includes email uniqueness validation and search
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
   - **Documentation**: 
-    - `docs/ADMIN_USERS_MANAGEMENT.md` - Complete guide
+    - `docs/admin/ADMIN_USERS_MANAGEMENT.md` - Complete guide
     - `docs/api/ADMIN_USERS_API.md` - API reference
-    - `docs/ADMIN_USERS_QUICK_REFERENCE.md` - Quick reference
+    - `docs/admin/ADMIN_USERS_QUICK_REFERENCE.md` - Quick reference
   - **Component**: `resources/views/livewire/admin/users/index.blade.php`
   - **Features**:
     - User listing with search and sorting
@@ -346,15 +346,15 @@
   - Selection state managed with checkboxes and select-all
   - _Requirements: 8.1, 8.3, 8.4, 8.5_
 
-- [ ] 10.2 Write property test for bulk selection display
+- [x] 10.2 Write property test for bulk selection display
   - **Property 17: Bulk selection accuracy**
   - **Validates: Requirements 8.1, 8.4**
 
-- [ ] 10.3 Write property test for bulk operation success
+- [x] 10.3 Write property test for bulk operation success
   - **Property 19: Bulk operation completeness**
   - **Validates: Requirements 8.3, 8.4**
 
-- [ ] 10.4 Write property test for bulk partial failure
+- [-] 10.4 Write property test for bulk partial failure
   - **Property 20: Bulk operation partial failure reporting**
   - **Validates: Requirements 8.5**
 

@@ -405,7 +405,7 @@ Comment::with(['user', 'post'])->recent()->get();
 
 ## 📚 Documentation Index
 
-1. **Architecture**: `docs/COMMENT_MODEL_ARCHITECTURE.md`
+1. **Architecture**: `docs/comments/COMMENT_MODEL_ARCHITECTURE.md`
 2. **Quick Reference**: `COMMENT_MODEL_QUICK_REFERENCE.md`
 3. **Improvements Summary**: `COMMENT_MODEL_IMPROVEMENTS_SUMMARY.md`
 4. **This Analysis**: `COMMENT_MODEL_ANALYSIS.md`

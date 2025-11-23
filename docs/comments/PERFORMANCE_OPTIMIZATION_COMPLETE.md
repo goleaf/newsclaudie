@@ -325,8 +325,8 @@ Caches are automatically cleared on:
 ### Updated Documentation
 
 - **`COMMENT_MODEL_INDEX.md`** - Added performance section
-- **`docs/COMMENT_MODEL_API.md`** - Added new methods
-- **`docs/COMMENT_MODEL_USAGE_GUIDE.md`** - Added performance examples
+- **`docs/comments/COMMENT_MODEL_API.md`** - Added new methods
+- **`docs/comments/COMMENT_MODEL_USAGE_GUIDE.md`** - Added performance examples
 
 ---
 
@@ -423,8 +423,8 @@ Caches are automatically cleared on:
 ### Documentation
 
 - **Performance Guide**: `COMMENT_MODEL_PERFORMANCE_GUIDE.md`
-- **API Reference**: `docs/COMMENT_MODEL_API.md`
-- **Usage Guide**: `docs/COMMENT_MODEL_USAGE_GUIDE.md`
+- **API Reference**: `docs/comments/COMMENT_MODEL_API.md`
+- **Usage Guide**: `docs/comments/COMMENT_MODEL_USAGE_GUIDE.md`
 - **Quick Reference**: `COMMENT_MODEL_QUICK_REFERENCE.md`
 
 ### Monitoring

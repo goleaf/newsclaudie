@@ -65,7 +65,7 @@ The design token system has been successfully implemented, providing a comprehen
 
 ### 3. Comprehensive Documentation ✅
 
-**File**: `docs/DESIGN_TOKENS.md` (1,200+ lines)
+**File**: `docs/design-tokens/DESIGN_TOKENS.md` (1,200+ lines)
 
 **Sections**:
 - ✅ Overview and purpose
@@ -89,7 +89,7 @@ The design token system has been successfully implemented, providing a comprehen
 
 ### 4. Usage Guide ✅
 
-**File**: `docs/DESIGN_TOKENS_USAGE_GUIDE.md` (800+ lines)
+**File**: `docs/design-tokens/DESIGN_TOKENS_USAGE_GUIDE.md` (800+ lines)
 
 **Sections**:
 - ✅ Quick start guide
@@ -432,7 +432,7 @@ php artisan config:clear
 
 For detailed performance analysis, see:
 - [Performance Analysis](DESIGN_TOKENS_PERFORMANCE_ANALYSIS.md)
-- [Performance Guide](docs/DESIGN_TOKENS_PERFORMANCE.md)
+- [Performance Guide](docs/design-tokens/DESIGN_TOKENS_PERFORMANCE.md)
 - [Performance Tests](tests/Unit/DesignTokensPerformanceTest.php)
 
 ## Testing Strategy
@@ -547,8 +547,8 @@ php artisan cache:clear
 ## Related Documentation
 
 ### Design System
-- [Design Tokens Reference](docs/DESIGN_TOKENS.md)
-- [Design Tokens Usage Guide](docs/DESIGN_TOKENS_USAGE_GUIDE.md)
+- [Design Tokens Reference](docs/design-tokens/DESIGN_TOKENS.md)
+- [Design Tokens Usage Guide](docs/design-tokens/DESIGN_TOKENS_USAGE_GUIDE.md)
 - [Design System Architecture](docs/DESIGN_SYSTEM_ARCHITECTURE.md) (planned)
 - [Component Library](docs/COMPONENT_LIBRARY.md) (planned)
 
@@ -595,8 +595,8 @@ Or use Tailwind classes:
 
 ### Documentation
 
-- [Design Tokens Reference](docs/DESIGN_TOKENS.md)
-- [Design Tokens Usage Guide](docs/DESIGN_TOKENS_USAGE_GUIDE.md)
+- [Design Tokens Reference](docs/design-tokens/DESIGN_TOKENS.md)
+- [Design Tokens Usage Guide](docs/design-tokens/DESIGN_TOKENS_USAGE_GUIDE.md)
 - [Component Library](docs/COMPONENT_LIBRARY.md)
 ```
 
@@ -604,8 +604,8 @@ Or use Tailwind classes:
 
 1. ✅ `config/design-tokens.php` - Configuration file (131 lines)
 2. ✅ `app/Support/DesignTokens.php` - Helper class (400+ lines)
-3. ✅ `docs/DESIGN_TOKENS.md` - Reference documentation (1,200+ lines)
-4. ✅ `docs/DESIGN_TOKENS_USAGE_GUIDE.md` - Usage guide (800+ lines)
+3. ✅ `docs/design-tokens/DESIGN_TOKENS.md` - Reference documentation (1,200+ lines)
+4. ✅ `docs/design-tokens/DESIGN_TOKENS_USAGE_GUIDE.md` - Usage guide (800+ lines)
 5. ✅ `DESIGN_TOKENS_IMPLEMENTATION_COMPLETE.md` - This file (600+ lines)
 
 ## Files Updated Summary
@@ -653,8 +653,8 @@ This establishes a strong foundation for the design system upgrade and provides 
 ## Questions?
 
 For questions about the design token system:
-- Review the [Design Tokens Reference](docs/DESIGN_TOKENS.md)
-- Check the [Usage Guide](docs/DESIGN_TOKENS_USAGE_GUIDE.md)
+- Review the [Design Tokens Reference](docs/design-tokens/DESIGN_TOKENS.md)
+- Check the [Usage Guide](docs/design-tokens/DESIGN_TOKENS_USAGE_GUIDE.md)
 - See the [Helper Class](app/Support/DesignTokens.php)
 - Review the [Configuration](config/design-tokens.php)
 - Contact project maintainers

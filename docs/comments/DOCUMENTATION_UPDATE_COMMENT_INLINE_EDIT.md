@@ -24,7 +24,7 @@ Comprehensive property-based tests have been created for the Comment Inline Edit
 - `tests/Unit/COMMENT_PROPERTY_TESTS_INDEX.md` (index of all comment tests, 400+ lines)
 
 ### Updated Files
-- `docs/TEST_COVERAGE.md` - Updated property test table
+- `docs/testing/TEST_COVERAGE.md` - Updated property test table
 - `.kiro/specs/admin-livewire-crud/tasks.md` - Marked task 5.4 as documented
 
 ## Test Coverage
@@ -196,7 +196,7 @@ Comprehensive property-based testing documentation:
 
 - **General**
   - [Property Testing Guide](tests/PROPERTY_TESTING.md)
-  - [Test Coverage](docs/TEST_COVERAGE.md)
+  - [Test Coverage](docs/testing/TEST_COVERAGE.md)
 ```
 
 ## Benefits
@@ -288,5 +288,5 @@ This establishes a strong foundation for testing comment management functionalit
 For questions about this documentation update:
 - Review the created documentation files
 - Check the [Property Testing Guide](tests/PROPERTY_TESTING.md)
-- See the [Test Coverage](docs/TEST_COVERAGE.md)
+- See the [Test Coverage](docs/testing/TEST_COVERAGE.md)
 - Contact project maintainers

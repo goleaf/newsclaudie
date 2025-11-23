@@ -287,9 +287,9 @@ php artisan migrate
 ## 📞 Support
 
 ### Documentation
-- **API Reference**: `docs/COMMENT_MODEL_API.md`
-- **Usage Guide**: `docs/COMMENT_MODEL_USAGE_GUIDE.md`
-- **Architecture**: `docs/COMMENT_MODEL_ARCHITECTURE.md`
+- **API Reference**: `docs/comments/COMMENT_MODEL_API.md`
+- **Usage Guide**: `docs/comments/COMMENT_MODEL_USAGE_GUIDE.md`
+- **Architecture**: `docs/comments/COMMENT_MODEL_ARCHITECTURE.md`
 - **Quick Reference**: `COMMENT_MODEL_QUICK_REFERENCE.md`
 
 ### Testing

@@ -192,8 +192,8 @@ $posts = Post::filterByCategories([1])->paginate(15);
 
 ## Where to Learn More
 
-1. **Quick Reference**: `docs/POST_QUERY_SCOPES_QUICK_REFERENCE.md`
-2. **Full Documentation**: `docs/POST_QUERY_SCOPES.md`
+1. **Quick Reference**: `docs/query-scopes/POST_QUERY_SCOPES_QUICK_REFERENCE.md`
+2. **Full Documentation**: `docs/query-scopes/POST_QUERY_SCOPES.md`
 3. **Test Examples**: `tests/Unit/PostQueryScopesTest.php`
 4. **Code Implementation**: `app/Models/Post.php`
 5. **Real Usage**: `app/Http/Controllers/NewsController.php`
@@ -240,7 +240,7 @@ $posts = Post::filterByCategories([1, 2])
 
 1. Check the test file for examples: `tests/Unit/PostQueryScopesTest.php`
 2. Review the NewsController: `app/Http/Controllers/NewsController.php`
-3. Read the full docs: `docs/POST_QUERY_SCOPES.md`
+3. Read the full docs: `docs/query-scopes/POST_QUERY_SCOPES.md`
 4. Ask a team member!
 
 ---

@@ -28,8 +28,8 @@ use InvalidArgumentException;
  *
  * @package App\Support
  * @see config/design-tokens.php
- * @see docs/DESIGN_TOKENS.md
- * @see docs/DESIGN_TOKENS_SECURITY.md
+ * @see docs/design-tokens/DESIGN_TOKENS.md
+ * @see docs/design-tokens/DESIGN_TOKENS_SECURITY.md
  *
  * @example
  * ```php

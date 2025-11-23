@@ -139,7 +139,7 @@ php artisan test --group=performance
 - **Property Testing Guide**: [../PROPERTY_TESTING.md](../PROPERTY_TESTING.md)
 - **Component Template**: `resources/views/components/news/news-card.blade.php`
 - **Requirements**: `.kiro/specs/news-page/requirements.md`
-- **Test Coverage**: `docs/TEST_COVERAGE.md`
+- **Test Coverage**: `docs/testing/TEST_COVERAGE.md`
 
 ## Expected Output
 

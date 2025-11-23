@@ -246,7 +246,7 @@ public function saveInlineEdit($commentId, $content, $status)
 
 ### General Documentation
 - [Property Testing Guide](../PROPERTY_TESTING.md)
-- [Test Coverage](../../docs/TEST_COVERAGE.md)
+- [Test Coverage](../../docs/testing/TEST_COVERAGE.md)
 - [Admin CRUD Requirements](../../.kiro/specs/admin-livewire-crud/requirements.md)
 - [Admin CRUD Design](../../.kiro/specs/admin-livewire-crud/design.md)
 - [Admin CRUD Tasks](../../.kiro/specs/admin-livewire-crud/tasks.md)

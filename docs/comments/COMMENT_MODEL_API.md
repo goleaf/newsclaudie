@@ -864,7 +864,7 @@ test('spam detection identifies excessive links', function () {
 ## Related Documentation
 
 - **Quick Reference**: `COMMENT_MODEL_QUICK_REFERENCE.md`
-- **Architecture**: `docs/COMMENT_MODEL_ARCHITECTURE.md`
+- **Architecture**: `docs/comments/COMMENT_MODEL_ARCHITECTURE.md`
 - **Improvements Summary**: `COMMENT_MODEL_IMPROVEMENTS_SUMMARY.md`
 - **Schema Diagram**: `COMMENT_MODEL_SCHEMA_DIAGRAM.md`
 - **Analysis**: `COMMENT_MODEL_ANALYSIS.md`

@@ -55,7 +55,7 @@ Comprehensive feedback component for success/error messages:
 
 ### 4. Documentation
 
-#### `docs/OPTIMISTIC_UI.md`
+#### `docs/optimistic-ui/OPTIMISTIC_UI.md`
 Comprehensive documentation covering:
 - Feature overview and capabilities
 - Implementation examples
@@ -164,8 +164,8 @@ window.optimisticUI.queueAction(async () => {
 - `resources/js/admin-optimistic-ui.ts`
 - `resources/views/components/admin/optimistic-action.blade.php`
 - `resources/views/components/admin/action-feedback.blade.php`
-- `docs/OPTIMISTIC_UI.md`
-- `docs/OPTIMISTIC_UI_IMPLEMENTATION_SUMMARY.md`
+- `docs/optimistic-ui/OPTIMISTIC_UI.md`
+- `docs/optimistic-ui/OPTIMISTIC_UI_IMPLEMENTATION_SUMMARY.md`
 
 ### Modified:
 - `resources/js/app.ts`

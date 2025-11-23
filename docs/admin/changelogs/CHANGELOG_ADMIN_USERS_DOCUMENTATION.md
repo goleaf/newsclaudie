@@ -27,7 +27,7 @@ Added comprehensive PHPDoc block to component class:
 
 ### 2. Complete User Guide
 
-**File:** `docs/ADMIN_USERS_MANAGEMENT.md` (NEW)
+**File:** `docs/admin/ADMIN_USERS_MANAGEMENT.md` (NEW)
 
 Created comprehensive 1,200+ line documentation covering:
 
@@ -90,7 +90,7 @@ Created detailed API documentation (800+ lines):
 
 ### 4. Quick Reference Guide
 
-**File:** `docs/ADMIN_USERS_QUICK_REFERENCE.md` (NEW)
+**File:** `docs/admin/ADMIN_USERS_QUICK_REFERENCE.md` (NEW)
 
 Created quick lookup guide (400+ lines):
 
@@ -118,7 +118,7 @@ Created quick lookup guide (400+ lines):
 
 ### 5. Documentation Index Updates
 
-**File:** `docs/ADMIN_DOCUMENTATION_INDEX.md`
+**File:** `docs/admin/ADMIN_DOCUMENTATION_INDEX.md`
 
 Updated main documentation index:
 - Added Users Management to component reference
@@ -316,14 +316,14 @@ Users can navigate documentation via:
 
 ### New Files (3)
 
-1. `docs/ADMIN_USERS_MANAGEMENT.md` - Complete user guide (1,200+ lines)
+1. `docs/admin/ADMIN_USERS_MANAGEMENT.md` - Complete user guide (1,200+ lines)
 2. `docs/api/ADMIN_USERS_API.md` - API reference (800+ lines)
-3. `docs/ADMIN_USERS_QUICK_REFERENCE.md` - Quick reference (400+ lines)
+3. `docs/admin/ADMIN_USERS_QUICK_REFERENCE.md` - Quick reference (400+ lines)
 
 ### Modified Files (3)
 
 1. `resources/views/livewire/admin/users/index.blade.php` - Added PHPDoc
-2. `docs/ADMIN_DOCUMENTATION_INDEX.md` - Updated index
+2. `docs/admin/ADMIN_DOCUMENTATION_INDEX.md` - Updated index
 3. `.kiro/specs/admin-livewire-crud/tasks.md` - Marked as documented
 
 ### Total Lines Added
@@ -363,11 +363,11 @@ Users can navigate documentation via:
 
 ## Related Documentation
 
-- [Admin Documentation Index](docs/ADMIN_DOCUMENTATION_INDEX.md)
-- [Volt Component Guide](docs/VOLT_COMPONENT_GUIDE.md)
-- [Livewire Traits Guide](docs/LIVEWIRE_TRAITS_GUIDE.md)
-- [Admin Configuration](docs/ADMIN_CONFIGURATION.md)
-- [Accessibility Guide](docs/ADMIN_ACCESSIBILITY.md)
+- [Admin Documentation Index](docs/admin/ADMIN_DOCUMENTATION_INDEX.md)
+- [Volt Component Guide](docs/volt/VOLT_COMPONENT_GUIDE.md)
+- [Livewire Traits Guide](docs/livewire/LIVEWIRE_TRAITS_GUIDE.md)
+- [Admin Configuration](docs/admin/ADMIN_CONFIGURATION.md)
+- [Accessibility Guide](docs/admin/ADMIN_ACCESSIBILITY.md)
 
 ## Version History
 

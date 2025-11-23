@@ -67,7 +67,7 @@ Detailed changelog documenting:
 ## What Was Updated
 
 ### 1. Test Coverage Documentation
-**File**: `docs/TEST_COVERAGE.md`
+**File**: `docs/testing/TEST_COVERAGE.md`
 
 Added entry for `NewsLocaleAwareNavigationPropertyTest`:
 - 4 property-based tests
@@ -335,7 +335,7 @@ Duration: 0.27s
 
 ### Updated (3 files)
 
-1. `docs/TEST_COVERAGE.md` (added locale navigation entry)
+1. `docs/testing/TEST_COVERAGE.md` (added locale navigation entry)
 2. `.kiro/specs/news-page/tasks.md` (marked task 7.4 as documented)
 3. `README.md` (added documentation links)
 
@@ -359,6 +359,6 @@ The News Locale-Aware Navigation feature now has comprehensive, professional-gra
 - [Full Testing Guide](tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_TESTING.md)
 - [Quick Reference](tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_QUICK_REFERENCE.md)
 - [Property Tests Index](tests/Unit/NEWS_PROPERTY_TESTS_INDEX.md)
-- [Test Coverage](docs/TEST_COVERAGE.md)
+- [Test Coverage](docs/testing/TEST_COVERAGE.md)
 - [Property Testing Guide](tests/PROPERTY_TESTING.md)
 - [News Requirements](.kiro/specs/news-page/requirements.md)

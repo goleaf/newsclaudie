@@ -132,8 +132,8 @@ All security vulnerabilities identified in the NewsController have been successf
 ### 9. Security Documentation ✅
 
 **Files Created:**
-- `docs/SECURITY_IMPLEMENTATION.md` - Comprehensive guide
-- `docs/SECURITY_CHECKLIST.md` - Deployment and maintenance checklist
+- `docs/news/security/SECURITY_IMPLEMENTATION.md` - Comprehensive guide
+- `docs/news/security/SECURITY_CHECKLIST.md` - Deployment and maintenance checklist
 - `SECURITY_AUDIT_SUMMARY.md` - This document
 
 **Security Impact:** MEDIUM

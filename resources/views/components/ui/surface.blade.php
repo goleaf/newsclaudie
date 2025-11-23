@@ -42,7 +42,7 @@
     - GPU-accelerated transforms for hover effects
 
     @see config/design-tokens.php
-    @see docs/DESIGN_TOKENS.md
+    @see docs/design-tokens/DESIGN_TOKENS.md
     @see .kiro/specs/design-system-upgrade/requirements.md (Requirement 2)
 
     @example Basic usage
