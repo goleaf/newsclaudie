@@ -38,5 +38,28 @@ final class RouteServiceProvider extends ServiceProvider
                     ], 429);
                 });
         });
+
+        // SECURITY: Rate limiter for comment creation (prevent spam and abuse)
+        RateLimiter::for('comments', function (Request $request) {
+            // Authenticated users: 10 comments per minute per user
+            // Anonymous/Guest: Should not reach here (auth required)
+            $key = $request->user()?->id ?? $request->ip();
+            
+            return [
+                // Primary limit: 10 comments per minute
+                Limit::perMinute(10)
+                    ->by($key)
+                    ->response(function () {
+                        return back()->with('error', __('comments.rate_limit_exceeded'));
+                    }),
+                
+                // Secondary limit: 50 comments per hour (prevent sustained abuse)
+                Limit::perHour(50)
+                    ->by($key)
+                    ->response(function () {
+                        return back()->with('error', __('comments.hourly_limit_exceeded'));
+                    }),
+            ];
+        });
     }
 }

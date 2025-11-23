@@ -19,12 +19,23 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Post::class);
+            
+            // Foreign keys with proper cascade rules
+            $table->foreignIdFor(User::class)
+                ->constrained()
+                ->cascadeOnDelete(); // Delete comments when user is deleted
+            
+            $table->foreignIdFor(Post::class)
+                ->constrained()
+                ->cascadeOnDelete(); // Delete comments when post is deleted
 
-            $table->string('content', 1024);
+            $table->text('content'); // Changed from string(1024) to text for flexibility
 
             $table->timestamps();
+            
+            // Add indexes for foreign keys (if not automatically created)
+            $table->index('user_id');
+            $table->index('post_id');
         });
     }
 

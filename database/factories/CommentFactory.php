@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Enums\CommentStatus;
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,29 +23,30 @@ final class CommentFactory extends Factory
      */
     public function definition()
     {
-        $userId = User::query()->inRandomOrder()->value('id');
-
-        if (! $userId) {
-            $userId = User::factory()->create()->id;
-        }
-
-        $postId = Post::query()->inRandomOrder()->value('id');
-
-        if (! $postId) {
-            $postId = Post::factory()->create()->id;
-        }
-
         return [
-            'user_id' => $userId,
-            'post_id' => $postId,
-            'content' => $this->faker->sentence(),
+            'user_id' => User::factory(),
+            'post_id' => function (array $attributes) {
+                // If user_id is set, use it for the post's author
+                $userId = $attributes['user_id'] ?? User::factory();
+                return Post::factory()->for(
+                    is_int($userId) ? User::find($userId) : $userId,
+                    'author'
+                );
+            },
+            'content' => $this->faker->paragraph(),
             'status' => CommentStatus::Pending,
+            'ip_address' => $this->faker->ipv4(),
+            'user_agent' => $this->faker->userAgent(),
         ];
     }
 
     public function approved(): static
     {
-        return $this->state(fn (): array => ['status' => CommentStatus::Approved]);
+        return $this->state(fn (): array => [
+            'status' => CommentStatus::Approved,
+            'approved_at' => $this->faker->dateTimeBetween('-1 month', 'now'),
+            'approved_by' => User::query()->where('is_admin', true)->inRandomOrder()->value('id'),
+        ]);
     }
 
     public function rejected(): static

@@ -28,9 +28,8 @@ final class CommentPolicy
             return Response::deny('Your email must be verified to comment.');
         }
 
-        if ($user->is_admin === true) {
-            return true;
-        }
+        // All authenticated users (including admins) can create comments
+        return true;
     }
 
     /**

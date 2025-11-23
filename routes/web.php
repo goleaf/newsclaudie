@@ -54,12 +54,16 @@ Volt::route('categories', 'categories.index')->name('categories.index');
 Route::resource('categories', App\Http\Controllers\CategoryController::class)->except(['index', 'show']);
 Volt::route('categories/{category}', 'categories.show')->name('categories.show');
 
-Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('posts.comments.store');
+// Comment routes with rate limiting for security
+Route::post('/posts/{post}/comments', [CommentController::class, 'store'])
+    ->middleware('throttle:comments')
+    ->name('posts.comments.store');
+
 Route::resource('comments', CommentController::class)->only([
     'edit',
     'update',
     'destroy',
-]);
+])->middleware('throttle:60,1'); // 60 requests per minute for edits/deletes
 
 Route::middleware(['auth', 'can:access-admin'])->group(function () {
     Volt::route('admin/dashboard', 'admin.dashboard')->name('admin.dashboard');

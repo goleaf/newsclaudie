@@ -17,11 +17,29 @@ final class CommentController extends Controller
 {
     public function store(StoreCommentRequest $request, Post $post): RedirectResponse
     {
+        // Create comment with security tracking
         $comment = $post->comments()->create([
             'user_id' => $request->user()->id,
             'content' => $request->validated()['content'],
             'status' => CommentStatus::Pending,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
         ]);
+
+        // Check for spam and auto-reject if detected
+        if ($comment->isPotentialSpam()) {
+            $comment->reject();
+            
+            // Log spam detection
+            \Log::warning('Spam comment detected', [
+                'comment_id' => $comment->id,
+                'user_id' => $comment->user_id,
+                'ip_address' => $comment->ip_address,
+                'content_preview' => \Str::limit($comment->content, 50),
+            ]);
+            
+            return back()->with('warning', __('comments.flagged_for_review'));
+        }
 
         $perPage = CommentPageSize::resolveFromRequest($request);
 

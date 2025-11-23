@@ -162,6 +162,10 @@ return [
 
     'attributes' => [],
 
+    // Security: Comment validation messages
+    'comment_too_many_links' => 'Your comment contains too many links. Please limit to 3 links maximum.',
+    'comment_excessive_caps' => 'Your comment contains excessive capital letters. Please use normal capitalization.',
+
     // Category validation messages
     'category' => [
         'name_required' => 'The category name is required.',
