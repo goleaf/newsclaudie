@@ -266,7 +266,7 @@ Monitor these metrics after deployment:
 - [Laravel Eager Loading](https://laravel.com/docs/eloquent-relationships#eager-loading)
 - [N+1 Query Problem](https://laravel.com/docs/eloquent-relationships#eager-loading)
 - [Selective Column Loading](https://laravel.com/docs/eloquent-relationships#constraining-eager-loads)
-- [Admin CRUD Specification](.kiro/specs/admin-livewire-crud/design.md)
+- [Admin CRUD Specification](../../../.kiro/specs/admin-livewire-crud/design.md)
 
 ## Contributors
 

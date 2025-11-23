@@ -354,7 +354,7 @@ The Design Tokens system is now **production-ready** with:
 ## Questions?
 
 For questions about performance optimizations:
-- Review [Performance Analysis](DESIGN_TOKENS_PERFORMANCE_ANALYSIS.md)
+- Review [Performance Analysis](../design-tokens/DESIGN_TOKENS_PERFORMANCE_ANALYSIS.md)
 - Check [Performance Guide](../design-tokens/DESIGN_TOKENS_PERFORMANCE.md)
 - Run performance tests: `php artisan test --filter=DesignTokensPerformanceTest`
 - Contact performance team

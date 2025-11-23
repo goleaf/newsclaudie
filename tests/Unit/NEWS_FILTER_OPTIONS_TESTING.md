@@ -267,7 +267,7 @@ public function index(NewsIndexRequest $request)
 ## Related Documentation
 
 - [Property Testing Guide](../PROPERTY_TESTING.md) - General property testing approach
-- [News Controller Testing](../Feature/NEWS_CONTROLLER_TESTING_GUIDE.md) - Integration tests
+- [News Controller Testing](../NEWS_CONTROLLER_TESTING_GUIDE.md) - Integration tests
 - [News Feature Requirements](../../.kiro/specs/news-page/requirements.md) - Feature requirements
 - [News Filter Service](../../app/Services/NewsFilterService.php) - Service implementation
 
@@ -359,5 +359,5 @@ When contributing to these tests:
 
 For questions about these tests, see:
 - [Property Testing Guide](../PROPERTY_TESTING.md)
-- [Test Coverage Documentation](../TEST_COVERAGE.md)
+- [Test Coverage Documentation](../../docs/testing/TEST_COVERAGE.md)
 - Project maintainers

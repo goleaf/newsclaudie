@@ -5,7 +5,7 @@ Quick reference guide for common admin users management tasks.
 ## Quick Links
 
 - [Full Documentation](ADMIN_USERS_MANAGEMENT.md)
-- [API Reference](api/ADMIN_USERS_API.md)
+- [API Reference](../api/ADMIN_USERS_API.md)
 - [Component Source](../resources/views/livewire/admin/users/index.blade.php)
 - [User Model](../app/Models/User.php)
 - [User Policy](../app/Policies/UserPolicy.php)
@@ -467,9 +467,9 @@ User::query()
 ## Support
 
 - [Full Documentation](ADMIN_USERS_MANAGEMENT.md)
-- [API Reference](api/ADMIN_USERS_API.md)
-- [Volt Component Guide](VOLT_COMPONENT_GUIDE.md)
-- [Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md)
+- [API Reference](../api/ADMIN_USERS_API.md)
+- [Volt Component Guide](../volt/VOLT_COMPONENT_GUIDE.md)
+- [Livewire Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md)
 
 ---
 

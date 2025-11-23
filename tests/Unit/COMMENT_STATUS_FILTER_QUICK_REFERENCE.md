@@ -213,5 +213,5 @@ $count = $faker->numberBetween(1, 5);
 
 - [Full Testing Guide](COMMENT_STATUS_FILTER_TESTING.md)
 - [Property Testing Guide](../PROPERTY_TESTING.md)
-- [Test Coverage](../../../../docs/testing/TEST_COVERAGE.md)
+- [Test Coverage](../../docs/testing/TEST_COVERAGE.md)
 - [Admin CRUD Requirements](../../.kiro/specs/admin-livewire-crud/requirements.md)

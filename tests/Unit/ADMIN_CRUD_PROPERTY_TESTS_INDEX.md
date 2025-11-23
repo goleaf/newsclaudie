@@ -279,7 +279,7 @@ Each property test file should have:
 ## Related Documentation
 
 - [Property Testing Guide](../PROPERTY_TESTING.md) - General approach
-- [Test Coverage](../../../../docs/testing/TEST_COVERAGE.md) - Overall coverage
+- [Test Coverage](../../docs/testing/TEST_COVERAGE.md) - Overall coverage
 - [Admin CRUD Requirements](../../.kiro/specs/admin-livewire-crud/requirements.md) - Feature requirements
 - [Admin CRUD Design](../../.kiro/specs/admin-livewire-crud/design.md) - Design decisions
 - [Admin CRUD Tasks](../../.kiro/specs/admin-livewire-crud/tasks.md) - Implementation tasks
@@ -304,5 +304,5 @@ When adding new property tests:
 For questions about property testing:
 - See [Property Testing Guide](../PROPERTY_TESTING.md)
 - Review individual test documentation
-- Check [Test Coverage](../../../../docs/testing/TEST_COVERAGE.md)
+- Check [Test Coverage](../../docs/testing/TEST_COVERAGE.md)
 - Contact project maintainers

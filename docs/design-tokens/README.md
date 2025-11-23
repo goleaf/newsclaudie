@@ -267,10 +267,10 @@ php artisan test --group=property,surface
 ## Related Documentation
 
 ### Project Documentation
-- [Project Structure](../../structure.md)
-- [Technology Stack](../../tech.md)
-- [Quality Playbook](../../quality.md)
-- [Operating Principles](../../operating-principles.md)
+- [Project Structure](../../.kiro/steering/structure.md)
+- [Technology Stack](../../.kiro/steering/tech.md)
+- [Quality Playbook](../../.kiro/steering/quality.md)
+- [Operating Principles](../../.kiro/steering/operating-principles.md)
 
 ### Design System
 - [Design System Spec](.kiro/specs/design-system-upgrade/requirements.md)

@@ -237,10 +237,10 @@ Comprehensive documentation added for the News View Rendering property-based tes
 
 ## References
 
-- [Property-Based Testing Guide](tests/PROPERTY_TESTING.md)
+- [Property-Based Testing Guide](../../../tests/PROPERTY_TESTING.md)
 - [News Feature Requirements](.kiro/specs/news-page/requirements.md)
 - [Test Coverage Inventory](../../testing/TEST_COVERAGE.md)
-- [News Filter Options Testing](tests/Unit/NEWS_FILTER_OPTIONS_TESTING.md)
+- [News Filter Options Testing](../../../tests/Unit/NEWS_FILTER_OPTIONS_TESTING.md)
 - [Laravel Testing Documentation](https://laravel.com/docs/testing)
 - [Laravel Blade Components](https://laravel.com/docs/blade#components)
 - [PestPHP Documentation](https://pestphp.com)

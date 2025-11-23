@@ -176,5 +176,5 @@ $this->assertEquals($render1, $render2);
 
 - [Full Testing Guide](NEWS_LOCALE_AWARE_NAVIGATION_TESTING.md)
 - [Property Testing Guide](../PROPERTY_TESTING.md)
-- [Test Coverage](../../../../docs/testing/TEST_COVERAGE.md)
+- [Test Coverage](../../docs/testing/TEST_COVERAGE.md)
 - [Requirements](../../.kiro/specs/news-page/requirements.md)

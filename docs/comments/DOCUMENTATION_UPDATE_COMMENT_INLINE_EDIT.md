@@ -169,9 +169,9 @@ php artisan test tests/Unit/CommentStatusFilterPropertyTest.php
 ```
 
 Documentation:
-- [Comment Property Tests Index](tests/Unit/COMMENT_PROPERTY_TESTS_INDEX.md)
-- [Comment Inline Edit Testing](tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md)
-- [Comment Status Filter Testing](tests/Unit/COMMENT_STATUS_FILTER_TESTING.md)
+- [Comment Property Tests Index](../../tests/Unit/COMMENT_PROPERTY_TESTS_INDEX.md)
+- [Comment Inline Edit Testing](../../tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md)
+- [Comment Status Filter Testing](../../tests/Unit/COMMENT_STATUS_FILTER_TESTING.md)
 ```
 
 ### Documentation Section
@@ -184,18 +184,18 @@ Add to the "Documentation" section of README.md:
 Comprehensive property-based testing documentation:
 
 - **Comment Tests**
-  - [Comment Property Tests Index](tests/Unit/COMMENT_PROPERTY_TESTS_INDEX.md)
-  - [Inline Edit Testing](tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md)
-  - [Status Filter Testing](tests/Unit/COMMENT_STATUS_FILTER_TESTING.md)
+  - [Comment Property Tests Index](../../tests/Unit/COMMENT_PROPERTY_TESTS_INDEX.md)
+  - [Inline Edit Testing](../../tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md)
+  - [Status Filter Testing](../../tests/Unit/COMMENT_STATUS_FILTER_TESTING.md)
 
 - **Post Tests**
-  - [Post Persistence Testing](tests/Unit/POST_PERSISTENCE_PROPERTY_TESTING.md)
+  - [Post Persistence Testing](../../tests/Unit/POST_PERSISTENCE_PROPERTY_TESTING.md)
 
 - **News Tests**
-  - [News Property Tests Index](tests/Unit/NEWS_PROPERTY_TESTS_INDEX.md)
+  - [News Property Tests Index](../../tests/Unit/NEWS_PROPERTY_TESTS_INDEX.md)
 
 - **General**
-  - [Property Testing Guide](tests/PROPERTY_TESTING.md)
+  - [Property Testing Guide](../../tests/PROPERTY_TESTING.md)
   - [Test Coverage](../testing/TEST_COVERAGE.md)
 ```
 
@@ -287,6 +287,6 @@ This establishes a strong foundation for testing comment management functionalit
 
 For questions about this documentation update:
 - Review the created documentation files
-- Check the [Property Testing Guide](tests/PROPERTY_TESTING.md)
+- Check the [Property Testing Guide](../../tests/PROPERTY_TESTING.md)
 - See the [Test Coverage](../testing/TEST_COVERAGE.md)
 - Contact project maintainers

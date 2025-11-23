@@ -26,7 +26,7 @@
 - 🔍 **[Code Review](COMMENT_MODEL_CODE_REVIEW_SUMMARY.md)** - Quality assessment
 
 ### For Everyone
-- 📋 **[Changelog](CHANGELOG_COMMENT_MODEL.md)** - Version history and migration guide
+- 📋 **[Changelog](changelogs/CHANGELOG_COMMENT_MODEL.md)** - Version history and migration guide
 
 ---
 
@@ -64,7 +64,7 @@
 
 ### Implementation Details
 1. [Improvements Summary](COMMENT_MODEL_IMPROVEMENTS_SUMMARY.md) - What changed
-2. [Changelog](CHANGELOG_COMMENT_MODEL.md) - Version history
+2. [Changelog](changelogs/CHANGELOG_COMMENT_MODEL.md) - Version history
 3. [Code Review](COMMENT_MODEL_CODE_REVIEW_SUMMARY.md) - Quality metrics
 
 ---
@@ -191,7 +191,7 @@ php artisan migrate
 php artisan test --filter=Comment
 ```
 
-📖 See: [Changelog - Migration Guide](CHANGELOG_COMMENT_MODEL.md#migration-guide)
+📖 See: [Changelog - Migration Guide](changelogs/CHANGELOG_COMMENT_MODEL.md#migration-guide)
 
 ---
 
@@ -266,7 +266,7 @@ php artisan test --filter=Comment
 - ✅ Basic comment functionality
 - ✅ Status-based moderation
 
-📖 See: [Complete Changelog](CHANGELOG_COMMENT_MODEL.md)
+📖 See: [Complete Changelog](changelogs/CHANGELOG_COMMENT_MODEL.md)
 
 ---
 

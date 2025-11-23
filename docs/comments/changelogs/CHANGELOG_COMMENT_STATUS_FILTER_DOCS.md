@@ -37,7 +37,7 @@ Comprehensive documentation created for the Comment Status Filter property-based
    - Documented 3 property-based tests with ~495 assertions
    - Added links to comprehensive documentation
 
-2. **`.kiro/specs/admin-livewire-crud/tasks.md`**
+2. **`../../../.kiro/specs/admin-livewire-crud/tasks.md`**
    - Marked task 5.3 as documented
    - Marked task 5.4 as documented
    - Added documentation file references
@@ -271,10 +271,10 @@ Uses status filtering for comment moderation interface.
 
 ## Related Documentation
 
-- [Property Testing Guide](../tests/PROPERTY_TESTING.md)
-- [Test Coverage](../../../testing/TEST_COVERAGE.md)
-- [Admin CRUD Requirements](../.kiro/specs/admin-livewire-crud/requirements.md)
-- [Admin CRUD Tasks](../.kiro/specs/admin-livewire-crud/tasks.md)
+- [Property Testing Guide](../../../tests/PROPERTY_TESTING.md)
+- [Test Coverage](../../testing/TEST_COVERAGE.md)
+- [Admin CRUD Requirements](../../../.kiro/specs/admin-livewire-crud/requirements.md)
+- [Admin CRUD Tasks](../../../.kiro/specs/admin-livewire-crud/tasks.md)
 
 ## Conclusion
 
@@ -289,8 +289,8 @@ The Comment Status Filter feature now has comprehensive documentation covering a
 
 ## Quick Links
 
-- [Full Testing Guide](tests/Unit/COMMENT_STATUS_FILTER_TESTING.md)
-- [Quick Reference](tests/Unit/COMMENT_STATUS_FILTER_QUICK_REFERENCE.md)
+- [Full Testing Guide](../../../tests/Unit/COMMENT_STATUS_FILTER_TESTING.md)
+- [Quick Reference](../../../tests/Unit/COMMENT_STATUS_FILTER_QUICK_REFERENCE.md)
 - [Test Coverage](../../testing/TEST_COVERAGE.md)
-- [Property Testing Guide](tests/PROPERTY_TESTING.md)
-- [Admin CRUD Requirements](.kiro/specs/admin-livewire-crud/requirements.md)
+- [Property Testing Guide](../../../tests/PROPERTY_TESTING.md)
+- [Admin CRUD Requirements](../../../.kiro/specs/admin-livewire-crud/requirements.md)

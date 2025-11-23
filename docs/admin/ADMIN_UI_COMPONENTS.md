@@ -518,7 +518,7 @@ All admin UI components are located in:
 
 ## Related Documentation
 
-- [Livewire Traits Guide](./LIVEWIRE_TRAITS_GUIDE.md)
-- [Volt Component Guide](./VOLT_COMPONENT_GUIDE.md)
+- [Livewire Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md)
+- [Volt Component Guide](../volt/VOLT_COMPONENT_GUIDE.md)
 - [Admin Configuration](./ADMIN_CONFIGURATION.md)
-- [Accessibility Implementation](./ACCESSIBILITY_IMPLEMENTATION_SUMMARY.md)
+- [Accessibility Implementation](../accessibility/ACCESSIBILITY_IMPLEMENTATION_SUMMARY.md)

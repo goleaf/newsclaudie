@@ -236,7 +236,7 @@ Comprehensive documentation added for the News Filter Options property-based tes
 
 ## References
 
-- [Property-Based Testing Guide](tests/PROPERTY_TESTING.md)
+- [Property-Based Testing Guide](../../../tests/PROPERTY_TESTING.md)
 - [News Feature Requirements](.kiro/specs/news-page/requirements.md)
 - [Test Coverage Inventory](../../testing/TEST_COVERAGE.md)
 - [Laravel Testing Documentation](https://laravel.com/docs/testing)

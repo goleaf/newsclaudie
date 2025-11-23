@@ -43,15 +43,15 @@ This document maps every PHP class under `app/` to its current automated coverag
 | --- | --- | --- |
 | `Category`, `Comment`, `Tag`, `User` | Not directly tested. | Add unit tests for relationships/scopes once domain logic is added. |
 | `PageView` | `tests/Unit/PageViewTest`. | Add coverage for `normalizeDomain` edge cases (e.g. missing protocol) and `anonymizeRequest` salted hashing. |
-| `Post` | `tests/Unit/PostModelTest` + `tests/Unit/PostQueryScopesTest` covers query scopes for news filtering. `tests/Unit/PostPersistencePropertyTest` (5 property-based tests, ~55 assertions) validates data persistence round-trip for creation, updates, null fields, timestamps, and JSON arrays. **Documentation**: [POST_PERSISTENCE_PROPERTY_TESTING.md](../tests/Unit/POST_PERSISTENCE_PROPERTY_TESTING.md) | Covered for helper methods, query scopes, and data persistence. |
+| `Post` | `tests/Unit/PostModelTest` + `tests/Unit/PostQueryScopesTest` covers query scopes for news filtering. `tests/Unit/PostPersistencePropertyTest` (5 property-based tests, ~55 assertions) validates data persistence round-trip for creation, updates, null fields, timestamps, and JSON arrays. **Documentation**: [POST_PERSISTENCE_PROPERTY_TESTING.md](../../tests/Unit/POST_PERSISTENCE_PROPERTY_TESTING.md) | Covered for helper methods, query scopes, and data persistence. |
 | `PublishedScope` | `tests/Unit/PublishedScopeTest`. | Covered for guest/author/admin visibility logic. |
 
 ## View Components
 
 | Component | Current Coverage | Gap / Required Test |
 | --- | --- | --- |
-| `resources/views/components/news/news-card.blade.php` | `tests/Unit/NewsViewRenderingPropertyTest` (5 property-based tests, 226 assertions) validates required fields display, post detail links, lazy loading images, and edge cases. **Documentation**: [NEWS_VIEW_RENDERING_TESTING.md](../tests/Unit/NEWS_VIEW_RENDERING_TESTING.md) | Covered for news card rendering. Add tests for filter panel component when created. |
-| `resources/views/components/navigation/main.blade.php` | `tests/Unit/NewsLocaleAwareNavigationPropertyTest` (4 property-based tests, 115 assertions) validates locale-aware navigation, locale switching, fallback behavior, and idempotence. **Documentation**: [NEWS_LOCALE_AWARE_NAVIGATION_TESTING.md](../tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_TESTING.md) | Covered for News link translation. Add tests for other navigation links when internationalized. |
+| `resources/views/components/news/news-card.blade.php` | `tests/Unit/NewsViewRenderingPropertyTest` (5 property-based tests, 226 assertions) validates required fields display, post detail links, lazy loading images, and edge cases. **Documentation**: [NEWS_VIEW_RENDERING_TESTING.md](../../tests/Unit/NEWS_VIEW_RENDERING_TESTING.md) | Covered for news card rendering. Add tests for filter panel component when created. |
+| `resources/views/components/navigation/main.blade.php` | `tests/Unit/NewsLocaleAwareNavigationPropertyTest` (4 property-based tests, 115 assertions) validates locale-aware navigation, locale switching, fallback behavior, and idempotence. **Documentation**: [NEWS_LOCALE_AWARE_NAVIGATION_TESTING.md](../../tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_TESTING.md) | Covered for News link translation. Add tests for other navigation links when internationalized. |
 | Other Blade components under `resources/views/components/**` | None. | Once Tailwind refactor stabilizes, add Laravel view component tests to ensure props render expected markup. |
 
 ## Volt Components
@@ -77,16 +77,16 @@ This document maps every PHP class under `app/` to its current automated coverag
 
 | Test File | Properties | Assertions | Duration | Status | Documentation |
 |-----------|-----------|-----------|----------|--------|---------------|
-| `NewsFilterOptionsPropertyTest` | 2 | ~238 | ~0.36s | ✅ | [Full Guide](../tests/Unit/NEWS_FILTER_OPTIONS_TESTING.md) \| [Quick Ref](../tests/Unit/NEWS_FILTER_OPTIONS_QUICK_REFERENCE.md) |
-| `NewsClearFiltersPropertyTest` | 2 | ~343 | ~1.27s | ✅ | [Full Guide](../tests/Unit/NEWS_CLEAR_FILTERS_TESTING.md) \| [Quick Ref](../tests/Unit/NEWS_CLEAR_FILTERS_QUICK_REFERENCE.md) |
-| `NewsViewRenderingPropertyTest` | 3 | ~226 | ~0.22s | ✅ | [Full Guide](../tests/Unit/NEWS_VIEW_RENDERING_TESTING.md) \| [Quick Ref](../tests/Unit/NEWS_VIEW_RENDERING_QUICK_REFERENCE.md) |
-| `NewsLocaleAwareNavigationPropertyTest` | 1 | 115 | ~0.08s | ✅ | [Full Guide](../tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_TESTING.md) \| [Quick Ref](../tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_QUICK_REFERENCE.md) |
-| `CommentStatusFilterPropertyTest` | 1 | ~495 | ~0.95s | ✅ | [Full Guide](../tests/Unit/COMMENT_STATUS_FILTER_TESTING.md) \| [Quick Ref](../tests/Unit/COMMENT_STATUS_FILTER_QUICK_REFERENCE.md) |
-| `CommentInlineEditPropertyTest` | 1 | ~1,100 | ~1.70s | ✅ | [Full Guide](../tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md) \| [Quick Ref](../tests/Unit/COMMENT_INLINE_EDIT_QUICK_REFERENCE.md) |
-| `PostPersistencePropertyTest` | 1 | ~55 | ~0.30s | ✅ | [Full Guide](../tests/Unit/POST_PERSISTENCE_PROPERTY_TESTING.md) \| [Quick Ref](../tests/Unit/POST_PERSISTENCE_QUICK_REFERENCE.md) |
-| `BulkSelectionDisplayPropertyTest` | 5 | ~4,300 | ~1.0s | ✅ | [Full Guide](../tests/Unit/BULK_SELECTION_DISPLAY_TESTING.md) \| [Quick Ref](../tests/Unit/BULK_SELECTION_DISPLAY_QUICK_REFERENCE.md) \| [Architecture](../docs/admin/BULK_ACTIONS_ARCHITECTURE.md) |
-| `BulkOperationSuccessPropertyTest` | 5 | ~405 | ~2.0s | ✅ | [Index](../tests/Unit/BULK_ACTIONS_PROPERTY_TESTS_INDEX.md) |
-| `BulkPartialFailurePropertyTest` | 2 | ~3,164 | ~70s | ✅ | [Index](../tests/Unit/BULK_ACTIONS_PROPERTY_TESTS_INDEX.md) |
+| `NewsFilterOptionsPropertyTest` | 2 | ~238 | ~0.36s | ✅ | [Full Guide](../../tests/Unit/NEWS_FILTER_OPTIONS_TESTING.md) \| [Quick Ref](../../tests/Unit/NEWS_FILTER_OPTIONS_QUICK_REFERENCE.md) |
+| `NewsClearFiltersPropertyTest` | 2 | ~343 | ~1.27s | ✅ | [Full Guide](../../tests/Unit/NEWS_CLEAR_FILTERS_TESTING.md) \| [Quick Ref](../../tests/Unit/NEWS_CLEAR_FILTERS_QUICK_REFERENCE.md) |
+| `NewsViewRenderingPropertyTest` | 3 | ~226 | ~0.22s | ✅ | [Full Guide](../../tests/Unit/NEWS_VIEW_RENDERING_TESTING.md) \| [Quick Ref](../../tests/Unit/NEWS_VIEW_RENDERING_QUICK_REFERENCE.md) |
+| `NewsLocaleAwareNavigationPropertyTest` | 1 | 115 | ~0.08s | ✅ | [Full Guide](../../tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_TESTING.md) \| [Quick Ref](../../tests/Unit/NEWS_LOCALE_AWARE_NAVIGATION_QUICK_REFERENCE.md) |
+| `CommentStatusFilterPropertyTest` | 1 | ~495 | ~0.95s | ✅ | [Full Guide](../../tests/Unit/COMMENT_STATUS_FILTER_TESTING.md) \| [Quick Ref](../../tests/Unit/COMMENT_STATUS_FILTER_QUICK_REFERENCE.md) |
+| `CommentInlineEditPropertyTest` | 1 | ~1,100 | ~1.70s | ✅ | [Full Guide](../../tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md) \| [Quick Ref](../../tests/Unit/COMMENT_INLINE_EDIT_QUICK_REFERENCE.md) |
+| `PostPersistencePropertyTest` | 1 | ~55 | ~0.30s | ✅ | [Full Guide](../../tests/Unit/POST_PERSISTENCE_PROPERTY_TESTING.md) \| [Quick Ref](../../tests/Unit/POST_PERSISTENCE_QUICK_REFERENCE.md) |
+| `BulkSelectionDisplayPropertyTest` | 5 | ~4,300 | ~1.0s | ✅ | [Full Guide](../../tests/Unit/BULK_SELECTION_DISPLAY_TESTING.md) \| [Quick Ref](../../tests/Unit/BULK_SELECTION_DISPLAY_QUICK_REFERENCE.md) \| [Architecture](../admin/BULK_ACTIONS_ARCHITECTURE.md) |
+| `BulkOperationSuccessPropertyTest` | 5 | ~405 | ~2.0s | ✅ | [Index](../../tests/Unit/BULK_ACTIONS_PROPERTY_TESTS_INDEX.md) |
+| `BulkPartialFailurePropertyTest` | 2 | ~3,164 | ~70s | ✅ | [Index](../../tests/Unit/BULK_ACTIONS_PROPERTY_TESTS_INDEX.md) |
 
 
 ## Console Commands / Providers

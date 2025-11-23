@@ -28,12 +28,12 @@
 - **[Property Testing Guide](../PROPERTY_TESTING.md)** - General property-based testing approach
 
 ### 📊 Project Documentation
-- **[Test Coverage Inventory](../../../../docs/testing/TEST_COVERAGE.md)** - Overall test coverage status
+- **[Test Coverage Inventory](../../docs/testing/TEST_COVERAGE.md)** - Overall test coverage status
 - **[README](../../README.md)** - Project overview with testing section
 
 ### 📝 Change Tracking
-- **[Changelog](../../CHANGELOG_NEWS_FILTER_TESTING.md)** - Detailed changelog for this documentation
-- **[Documentation Summary](../../DOCUMENTATION_NEWS_FILTER_TESTING.md)** - Summary of documentation work
+- **[Changelog](../../docs/news/changelogs/CHANGELOG_NEWS_FILTER_TESTING.md)** - Detailed changelog for this documentation
+- **[Documentation Summary](../../docs/news/DOCUMENTATION_NEWS_FILTER_TESTING.md)** - Summary of documentation work
 - **[Tasks](../../.kiro/specs/news-page/tasks.md)** - Implementation task tracking
 
 ## Documentation Structure
@@ -97,14 +97,14 @@ Root/
 → **Comprehensive Guides** - Deep dive
 
 ### 📊 I need coverage information
-→ **[Test Coverage Inventory](../../../../docs/testing/TEST_COVERAGE.md)** - Overall coverage  
-→ **[Complete Summary](../../DOCUMENTATION_NEWS_COMPLETE.md)** - Full statistics  
+→ **[Test Coverage Inventory](../../docs/testing/TEST_COVERAGE.md)** - Overall coverage  
+→ **[Complete Summary](../../docs/news/DOCUMENTATION_NEWS_COMPLETE.md)** - Full statistics  
 → **Quick References** - Test summaries
 
 ### 🔍 I want to see what changed
-→ **[Filter Options Changelog](../../CHANGELOG_NEWS_FILTER_TESTING.md)**  
-→ **[View Rendering Changelog](../../CHANGELOG_NEWS_VIEW_RENDERING.md)**  
-→ **[Complete Summary](../../DOCUMENTATION_NEWS_COMPLETE.md)**
+→ **[Filter Options Changelog](../../docs/news/changelogs/CHANGELOG_NEWS_FILTER_TESTING.md)**  
+→ **[View Rendering Changelog](../../docs/news/changelogs/CHANGELOG_NEWS_VIEW_RENDERING.md)**  
+→ **[Complete Summary](../../docs/news/DOCUMENTATION_NEWS_COMPLETE.md)**
 
 ## Test Suite Overview
 
@@ -183,7 +183,7 @@ Testing universal properties that should hold true across all valid inputs by ru
 1. Check the **[Quick Reference](NEWS_FILTER_OPTIONS_QUICK_REFERENCE.md)** first
 2. Read the **[Comprehensive Guide](NEWS_FILTER_OPTIONS_TESTING.md)** for details
 3. Review the **[Property Testing Guide](../PROPERTY_TESTING.md)** for concepts
-4. Check the **[Test Coverage](../../../../docs/testing/TEST_COVERAGE.md)** for context
+4. Check the **[Test Coverage](../../docs/testing/TEST_COVERAGE.md)** for context
 
 ### Found an Issue?
 1. Check **[Common Failures](NEWS_FILTER_OPTIONS_QUICK_REFERENCE.md#common-failures)**

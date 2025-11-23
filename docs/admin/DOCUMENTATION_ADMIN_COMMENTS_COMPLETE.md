@@ -375,7 +375,7 @@ DOCUMENTATION_ADMIN_COMMENTS_COMPLETE.md    # This summary
 - [Admin Documentation Index](ADMIN_DOCUMENTATION_INDEX.md)
 - [Admin Comments Eager Loading](ADMIN_COMMENTS_EAGER_LOADING.md)
 - [Admin Comments API](../api/ADMIN_COMMENTS_API.md)
-- [Changelog](CHANGELOG_ADMIN_COMMENTS_EAGER_LOADING.md)
+- [Changelog](changelogs/CHANGELOG_ADMIN_COMMENTS_EAGER_LOADING.md)
 
 ### External Resources
 

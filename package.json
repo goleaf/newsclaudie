@@ -10,7 +10,7 @@
         "typecheck": "tsc --noEmit",
         "playwright:install": "playwright install",
         "test:optimistic": "tsx tests/js/admin-post-actions.test.ts",
-        "docs:verify": "python3 scripts/organize-docs.py --fix && bash scripts/check-docs-placement.sh"
+        "docs:verify": "python3 scripts/organize-docs.py --fix && python3 scripts/verify-markdown-links.py && bash scripts/check-docs-placement.sh"
     },
     "dependencies": {
         "alpinejs": "^3.15.2",

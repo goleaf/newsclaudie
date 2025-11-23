@@ -216,12 +216,12 @@ Duration: 1.37s
 
 ## Related Documentation
 
-- [Bulk Actions Architecture](docs/admin/BULK_ACTIONS_ARCHITECTURE.md)
-- [Bulk Actions Quick Reference](docs/admin/BULK_ACTIONS_QUICK_REFERENCE.md)
-- [Bulk Actions API Reference](docs/api/BULK_ACTIONS_API.md)
-- [Bulk Selection Display Testing](tests/Unit/BULK_SELECTION_DISPLAY_TESTING.md)
-- [Bulk Actions Property Tests Index](tests/Unit/BULK_ACTIONS_PROPERTY_TESTS_INDEX.md)
-- [Admin Documentation Index](docs/admin/ADMIN_DOCUMENTATION_INDEX.md)
+- [Bulk Actions Architecture](../admin/BULK_ACTIONS_ARCHITECTURE.md)
+- [Bulk Actions Quick Reference](../admin/BULK_ACTIONS_QUICK_REFERENCE.md)
+- [Bulk Actions API Reference](../api/BULK_ACTIONS_API.md)
+- [Bulk Selection Display Testing](../../tests/Unit/BULK_SELECTION_DISPLAY_TESTING.md)
+- [Bulk Actions Property Tests Index](../../tests/Unit/BULK_ACTIONS_PROPERTY_TESTS_INDEX.md)
+- [Admin Documentation Index](../admin/ADMIN_DOCUMENTATION_INDEX.md)
 
 ## Next Steps
 

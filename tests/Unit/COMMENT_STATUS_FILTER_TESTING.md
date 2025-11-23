@@ -323,7 +323,7 @@ $comments = Comment::query()
 - [Quick Reference](COMMENT_STATUS_FILTER_QUICK_REFERENCE.md) - Fast-access commands and tips
 - [Property Testing Guide](../PROPERTY_TESTING.md) - General property testing approach
 - [Admin CRUD Requirements](../../.kiro/specs/admin-livewire-crud/requirements.md) - Feature requirements
-- [Test Coverage](../../../../docs/testing/TEST_COVERAGE.md) - Overall test coverage
+- [Test Coverage](../../docs/testing/TEST_COVERAGE.md) - Overall test coverage
 
 ## Maintenance Notes
 
@@ -425,5 +425,5 @@ When contributing to these tests:
 For questions about these tests, see:
 - [Quick Reference](COMMENT_STATUS_FILTER_QUICK_REFERENCE.md)
 - [Property Testing Guide](../PROPERTY_TESTING.md)
-- [Test Coverage Documentation](../../../../docs/testing/TEST_COVERAGE.md)
+- [Test Coverage Documentation](../../docs/testing/TEST_COVERAGE.md)
 - Project maintainers

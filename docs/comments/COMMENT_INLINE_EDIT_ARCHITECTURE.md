@@ -463,19 +463,19 @@ Metrics::timing('comment.inline_edit.duration', $duration);
 ## Related Documentation
 
 ### Testing
-- [Comment Inline Edit Property Testing](../tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md)
-- [Comment Inline Edit Quick Reference](../tests/Unit/COMMENT_INLINE_EDIT_QUICK_REFERENCE.md)
-- [Comment Property Tests Index](../tests/Unit/COMMENT_PROPERTY_TESTS_INDEX.md)
+- [Comment Inline Edit Property Testing](../../tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md)
+- [Comment Inline Edit Quick Reference](../../tests/Unit/COMMENT_INLINE_EDIT_QUICK_REFERENCE.md)
+- [Comment Property Tests Index](../../tests/Unit/COMMENT_PROPERTY_TESTS_INDEX.md)
 
 ### Architecture
-- [Admin UI Components](ADMIN_UI_COMPONENTS.md)
-- [Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md)
-- [Interface Architecture](INTERFACE_ARCHITECTURE.md)
+- [Admin UI Components](../admin/ADMIN_UI_COMPONENTS.md)
+- [Livewire Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md)
+- [Interface Architecture](../interface/INTERFACE_ARCHITECTURE.md)
 
 ### Requirements
-- [Admin CRUD Requirements](../.kiro/specs/admin-livewire-crud/requirements.md)
-- [Admin CRUD Design](../.kiro/specs/admin-livewire-crud/design.md)
-- [Admin CRUD Tasks](../.kiro/specs/admin-livewire-crud/tasks.md)
+- [Admin CRUD Requirements](../../.kiro/specs/admin-livewire-crud/requirements.md)
+- [Admin CRUD Design](../../.kiro/specs/admin-livewire-crud/design.md)
+- [Admin CRUD Tasks](../../.kiro/specs/admin-livewire-crud/tasks.md)
 
 ## Changelog
 
@@ -491,5 +491,5 @@ Metrics::timing('comment.inline_edit.duration', $duration);
 For questions about the Comment Inline Edit architecture:
 - Review this document
 - Check the test documentation
-- See the [Admin UI Components](ADMIN_UI_COMPONENTS.md) guide
+- See the [Admin UI Components](../admin/ADMIN_UI_COMPONENTS.md) guide
 - Contact project maintainers

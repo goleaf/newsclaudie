@@ -891,9 +891,9 @@ public function with(): array
 
 ## Related Documentation
 
-- [Admin Configuration Guide](ADMIN_CONFIGURATION.md)
-- [Volt Component Guide](VOLT_COMPONENT_GUIDE.md)
-- [Admin Config Quick Reference](ADMIN_CONFIG_QUICK_REFERENCE.md)
+- [Admin Configuration Guide](../admin/ADMIN_CONFIGURATION.md)
+- [Volt Component Guide](../volt/VOLT_COMPONENT_GUIDE.md)
+- [Admin Config Quick Reference](../admin/ADMIN_CONFIG_QUICK_REFERENCE.md)
 
 ## Requirements Validation
 

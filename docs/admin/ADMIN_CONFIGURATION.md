@@ -546,8 +546,8 @@ class PostsIndex extends Component
 ## Related Documentation
 
 - [Admin Accessibility Guide](ADMIN_ACCESSIBILITY.md)
-- [Optimistic UI Implementation](OPTIMISTIC_UI.md)
-- [Property Testing Guide](../tests/PROPERTY_TESTING.md)
+- [Optimistic UI Implementation](../optimistic-ui/OPTIMISTIC_UI.md)
+- [Property Testing Guide](../../tests/PROPERTY_TESTING.md)
 
 ## Requirements Validation
 

@@ -196,7 +196,7 @@ This document summarizes all documentation created for the News feature implemen
 3. Check [NEWS_CONTROLLER_REFACTORING.md](./NEWS_CONTROLLER_REFACTORING.md) for architecture
 
 ### For API Consumers
-1. Read [NEWS_API.md](./api/NEWS_API.md)
+1. Read [NEWS_API.md](../api/NEWS_API.md)
 2. Try the code examples
 3. Review error handling section
 
@@ -206,7 +206,7 @@ This document summarizes all documentation created for the News feature implemen
 3. Consider service layer for larger apps
 
 ### For Release Managers
-1. Review [CHANGELOG_NEWS_FEATURE.md](../CHANGELOG_NEWS_FEATURE.md)
+1. Review [CHANGELOG_NEWS_FEATURE.md](changelogs/CHANGELOG_NEWS_FEATURE.md)
 2. Verify no breaking changes
 3. Update main CHANGELOG.md when ready
 
@@ -245,10 +245,10 @@ This document summarizes all documentation created for the News feature implemen
 ## Related Documentation
 
 ### Existing Documentation
-- [Admin Documentation Index](./ADMIN_DOCUMENTATION_INDEX.md)
-- [Interface Architecture](./INTERFACE_ARCHITECTURE.md)
-- [Volt Component Guide](./VOLT_COMPONENT_GUIDE.md)
-- [Livewire Traits Guide](./LIVEWIRE_TRAITS_GUIDE.md)
+- [Admin Documentation Index](../admin/ADMIN_DOCUMENTATION_INDEX.md)
+- [Interface Architecture](../interface/INTERFACE_ARCHITECTURE.md)
+- [Volt Component Guide](../volt/VOLT_COMPONENT_GUIDE.md)
+- [Livewire Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md)
 
 ### Spec Documentation
 - [News Page Requirements](../.kiro/specs/news-page/requirements.md)
@@ -256,8 +256,8 @@ This document summarizes all documentation created for the News feature implemen
 - [News Page Tasks](../.kiro/specs/news-page/tasks.md)
 
 ### Test Documentation
-- [Property Testing Guide](../tests/PROPERTY_TESTING.md)
-- [Test Coverage](./TEST_COVERAGE.md)
+- [Property Testing Guide](../../tests/PROPERTY_TESTING.md)
+- [Test Coverage](../testing/TEST_COVERAGE.md)
 
 ## Documentation Metrics
 

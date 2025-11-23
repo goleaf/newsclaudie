@@ -490,7 +490,7 @@ public function with(): array
 - Loads only required columns
 - Uses indexed columns for filtering
 
-**See:** [ADMIN_COMMENTS_EAGER_LOADING.md](ADMIN_COMMENTS_EAGER_LOADING.md) for detailed explanation
+**See:** [ADMIN_COMMENTS_EAGER_LOADING.md](../admin/ADMIN_COMMENTS_EAGER_LOADING.md) for detailed explanation
 
 ### `applySort(Builder $query): Builder`
 
@@ -755,9 +755,9 @@ php artisan test tests/Browser/AdminCommentsTest.php
 
 ## Related Documentation
 
-- [Admin Comments Eager Loading](ADMIN_COMMENTS_EAGER_LOADING.md)
-- [Livewire Traits Guide](../LIVEWIRE_TRAITS_GUIDE.md)
-- [Admin Configuration](../ADMIN_CONFIGURATION.md)
+- [Admin Comments Eager Loading](../admin/ADMIN_COMMENTS_EAGER_LOADING.md)
+- [Livewire Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md)
+- [Admin Configuration](../admin/ADMIN_CONFIGURATION.md)
 - [Comment Model](../../app/Models/Comment.php)
 
 ## Changelog

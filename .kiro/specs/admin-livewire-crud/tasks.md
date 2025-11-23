@@ -369,7 +369,7 @@
   - **Property 20: Bulk operation partial failure reporting**
   - **Validates: Requirements 8.5**
 
-- [-] 11. Implement comprehensive validation
+- [x] 11. Implement comprehensive validation
   - Real-time validation with error clearing implemented
   - Includes format hints and server-side error display
   - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5_
@@ -384,15 +384,15 @@
   - Format hints provided (e.g., slug format, email format)
   - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5_
 
-- [-] 11.2 Write property test for validation error display
+- [x] 11.2 Write property test for validation error display
   - **Property 4: Invalid input rejection**
   - **Validates: Requirements 10.1, 10.4**
 
-- [ ] 11.3 Write property test for error clearing
+- [x] 11.3 Write property test for error clearing
   - **Property 5: Error clearing on correction**
   - **Validates: Requirements 10.2**
 
-- [ ] 11.4 Write property test for validation success
+- [x] 11.4 Write property test for validation success
   - **Property 6: Validation success enables submission**
   - **Validates: Requirements 10.5**
 

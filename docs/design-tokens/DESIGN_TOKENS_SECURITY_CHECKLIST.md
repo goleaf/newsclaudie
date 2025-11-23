@@ -131,9 +131,9 @@ composer dump-autoload
 
 ## Resources
 
-- [Security Audit Report](../DESIGN_TOKENS_SECURITY_AUDIT.md)
+- [Security Audit Report](DESIGN_TOKENS_SECURITY_AUDIT.md)
 - [Security Guide](DESIGN_TOKENS_SECURITY.md)
-- [Implementation Summary](../DESIGN_TOKENS_SECURITY_IMPLEMENTATION_COMPLETE.md)
+- [Implementation Summary](DESIGN_TOKENS_SECURITY_IMPLEMENTATION_COMPLETE.md)
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 
 ---

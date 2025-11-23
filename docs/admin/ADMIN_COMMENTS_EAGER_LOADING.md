@@ -204,7 +204,7 @@ php artisan migrate:status
 - **[Comment Model](../app/Models/Comment.php)** - Comment model with relationships
 - **[Post Model](../app/Models/Post.php)** - Post model with user relationship
 - **[Admin Comments Component](../resources/views/livewire/admin/comments/index.blade.php)** - Full component implementation
-- **[Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md)** - Shared trait documentation
+- **[Livewire Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md)** - Shared trait documentation
 - **[Admin Configuration](ADMIN_CONFIGURATION.md)** - Performance tuning
 
 ## Testing

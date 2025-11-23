@@ -369,5 +369,5 @@ php artisan test --group=news-page
 **Quality Level**: Production-ready  
 **Status**: ✅ Ready for team use
 
-**Start Here**: [NEWS_FILTER_OPTIONS_INDEX.md](tests/Unit/NEWS_FILTER_OPTIONS_INDEX.md)
+**Start Here**: [NEWS_FILTER_OPTIONS_INDEX.md](../../tests/Unit/NEWS_FILTER_OPTIONS_INDEX.md)
 

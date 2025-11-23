@@ -83,9 +83,9 @@ new class extends Component {
 | Trait | Purpose | Documentation |
 |-------|---------|---------------|
 | `AuthorizesRequests` | Policy-based authorization | Laravel Docs |
-| `ManagesPerPage` | Pagination configuration | [Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md#managesperpage) |
-| `ManagesSearch` | Search with debouncing | [Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md#managessearch) |
-| `ManagesSorting` | Sortable columns | [Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md#managessorting) |
+| `ManagesPerPage` | Pagination configuration | [Livewire Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md#managesperpage) |
+| `ManagesSearch` | Search with debouncing | [Livewire Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md#managessearch) |
+| `ManagesSorting` | Sortable columns | [Livewire Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md#managessorting) |
 | `WithPagination` | Livewire pagination | Livewire Docs |
 
 ### Data Flow
@@ -900,8 +900,8 @@ tail -f storage/logs/laravel.log
 
 ## Related Documentation
 
-- [Volt Component Guide](VOLT_COMPONENT_GUIDE.md)
-- [Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md)
+- [Volt Component Guide](../volt/VOLT_COMPONENT_GUIDE.md)
+- [Livewire Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md)
 - [Admin Configuration](ADMIN_CONFIGURATION.md)
 - [User Model API](../app/Models/User.php)
 - [User Policy](../app/Policies/UserPolicy.php)

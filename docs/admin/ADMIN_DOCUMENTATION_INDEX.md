@@ -7,8 +7,8 @@ Complete documentation for the admin Livewire CRUD interface.
 New to the admin interface? Start here:
 
 1. **[Admin Config Quick Reference](ADMIN_CONFIG_QUICK_REFERENCE.md)** - Quick access to common configuration tasks
-2. **[Volt Component Guide](VOLT_COMPONENT_GUIDE.md)** - Learn how Volt components work
-3. **[Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md)** - Understand shared functionality
+2. **[Volt Component Guide](../volt/VOLT_COMPONENT_GUIDE.md)** - Learn how Volt components work
+3. **[Livewire Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md)** - Understand shared functionality
 
 ## Documentation Structure
 
@@ -31,7 +31,7 @@ New to the admin interface? Start here:
 
 ### Component Development
 
-- **[Volt Component Guide](VOLT_COMPONENT_GUIDE.md)** - Volt component documentation
+- **[Volt Component Guide](../volt/VOLT_COMPONENT_GUIDE.md)** - Volt component documentation
   - Component structure
   - Common patterns
   - Component reference (Categories, Posts, Comments, Users)
@@ -46,7 +46,7 @@ New to the admin interface? Start here:
   - Authorization rules
   - Search and sorting
 
-- **[Admin Users API Reference](api/ADMIN_USERS_API.md)** - API documentation
+- **[Admin Users API Reference](../api/ADMIN_USERS_API.md)** - API documentation
   - Component properties
   - Methods reference
   - Events and listeners
@@ -59,7 +59,7 @@ New to the admin interface? Start here:
   - Configuration
   - Testing examples
 
-- **[Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md)** - Shared trait documentation
+- **[Livewire Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md)** - Shared trait documentation
   - ManagesPerPage
   - ManagesBulkActions
   - ManagesSearch
@@ -84,7 +84,7 @@ New to the admin interface? Start here:
   - Configuration
   - Testing examples
 
-- **[Optimistic UI Implementation](OPTIMISTIC_UI.md)** - Optimistic UI updates
+- **[Optimistic UI Implementation](../optimistic-ui/OPTIMISTIC_UI.md)** - Optimistic UI updates
   - Implementation details
   - Loading indicators
   - Error handling
@@ -96,7 +96,7 @@ New to the admin interface? Start here:
   - Screen reader support
   - Focus management
 
-- **[Accessibility Enhancements](ACCESSIBILITY_ENHANCEMENTS.md)** - Detailed accessibility implementation
+- **[Accessibility Enhancements](../accessibility/ACCESSIBILITY_ENHANCEMENTS.md)** - Detailed accessibility implementation
   - Keyboard navigation patterns
   - ARIA labels and roles
   - Focus management
@@ -104,14 +104,14 @@ New to the admin interface? Start here:
   - Table accessibility
   - WCAG 2.1 compliance
 
-- **[Accessibility Testing Guide](ACCESSIBILITY_TESTING_GUIDE.md)** - Testing procedures
+- **[Accessibility Testing Guide](../accessibility/ACCESSIBILITY_TESTING_GUIDE.md)** - Testing procedures
   - Automated testing tools
   - Manual testing procedures
   - Screen reader testing
   - Browser testing matrix
   - Common issues and fixes
 
-- **[Accessibility Audit Checklist](ACCESSIBILITY_AUDIT_CHECKLIST.md)** - Comprehensive audit checklist
+- **[Accessibility Audit Checklist](../accessibility/ACCESSIBILITY_AUDIT_CHECKLIST.md)** - Comprehensive audit checklist
   - General accessibility checks
   - Keyboard navigation tests
   - Form accessibility
@@ -120,13 +120,13 @@ New to the admin interface? Start here:
 
 ### Architecture
 
-- **[Interface Architecture](INTERFACE_ARCHITECTURE.md)** - System architecture
+- **[Interface Architecture](../interface/INTERFACE_ARCHITECTURE.md)** - System architecture
   - Component hierarchy
   - Data flow
   - State management
   - Event system
 
-- **[Interface Migration Guide](interface-migration-guide.md)** - Migration guide
+- **[Interface Migration Guide](../interface/interface-migration-guide.md)** - Migration guide
   - Upgrading from traditional controllers
   - Breaking changes
   - Migration steps
@@ -148,49 +148,49 @@ New to the admin interface? Start here:
 
 #### Build a New CRUD Component
 
-1. Read [Volt Component Guide](VOLT_COMPONENT_GUIDE.md) - Component structure
-2. Read [Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md) - Available traits
+1. Read [Volt Component Guide](../volt/VOLT_COMPONENT_GUIDE.md) - Component structure
+2. Read [Livewire Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md) - Available traits
 3. Reference existing components:
-   - [Categories](VOLT_COMPONENT_GUIDE.md#categories-index-component)
-   - [Posts](VOLT_COMPONENT_GUIDE.md#posts-index-component)
-   - [Comments](VOLT_COMPONENT_GUIDE.md#comments-index-component)
+   - [Categories](../volt/VOLT_COMPONENT_GUIDE.md#categories-index-component)
+   - [Posts](../volt/VOLT_COMPONENT_GUIDE.md#posts-index-component)
+   - [Comments](../volt/VOLT_COMPONENT_GUIDE.md#comments-index-component)
    - [Users](ADMIN_USERS_MANAGEMENT.md)
 
 #### Add Search Functionality
 
-→ See [ManagesSearch](LIVEWIRE_TRAITS_GUIDE.md#managessearch) in Traits Guide
+→ See [ManagesSearch](../livewire/LIVEWIRE_TRAITS_GUIDE.md#managessearch) in Traits Guide
 → Configuration: [Search Debounce Timing](ADMIN_CONFIGURATION.md#search-debounce-timing)
 
 #### Add Bulk Actions
 
-→ See [ManagesBulkActions](LIVEWIRE_TRAITS_GUIDE.md#managesbulkactions) in Traits Guide
+→ See [ManagesBulkActions](../livewire/LIVEWIRE_TRAITS_GUIDE.md#managesbulkactions) in Traits Guide
 → Architecture: [Bulk Actions Architecture](BULK_ACTIONS_ARCHITECTURE.md)
 → Quick Reference: [Bulk Actions Quick Reference](BULK_ACTIONS_QUICK_REFERENCE.md)
 → Configuration: [Bulk Action Limits](ADMIN_CONFIGURATION.md#bulk-action-limit)
 
 #### Add Sortable Columns
 
-→ See [ManagesSorting](LIVEWIRE_TRAITS_GUIDE.md#managessorting) in Traits Guide
+→ See [ManagesSorting](../livewire/LIVEWIRE_TRAITS_GUIDE.md#managessorting) in Traits Guide
 → Configuration: [URL Persistence](ADMIN_CONFIGURATION.md#query-string-persistence)
 → Example: [Users Sorting](ADMIN_USERS_MANAGEMENT.md#sorting)
 
 #### Implement Inline Editing
 
-→ See [Inline Editing Patterns](VOLT_COMPONENT_GUIDE.md#common-patterns) in Component Guide
-→ Example: [Categories Index Component](VOLT_COMPONENT_GUIDE.md#categories-index-component)
+→ See [Inline Editing Patterns](../volt/VOLT_COMPONENT_GUIDE.md#common-patterns) in Component Guide
+→ Example: [Categories Index Component](../volt/VOLT_COMPONENT_GUIDE.md#categories-index-component)
 
 #### Add Optimistic UI Updates
 
-→ Read [Optimistic UI Implementation](OPTIMISTIC_UI.md)
+→ Read [Optimistic UI Implementation](../optimistic-ui/OPTIMISTIC_UI.md)
 → Configuration: [Optimistic UI Settings](ADMIN_CONFIGURATION.md#optimistic-ui-updates)
 
 #### Improve Accessibility
 
 → Read [Admin Accessibility](ADMIN_ACCESSIBILITY.md)
-→ Implementation details: [Accessibility Enhancements](ACCESSIBILITY_ENHANCEMENTS.md)
-→ Testing procedures: [Accessibility Testing Guide](ACCESSIBILITY_TESTING_GUIDE.md)
-→ Audit checklist: [Accessibility Audit Checklist](ACCESSIBILITY_AUDIT_CHECKLIST.md)
-→ Best practices: [Accessibility in Component Guide](VOLT_COMPONENT_GUIDE.md#8-accessibility)
+→ Implementation details: [Accessibility Enhancements](../accessibility/ACCESSIBILITY_ENHANCEMENTS.md)
+→ Testing procedures: [Accessibility Testing Guide](../accessibility/ACCESSIBILITY_TESTING_GUIDE.md)
+→ Audit checklist: [Accessibility Audit Checklist](../accessibility/ACCESSIBILITY_AUDIT_CHECKLIST.md)
+→ Best practices: [Accessibility in Component Guide](../volt/VOLT_COMPONENT_GUIDE.md#8-accessibility)
 
 #### Tune Performance
 
@@ -199,8 +199,8 @@ New to the admin interface? Start here:
 
 #### Understand the Architecture
 
-→ Read [Interface Architecture](INTERFACE_ARCHITECTURE.md)
-→ Component structure: [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#component-structure)
+→ Read [Interface Architecture](../interface/INTERFACE_ARCHITECTURE.md)
+→ Component structure: [Volt Component Guide](../volt/VOLT_COMPONENT_GUIDE.md#component-structure)
 
 ## Code Examples
 
@@ -317,12 +317,12 @@ See [Admin Configuration Guide](ADMIN_CONFIGURATION.md) for complete reference.
 
 | Component | Location | Purpose | Documentation |
 |-----------|----------|---------|---------------|
-| Categories Index | `livewire/admin/categories/index.blade.php` | Manage categories | [Volt Guide](VOLT_COMPONENT_GUIDE.md#categories-index-component) |
-| Posts Index | `livewire/admin/posts/index.blade.php` | Manage posts | [Volt Guide](VOLT_COMPONENT_GUIDE.md#posts-index-component) |
-| Comments Index | `livewire/admin/comments/index.blade.php` | Manage comments | [Volt Guide](VOLT_COMPONENT_GUIDE.md#comments-index-component) |
+| Categories Index | `livewire/admin/categories/index.blade.php` | Manage categories | [Volt Guide](../volt/VOLT_COMPONENT_GUIDE.md#categories-index-component) |
+| Posts Index | `livewire/admin/posts/index.blade.php` | Manage posts | [Volt Guide](../volt/VOLT_COMPONENT_GUIDE.md#posts-index-component) |
+| Comments Index | `livewire/admin/comments/index.blade.php` | Manage comments | [Volt Guide](../volt/VOLT_COMPONENT_GUIDE.md#comments-index-component) |
 | Users Index | `livewire/admin/users/index.blade.php` | Manage users | [Users Management](ADMIN_USERS_MANAGEMENT.md) |
 
-See [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#component-reference) for detailed documentation.
+See [Volt Component Guide](../volt/VOLT_COMPONENT_GUIDE.md#component-reference) for detailed documentation.
 
 ## Trait Reference
 
@@ -330,18 +330,18 @@ See [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#component-reference) for deta
 
 | Trait | Location | Purpose | Documentation |
 |-------|----------|---------|---------------|
-| ManagesPerPage | `app/Livewire/Concerns/ManagesPerPage.php` | Pagination | [Traits Guide](LIVEWIRE_TRAITS_GUIDE.md#managesperpage) |
+| ManagesPerPage | `app/Livewire/Concerns/ManagesPerPage.php` | Pagination | [Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md#managesperpage) |
 | ManagesBulkActions | `app/Livewire/Concerns/ManagesBulkActions.php` | Bulk operations | [Architecture](BULK_ACTIONS_ARCHITECTURE.md), [Quick Ref](BULK_ACTIONS_QUICK_REFERENCE.md) |
-| ManagesSearch | `app/Livewire/Concerns/ManagesSearch.php` | Search functionality | [Traits Guide](LIVEWIRE_TRAITS_GUIDE.md#managessearch) |
-| ManagesSorting | `app/Livewire/Concerns/ManagesSorting.php` | Sortable columns | [Traits Guide](LIVEWIRE_TRAITS_GUIDE.md#managessorting) |
+| ManagesSearch | `app/Livewire/Concerns/ManagesSearch.php` | Search functionality | [Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md#managessearch) |
+| ManagesSorting | `app/Livewire/Concerns/ManagesSorting.php` | Sortable columns | [Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md#managessorting) |
 
-See [Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md) for detailed documentation.
+See [Livewire Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md) for detailed documentation.
 
 ## Testing
 
 ### Property-Based Testing
 
-See [Property Testing Guide](../tests/PROPERTY_TESTING.md) for:
+See [Property Testing Guide](../../tests/PROPERTY_TESTING.md) for:
 - Property-based testing overview
 - Writing property tests
 - Running property tests
@@ -349,7 +349,7 @@ See [Property Testing Guide](../tests/PROPERTY_TESTING.md) for:
 
 ### Test Coverage
 
-See [Test Coverage](TEST_COVERAGE.md) for:
+See [Test Coverage](../testing/TEST_COVERAGE.md) for:
 - Current test coverage
 - Coverage by component
 - Coverage gaps
@@ -364,18 +364,18 @@ All documentation supports the requirements defined in:
 
 | Requirement | Documentation |
 |-------------|---------------|
-| 1.1-1.7 (Posts) | [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#posts-index-component) |
-| 2.1-2.7 (Categories) | [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#categories-index-component) |
-| 3.1-3.6 (Comments) | [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#comments-index-component) |
+| 1.1-1.7 (Posts) | [Volt Component Guide](../volt/VOLT_COMPONENT_GUIDE.md#posts-index-component) |
+| 2.1-2.7 (Categories) | [Volt Component Guide](../volt/VOLT_COMPONENT_GUIDE.md#categories-index-component) |
+| 3.1-3.6 (Comments) | [Volt Component Guide](../volt/VOLT_COMPONENT_GUIDE.md#comments-index-component) |
 | 4.1-4.6 (Users) | [Admin Users Management](ADMIN_USERS_MANAGEMENT.md) |
-| 5.1-5.5 (Inline Editing) | [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#common-patterns) |
-| 6.1-6.5 (Modal Workflows) | [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#common-patterns) |
-| 7.1-7.5 (Search/Filtering) | [Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md#managessearch) |
-| 8.1-8.5 (Bulk Actions) | [Bulk Actions Architecture](BULK_ACTIONS_ARCHITECTURE.md), [Traits Guide](LIVEWIRE_TRAITS_GUIDE.md#managesbulkactions) |
-| 9.1-9.5 (Sorting) | [Livewire Traits Guide](LIVEWIRE_TRAITS_GUIDE.md#managessorting) |
-| 10.1-10.5 (Validation) | [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#validation-rules-documentation) |
-| 11.1-11.5 (Relationships) | [Volt Component Guide](VOLT_COMPONENT_GUIDE.md#posts-index-component) |
-| 12.1-12.5 (Optimistic UI) | [Optimistic UI Implementation](OPTIMISTIC_UI.md) |
+| 5.1-5.5 (Inline Editing) | [Volt Component Guide](../volt/VOLT_COMPONENT_GUIDE.md#common-patterns) |
+| 6.1-6.5 (Modal Workflows) | [Volt Component Guide](../volt/VOLT_COMPONENT_GUIDE.md#common-patterns) |
+| 7.1-7.5 (Search/Filtering) | [Livewire Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md#managessearch) |
+| 8.1-8.5 (Bulk Actions) | [Bulk Actions Architecture](BULK_ACTIONS_ARCHITECTURE.md), [Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md#managesbulkactions) |
+| 9.1-9.5 (Sorting) | [Livewire Traits Guide](../livewire/LIVEWIRE_TRAITS_GUIDE.md#managessorting) |
+| 10.1-10.5 (Validation) | [Volt Component Guide](../volt/VOLT_COMPONENT_GUIDE.md#validation-rules-documentation) |
+| 11.1-11.5 (Relationships) | [Volt Component Guide](../volt/VOLT_COMPONENT_GUIDE.md#posts-index-component) |
+| 12.1-12.5 (Optimistic UI) | [Optimistic UI Implementation](../optimistic-ui/OPTIMISTIC_UI.md) |
 
 ## Contributing
 

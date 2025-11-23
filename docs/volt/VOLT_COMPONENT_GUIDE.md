@@ -534,10 +534,10 @@ Always include ARIA labels:
 
 ## Related Documentation
 
-- [Admin Configuration Guide](ADMIN_CONFIGURATION.md)
-- [Admin Config Quick Reference](ADMIN_CONFIG_QUICK_REFERENCE.md)
-- [Optimistic UI Implementation](OPTIMISTIC_UI.md)
-- [Property Testing Guide](../tests/PROPERTY_TESTING.md)
+- [Admin Configuration Guide](../admin/ADMIN_CONFIGURATION.md)
+- [Admin Config Quick Reference](../admin/ADMIN_CONFIG_QUICK_REFERENCE.md)
+- [Optimistic UI Implementation](../optimistic-ui/OPTIMISTIC_UI.md)
+- [Property Testing Guide](../../tests/PROPERTY_TESTING.md)
 
 ## Requirements Validation
 

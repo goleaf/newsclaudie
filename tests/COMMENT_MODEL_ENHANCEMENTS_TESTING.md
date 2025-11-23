@@ -339,9 +339,9 @@ All new tests:
 ## Documentation References
 
 ### Related Documentation
-- [Comment Model API](../../docs/comments/COMMENT_MODEL_API.md)
-- [Comment Model Architecture](../../docs/comments/COMMENT_MODEL_ARCHITECTURE.md)
-- [Security Implementation](../SECURITY_IMPLEMENTATION_COMPLETE.md)
+- [Comment Model API](../docs/comments/COMMENT_MODEL_API.md)
+- [Comment Model Architecture](../docs/comments/COMMENT_MODEL_ARCHITECTURE.md)
+- [Security Implementation](../docs/comments/SECURITY_IMPLEMENTATION_COMPLETE.md)
 - [Property Testing Guide](./PROPERTY_TESTING.md)
 
 ### Laravel Documentation

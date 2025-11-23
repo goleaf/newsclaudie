@@ -352,8 +352,8 @@ php artisan test tests/Unit/CommentInlineEditPropertyTest.php
 ```
 
 Documentation:
-- [Comment Property Tests Index](tests/Unit/COMMENT_PROPERTY_TESTS_INDEX.md)
-- [Comment Inline Edit Testing](tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md)
+- [Comment Property Tests Index](../../tests/Unit/COMMENT_PROPERTY_TESTS_INDEX.md)
+- [Comment Inline Edit Testing](../../tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md)
 - [Comment Inline Edit Architecture](COMMENT_INLINE_EDIT_ARCHITECTURE.md)
 ```
 
@@ -363,8 +363,8 @@ Documentation:
 #### Property Testing Documentation
 
 - **Comment Tests**
-  - [Property Tests Index](tests/Unit/COMMENT_PROPERTY_TESTS_INDEX.md)
-  - [Inline Edit Testing](tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md)
+  - [Property Tests Index](../../tests/Unit/COMMENT_PROPERTY_TESTS_INDEX.md)
+  - [Inline Edit Testing](../../tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md)
   - [Inline Edit Architecture](COMMENT_INLINE_EDIT_ARCHITECTURE.md)
 ```
 
@@ -416,7 +416,7 @@ This establishes a strong foundation for comment management testing and serves a
 
 For questions about this documentation:
 - Review the created documentation files
-- Check the [Property Testing Guide](tests/PROPERTY_TESTING.md)
+- Check the [Property Testing Guide](../../tests/PROPERTY_TESTING.md)
 - See the [Test Coverage](../testing/TEST_COVERAGE.md)
 - Review the [Architecture Guide](COMMENT_INLINE_EDIT_ARCHITECTURE.md)
 - Contact project maintainers
