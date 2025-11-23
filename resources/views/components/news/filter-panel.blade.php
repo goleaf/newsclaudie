@@ -11,15 +11,17 @@
         || !empty($appliedFilters['to_date']);
 @endphp
 
-<div x-data="{ mobileOpen: false }" class="space-y-6">
-    <!-- Mobile Filter Toggle -->
-    <div class="lg:hidden">
+<div x-data="{ mobileOpen: false }" class="space-y-4">
+    <!-- Mobile Filter Toggle (< 768px) -->
+    <div class="md:hidden">
         <button
             @click="mobileOpen = !mobileOpen"
             type="button"
             class="flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900/70 dark:text-white dark:hover:bg-slate-800"
+            aria-expanded="false"
+            :aria-expanded="mobileOpen.toString()"
         >
-            <span>{{ __('Filters') }}</span>
+            <span>{{ __('news.filters.heading') }}</span>
             <svg class="h-5 w-5 transition" :class="{ 'rotate-180': mobileOpen }" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
@@ -32,7 +34,8 @@
         action="{{ route('news.index') }}"
         x-show="mobileOpen"
         x-transition
-        class="space-y-6 lg:!block"
+        x-cloak
+        class="space-y-6 md:block!"
     >
         <x-ui.card padding="p-6">
             <div class="space-y-6">
@@ -40,13 +43,13 @@
                 @if ($hasFilters)
                     <div class="flex justify-between items-center pb-4 border-b border-slate-200 dark:border-slate-700">
                         <h3 class="text-sm font-semibold text-slate-900 dark:text-white">
-                            {{ __('Active Filters') }}
+                            {{ __('news.filters.heading') }}
                         </h3>
                         <a
                             href="{{ route('news.index') }}"
                             class="text-xs font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
                         >
-                            {{ __('Clear All') }}
+                            {{ __('news.filters.clear_all') }}
                         </a>
                     </div>
                 @endif
@@ -54,7 +57,7 @@
                 <!-- Sort Order -->
                 <div>
                     <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-3">
-                        {{ __('Sort By') }}
+                        {{ __('news.filters.sort_label') }}
                     </label>
                     <select
                         name="sort"
@@ -62,10 +65,10 @@
                         class="block w-full rounded-2xl border border-slate-200 bg-white/80 px-4 py-2 text-sm text-slate-900 shadow-sm transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 dark:border-slate-700 dark:bg-slate-900/70 dark:text-white dark:focus:border-indigo-400 dark:focus:ring-indigo-400/40"
                     >
                         <option value="newest" {{ ($appliedFilters['sort'] ?? 'newest') === 'newest' ? 'selected' : '' }}>
-                            {{ __('Newest First') }}
+                            {{ __('news.filters.sort_newest') }}
                         </option>
                         <option value="oldest" {{ ($appliedFilters['sort'] ?? 'newest') === 'oldest' ? 'selected' : '' }}>
-                            {{ __('Oldest First') }}
+                            {{ __('news.filters.sort_oldest') }}
                         </option>
                     </select>
                 </div>
@@ -74,7 +77,7 @@
                 @if ($categories->isNotEmpty())
                     <div>
                         <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-3">
-                            {{ __('Categories') }}
+                            {{ __('news.filters.categories_label') }}
                         </label>
                         <div class="space-y-2 max-h-48 overflow-y-auto">
                             @foreach ($categories as $category)
@@ -100,7 +103,7 @@
                 @if ($authors->isNotEmpty())
                     <div>
                         <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-3">
-                            {{ __('Authors') }}
+                            {{ __('news.filters.authors_label') }}
                         </label>
                         <div class="space-y-2 max-h-48 overflow-y-auto">
                             @foreach ($authors as $author)
@@ -125,12 +128,12 @@
                 <!-- Date Range Filter -->
                 <div>
                     <label class="block text-sm font-semibold text-slate-900 dark:text-white mb-3">
-                        {{ __('Date Range') }}
+                        {{ __('news.filters.date_range_label') }}
                     </label>
                     <div class="space-y-3">
                         <div>
                             <label for="from_date" class="block text-xs text-slate-600 dark:text-slate-400 mb-1">
-                                {{ __('From Date') }}
+                                {{ __('news.filters.from_date_label') }}
                             </label>
                             <input
                                 type="date"
@@ -143,7 +146,7 @@
                         </div>
                         <div>
                             <label for="to_date" class="block text-xs text-slate-600 dark:text-slate-400 mb-1">
-                                {{ __('To Date') }}
+                                {{ __('news.filters.to_date_label') }}
                             </label>
                             <input
                                 type="date"

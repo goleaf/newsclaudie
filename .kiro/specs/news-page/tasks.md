@@ -58,10 +58,18 @@
     - Query users who have authored published posts
     - _Requirements: 2.1, 4.1_
   
-  - [ ]* 3.3 Write property tests for filter options
+  - [x] 3.3 Write property tests for filter options ✅ **DOCUMENTED**
     - **Property 4: Category filter completeness**
     - **Property 6: Author filter completeness**
     - **Validates: Requirements 2.1, 4.1**
+    - Tests created in `tests/Unit/NewsFilterOptionsPropertyTest.php`
+    - 6 tests with 238 assertions covering:
+      - Category filter completeness (with/without published posts)
+      - Author filter completeness (with/without published posts)
+      - Filter options consistency across multiple calls (idempotence)
+      - Empty database edge case
+    - **Documentation**: `tests/Unit/NEWS_FILTER_OPTIONS_TESTING.md`
+    - **Test Coverage**: Updated in `docs/TEST_COVERAGE.md`
   
   - [x] 3.4 Implement pagination
     - Paginate results with 15 items per page
@@ -106,11 +114,21 @@
     - Add lazy loading for featured images
     - _Requirements: 1.3, 1.4, 10.5_
   
-  - [ ]* 4.4 Write property tests for view rendering
+  - [x] 4.4 Write property tests for view rendering ✅ **DOCUMENTED**
     - **Property 2: Required fields display**
     - **Property 3: Post detail links**
     - **Property 22: Lazy loading images**
     - **Validates: Requirements 1.3, 1.4, 10.5**
+    - Tests created in `tests/Unit/NewsViewRenderingPropertyTest.php`
+    - 5 tests with 226 assertions covering:
+      - Required fields display (title, excerpt, date, author, categories)
+      - Post detail links (correct routes, multiple link instances)
+      - Lazy loading images (loading="lazy" attribute, edge cases)
+      - Edge case: Posts without description
+      - Edge case: Posts without categories
+    - **Documentation**: `tests/Unit/NEWS_VIEW_RENDERING_TESTING.md`
+    - **Quick Reference**: `tests/Unit/NEWS_VIEW_RENDERING_QUICK_REFERENCE.md`
+    - **Test Coverage**: Updated in `docs/TEST_COVERAGE.md`
   
   - [x] 4.5 Create empty state view
     - Display "0 results found" message when no results
@@ -124,7 +142,7 @@
     - Ensure filters persist when sort changes
     - _Requirements: 2.5, 3.5, 4.5, 5.4, 5.5_
   
-  - [ ]* 5.2 Write property tests for filter persistence
+  - [x] 5.2 Write property tests for filter persistence
     - **Property 13: Filter persistence in URL**
     - **Property 14: Sort preserves filters**
     - **Validates: Requirements 2.5, 3.5, 4.5, 5.4, 5.5**
@@ -135,23 +153,32 @@
     - Redirect to clean /news URL
     - _Requirements: 6.1, 6.2, 6.3, 6.5_
   
-  - [ ]* 5.4 Write property tests for clear filters
+  - [x] 5.4 Write property tests for clear filters ✅ **DOCUMENTED**
     - **Property 15: Clear filters button visibility**
     - **Property 16: Clear filters action**
     - **Validates: Requirements 6.1, 6.3, 6.5**
+    - Tests created in `tests/Unit/NewsClearFiltersPropertyTest.php`
+    - 5 tests with 326 assertions covering:
+      - Clear button visibility (with/without filters)
+      - Clear filters action (complete filter removal)
+      - Sort-only state (button hidden)
+      - Pagination state during clear
+      - Draft/future post exclusion
+    - **Documentation**: `tests/Unit/NEWS_CLEAR_FILTERS_TESTING.md`
+    - **Test Coverage**: Updated in `docs/TEST_COVERAGE.md`
 
-- [ ] 6. Add responsive design and styling
-  - [ ] 6.1 Implement mobile layout (< 768px)
+- [x] 6. Add responsive design and styling
+  - [x] 6.1 Implement mobile layout (< 768px)
     - Make filter panel collapsible with Alpine.js
     - Stack news items vertically with full-width cards
     - _Requirements: 8.1, 8.4_
   
-  - [ ] 6.2 Implement tablet layout (768px - 1023px)
+  - [x] 6.2 Implement tablet layout (768px - 1023px)
     - Display filters in sidebar layout
     - Adjust news item grid for tablet
     - _Requirements: 8.2_
   
-  - [ ] 6.3 Implement desktop layout (>= 1024px)
+  - [x] 6.3 Implement desktop layout (>= 1024px)
     - Display filters in fixed sidebar
     - Show news items in multi-column grid
     - _Requirements: 8.3_
@@ -161,36 +188,36 @@
     - **Property 20: Responsive news item layout**
     - **Validates: Requirements 8.1, 8.2, 8.3, 8.4**
 
-- [ ] 7. Add navigation integration
-  - [ ] 7.1 Add "News" link to main navigation
+- [-] 7. Add navigation integration
+  - [x] 7.1 Add "News" link to main navigation
     - Update resources/views/components/navigation/main.blade.php
     - Add news route to primaryLinks array
     - Ensure link appears in both desktop and mobile navigation
     - _Requirements: 9.1, 9.3_
   
-  - [ ] 7.2 Implement active state highlighting
+  - [x] 7.2 Implement active state highlighting
     - Add route matching for news.* pattern
     - Apply active styling when on news page
     - _Requirements: 9.2_
   
-  - [ ] 7.3 Add translation support
+  - [-] 7.3 Add translation support
     - Create lang/en/news.php with all translatable strings
     - Add "nav.news" key to lang/en.json
     - Use __() helper in all views
     - _Requirements: 9.4_
   
-  - [ ]* 7.4 Write property test for locale-aware navigation
+  - [ ] 7.4 Write property test for locale-aware navigation
     - **Property 21: Locale-aware navigation**
     - **Validates: Requirements 9.4**
 
-- [ ] 8. Add database indexes for performance
-  - [ ] 8.1 Create migration for indexes
+- [x] 8. Add database indexes for performance
+  - [x] 8.1 Create migration for indexes
     - Add index on posts.published_at
     - Add index on posts.user_id (if not exists)
     - Add indexes on category_post pivot table
     - _Requirements: 10.1_
   
-  - [ ] 8.2 Run migration and verify indexes
+  - [x] 8.2 Run migration and verify indexes
     - Execute migration
     - Verify indexes with EXPLAIN queries
     - _Requirements: 10.1_

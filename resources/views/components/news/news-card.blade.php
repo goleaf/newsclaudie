@@ -3,14 +3,14 @@
 <article class="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white/80 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800/70 dark:bg-slate-900/70">
     <!-- Featured Image -->
     @if ($post->featured_image && basename($post->featured_image) !== 'default.jpg')
-        <a href="{{ route('posts.show', $post) }}" class="relative block aspect-[16/9]">
+        <a href="{{ route('posts.show', $post) }}" class="relative block aspect-video">
             <img
                 src="{{ $post->featured_image }}"
                 alt="{{ $post->title }}"
                 loading="lazy"
                 class="absolute inset-0 h-full w-full object-cover"
             >
-            <span class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/10 to-transparent"></span>
+            <span class="absolute inset-0 bg-linear-to-t from-slate-950/60 via-slate-950/10 to-transparent"></span>
         </a>
     @endif
 
@@ -27,7 +27,7 @@
             @if ($post->author)
                 <span>&bull;</span>
                 <span>
-                    {{ __('By') }}
+                    {{ __('news.by_author', ['author' => '']) }}
                     <a
                         href="{{ route('posts.index', ['author' => $post->author]) }}"
                         class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400"
@@ -73,7 +73,7 @@
                 href="{{ route('posts.show', $post) }}"
                 class="inline-flex items-center gap-1 text-sm font-semibold text-indigo-600 transition hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
             >
-                {{ __('Read more') }}
+                {{ __('news.read_more') }}
                 <svg class="h-4 w-4 transition group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>

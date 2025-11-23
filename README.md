@@ -172,7 +172,11 @@ php artisan test --testsuite=Browser
 - **Unit Tests:** Property-based testing for critical business logic
 - **Accessibility Tests:** Automated and manual accessibility testing
 
-See [Property Testing Guide](tests/PROPERTY_TESTING.md) for information on property-based testing.
+### Testing Documentation
+
+- **[Property Testing Guide](tests/PROPERTY_TESTING.md)** - Property-based testing approach and examples
+- **[News Filter Options Testing](tests/Unit/NEWS_FILTER_OPTIONS_TESTING.md)** - Property tests for news filters
+- **[Test Coverage](docs/TEST_COVERAGE.md)** - Complete test coverage inventory
 
 ## 🎨 Writing Blog Posts
 

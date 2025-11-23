@@ -7,6 +7,7 @@ This document maps every PHP class under `app/` to its current automated coverag
 | Class | Current Coverage | Gap / Required Test (type + prerequisites) |
 | --- | --- | --- |
 | `Auth\AuthenticatedSessionController` | `tests/Feature/Auth/AuthenticationTest` exercises login/logout happy-path + failures. | Add regression feature test for throttling/lockout once rate-limiter is configured. Requires fake cache + multiple failed attempts. |
+| `NewsController` | `tests/Feature/NewsControllerTest` covers filtering, sorting, pagination. Property tests in `tests/Unit/NewsFilterOptionsPropertyTest` verify filter option completeness. | Add feature tests for URL parameter persistence and empty state rendering. |
 | `Auth\ConfirmablePasswordController` | `tests/Feature/Auth/PasswordConfirmationTest`. | Covered. |
 | `Auth\EmailVerificationNotificationController`, `Auth\EmailVerificationPromptController`, `Auth\VerifyEmailController` | `tests/Feature/Auth/EmailVerificationTest`. | Covered. |
 | `Auth\NewPasswordController`, `Auth\PasswordResetLinkController` | `tests/Feature/Auth/PasswordResetTest`. | Covered. |
@@ -42,14 +43,15 @@ This document maps every PHP class under `app/` to its current automated coverag
 | --- | --- | --- |
 | `Category`, `Comment`, `Tag`, `User` | Not directly tested. | Add unit tests for relationships/scopes once domain logic is added. |
 | `PageView` | `tests/Unit/PageViewTest`. | Add coverage for `normalizeDomain` edge cases (e.g. missing protocol) and `anonymizeRequest` salted hashing. |
-| `Post` | `tests/Unit/PostModelTest`. | Covered for helper methods; add test for `scopePublished` once `PublishedScope` integrates. |
+| `Post` | `tests/Unit/PostModelTest` + `tests/Unit/PostQueryScopesTest` covers query scopes for news filtering. | Covered for helper methods and query scopes; add test for `scopePublished` once `PublishedScope` integrates. |
 | `PublishedScope` | `tests/Unit/PublishedScopeTest`. | Covered for guest/author/admin visibility logic. |
 
 ## View Components
 
 | Component | Current Coverage | Gap / Required Test |
 | --- | --- | --- |
-| Blade components under `resources/views/components/**` | None. | Once Tailwind refactor stabilizes, add Laravel view component tests to ensure props render expected markup. |
+| `resources/views/components/news/news-card.blade.php` | `tests/Unit/NewsViewRenderingPropertyTest` (5 property-based tests, 226 assertions) validates required fields display, post detail links, lazy loading images, and edge cases. **Documentation**: [NEWS_VIEW_RENDERING_TESTING.md](../tests/Unit/NEWS_VIEW_RENDERING_TESTING.md) | Covered for news card rendering. Add tests for filter panel component when created. |
+| Other Blade components under `resources/views/components/**` | None. | Once Tailwind refactor stabilizes, add Laravel view component tests to ensure props render expected markup. |
 
 ## Volt Components
 
@@ -77,14 +79,25 @@ This document maps every PHP class under `app/` to its current automated coverag
 | `Console\Commands\*` | None. | Add feature tests using `artisan` helper to assert side effects (e.g. `CreateAdminUser` seeds user). |
 | `Providers\*` | Not tested. | Rely on integration tests unless provider adds custom boot logic (then add unit test hooking container). |
 
+## Services
+
+| Service | Current Coverage | Gap / Required Test |
+| --- | --- | --- |
+| `NewsFilterService` | `tests/Unit/NewsFilterOptionsPropertyTest` (6 property-based tests, 238 assertions) validates filter option completeness, idempotence, and edge cases. | Covered for filter options. Add tests for `getFilteredPosts()` method with various filter combinations. |
+
 ## Priority Coverage Targets
 
-1. **Markdown parser/converter** – add:
+1. **News feature completion** – add:
+   - Feature tests for URL parameter persistence across pagination
+   - Feature tests for "Clear All Filters" functionality
+   - Feature tests for results count display
+   - Browser tests for responsive filter panel behavior
+2. **Markdown parser/converter** – add:
    - Failure test when markdown front matter references a missing author.
    - Regression test ensuring Torchlight attribution is suppressed when disabled even if the comment is present.
-2. **Post creation flow** – add feature tests confirming categories sync, drafts skip `published_at`, and unauthorized users receive `403`.
-3. **Analytics tracking** – add feature test for `AnalyticsMiddleware` verifying `PageView` creation and exclusion list behaviour.
-4. **Locale workflow** – extend feature coverage to assert that the validation message uses `validation.locale_invalid` and that supported locale list is honoured.
+3. **Post creation flow** – add feature tests confirming categories sync, drafts skip `published_at`, and unauthorized users receive `403`.
+4. **Analytics tracking** – add feature test for `AnalyticsMiddleware` verifying `PageView` creation and exclusion list behaviour.
+5. **Locale workflow** – extend feature coverage to assert that the validation message uses `validation.locale_invalid` and that supported locale list is honoured.
 
 ## Test Harness Hardening Checklist
 

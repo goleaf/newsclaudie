@@ -3,6 +3,7 @@
         ['label' => __('nav.home'), 'route' => 'home', 'active' => 'home'],
         ['label' => __('nav.posts'), 'route' => 'posts.index', 'active' => 'posts.*'],
         ['label' => __('nav.categories'), 'route' => 'categories.index', 'active' => 'categories.*'],
+        ['label' => __('nav.news'), 'route' => 'news.index', 'active' => 'news.*'],
     ])
         ->when(config('blog.readme'), function ($links) {
             $links->push([

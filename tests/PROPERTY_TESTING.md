@@ -186,4 +186,127 @@ If tests are slow:
 
 ## Examples
 
-See `tests/Unit/PropertyTestingExampleTest.php` for working examples.
+### Example Test Files
+
+- **`tests/Unit/PropertyTestingExampleTest.php`** - Basic property testing examples
+- **`tests/Unit/NewsFilterOptionsPropertyTest.php`** - Real-world property tests for news filters
+  - See [NEWS_FILTER_OPTIONS_TESTING.md](Unit/NEWS_FILTER_OPTIONS_TESTING.md) for detailed documentation
+  - See [NEWS_FILTER_OPTIONS_QUICK_REFERENCE.md](Unit/NEWS_FILTER_OPTIONS_QUICK_REFERENCE.md) for quick reference
+- **`tests/Unit/NewsViewRenderingPropertyTest.php`** - Property tests for view rendering
+  - See [NEWS_VIEW_RENDERING_TESTING.md](Unit/NEWS_VIEW_RENDERING_TESTING.md) for detailed documentation
+  - See [NEWS_VIEW_RENDERING_QUICK_REFERENCE.md](Unit/NEWS_VIEW_RENDERING_QUICK_REFERENCE.md) for quick reference
+- **`tests/Unit/NewsFilterPersistencePropertyTest.php`** - Property tests for filter state persistence
+
+### Real-World Example: News Filter Options
+
+The news filter options tests demonstrate property-based testing with database operations:
+
+```php
+/**
+ * Test Property 4: Category filter completeness
+ * 
+ * Property: Only categories with published posts appear in filter options
+ */
+public function test_category_filter_completeness(): void
+{
+    for ($i = 0; $i < 10; $i++) {
+        $faker = fake();
+        
+        // Create random categories (0-10)
+        $totalCategories = $faker->numberBetween(0, 10);
+        $categories = Category::factory()->count($totalCategories)->create();
+        
+        // Randomly assign posts (70% probability)
+        $categoriesWithPosts = [];
+        foreach ($categories as $category) {
+            if ($faker->boolean(70)) {
+                $posts = Post::factory()->count($faker->numberBetween(1, 5))
+                    ->create(['published_at' => now()->subDay()]);
+                $category->posts()->attach($posts->pluck('id'));
+                $categoriesWithPosts[] = $category->id;
+            }
+        }
+        
+        // Verify property: filter includes all and only categories with posts
+        $filterOptions = $this->service->getFilterOptions();
+        $returnedCategoryIds = $filterOptions['categories']->pluck('id')->toArray();
+        
+        sort($categoriesWithPosts);
+        sort($returnedCategoryIds);
+        
+        $this->assertSame($categoriesWithPosts, $returnedCategoryIds);
+        
+        // Cleanup
+        foreach ($categories as $category) {
+            $category->posts()->detach();
+            $category->delete();
+        }
+    }
+}
+```
+
+This test verifies that the filter options always include exactly the categories that have published posts, regardless of how many categories exist or how posts are distributed.
+
+### Real-World Example: News View Rendering
+
+The news view rendering tests demonstrate property-based testing with Blade components:
+
+```php
+/**
+ * Test Property 2: Required fields display
+ * 
+ * Property: All news cards must display required fields
+ */
+public function test_required_fields_display(): void
+{
+    for ($i = 0; $i < 10; $i++) {
+        $faker = fake();
+        
+        // Create a post with random content
+        $author = User::factory()->create();
+        $post = Post::factory()
+            ->for($author, 'author')
+            ->create([
+                'title' => $faker->sentence(),
+                'description' => $faker->paragraph(),
+                'published_at' => now()->subDays($faker->numberBetween(1, 30)),
+            ]);
+        
+        // Attach random number of categories (0-5)
+        $categoryCount = $faker->numberBetween(0, 5);
+        if ($categoryCount > 0) {
+            $categories = Category::factory()->count($categoryCount)->create();
+            $post->categories()->attach($categories->pluck('id'));
+            $post->load('categories');
+        }
+        
+        // Render the news card component
+        $html = (string) $this->blade('<x-news.news-card :post="$post" />', ['post' => $post]);
+        
+        // Verify property: all required fields must be present
+        $this->assertStringContainsString($post->title, $html);
+        $this->assertStringContainsString($post->author->name, $html);
+        $this->assertStringContainsString(
+            $post->published_at->format('M j, Y'), 
+            $html
+        );
+        
+        // Verify all category names are present
+        foreach ($post->categories as $category) {
+            $this->assertStringContainsString($category->name, $html);
+        }
+        
+        // Cleanup
+        $post->categories()->detach();
+        $post->delete();
+        $author->delete();
+        if (isset($categories)) {
+            foreach ($categories as $category) {
+                $category->delete();
+            }
+        }
+    }
+}
+```
+
+This test verifies that the news card component always renders all required fields correctly, regardless of post content, number of categories, or publication date.
