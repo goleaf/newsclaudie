@@ -14,9 +14,9 @@
   - Add custom animations and keyframes
   - Configure dark mode with class strategy
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6_
-  - **Documentation**: `docs/design-tokens/DESIGN_TOKENS.md` (comprehensive reference)
+  - **Documentation**: `../../../docs/design-tokens/DESIGN_TOKENS.md` (comprehensive reference)
   - **Helper Class**: `app/Support/DesignTokens.php` (type-safe access)
-  - **Usage Guide**: `docs/design-tokens/DESIGN_TOKENS_USAGE_GUIDE.md` (practical examples)
+  - **Usage Guide**: `../../../docs/design-tokens/DESIGN_TOKENS_USAGE_GUIDE.md` (practical examples)
 
 - [ ]* 1.1 Write property test for design token configuration
   - **Property 1: Color contrast compliance**
@@ -28,7 +28,7 @@
   - Create resources/views/components/ui/spacer.blade.php for consistent spacing
   - Update resources/css/app.css with component-specific styles
   - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
-  - **Documentation**: `docs/design-tokens/SURFACE_COMPONENT.md` (complete reference)
+  - **Documentation**: `../../../docs/design-tokens/SURFACE_COMPONENT.md` (complete reference)
   - **Component**: `resources/views/components/ui/surface.blade.php` (v2.0.0)
   - **Features**:
     - Variant system (default, subtle, ghost)

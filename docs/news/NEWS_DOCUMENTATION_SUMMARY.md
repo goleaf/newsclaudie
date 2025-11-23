@@ -30,7 +30,7 @@ This document summarizes all documentation created for the News feature implemen
 
 ### 2. Usage Guide
 
-**File**: `docs/news/NEWS_CONTROLLER_USAGE.md`
+**File**: `NEWS_CONTROLLER_USAGE.md`
 
 **Contents**:
 - **Basic Usage** - Simple examples and route definition
@@ -52,7 +52,7 @@ This document summarizes all documentation created for the News feature implemen
 
 ### 3. API Documentation
 
-**File**: `docs/api/NEWS_API.md`
+**File**: `../api/NEWS_API.md`
 
 **Contents**:
 - **Endpoint Specification** - Complete HTTP API reference
@@ -75,7 +75,7 @@ This document summarizes all documentation created for the News feature implemen
 
 ### 4. Refactoring Guide
 
-**File**: `docs/news/NEWS_CONTROLLER_REFACTORING.md`
+**File**: `NEWS_CONTROLLER_REFACTORING.md`
 
 **Contents**:
 - **Refactoring Overview** - Why and how the code was refactored

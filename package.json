@@ -9,7 +9,8 @@
         "test:lint": "prettier --check resources/",
         "typecheck": "tsc --noEmit",
         "playwright:install": "playwright install",
-        "test:optimistic": "tsx tests/js/admin-post-actions.test.ts"
+        "test:optimistic": "tsx tests/js/admin-post-actions.test.ts",
+        "docs:verify": "bash scripts/check-docs-placement.sh"
     },
     "dependencies": {
         "alpinejs": "^3.15.2",

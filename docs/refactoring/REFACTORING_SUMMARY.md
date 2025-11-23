@@ -281,7 +281,7 @@ All changes are **non-breaking**:
 ### Short Term (Recommended)
 1. 📝 **Update Controllers**: Use new `approve()`, `reject()` methods
 2. 📝 **Update Views**: Use helper methods like `canBeEditedBy()`
-3. 📝 **Update Documentation**: Add to `docs/testing/TEST_COVERAGE.md`
+3. 📝 **Update Documentation**: Add to `../testing/TEST_COVERAGE.md`
 
 ### Long Term (Optional)
 1. 🔔 **Add Events**: `CommentApproved`, `CommentRejected` events
@@ -306,7 +306,7 @@ All changes are **non-breaking**:
    - Key metrics
 
 ### Documentation to Update
-1. ⚠️ `docs/testing/TEST_COVERAGE.md` - Add new test coverage
+1. ⚠️ `../testing/TEST_COVERAGE.md` - Add new test coverage
 2. ⚠️ `tests/Unit/ADMIN_CRUD_PROPERTY_TESTS_INDEX.md` - Add new properties
 3. ⚠️ `README.md` - Mention soft deletes feature
 

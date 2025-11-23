@@ -1,6 +1,6 @@
 # Interface Migration Guide
 
-> Canonical, actively maintained copy: `docs/interface/interface-migration-guide.md`. Keep this file as a thin pointer to avoid guidance drifting between the two.
+> Canonical, actively maintained copy: `interface-migration-guide.md`. Keep this file as a thin pointer to avoid guidance drifting between the two.
 
 ## 1. Controllers & Form Requests
 

@@ -57,7 +57,7 @@ Comprehensive documentation has been created for the News Filter Options propert
 ### 4. Updated Project Documentation
 
 #### Test Coverage Inventory
-**File**: `docs/testing/TEST_COVERAGE.md`
+**File**: `../testing/TEST_COVERAGE.md`
 
 **Updates**:
 - Added NewsController to Controllers section
@@ -208,7 +208,7 @@ cat tests/Unit/NewsFilterOptionsPropertyTest.php
 ### Troubleshooting
 ```bash
 # Check test coverage inventory
-cat docs/testing/TEST_COVERAGE.md
+cat ../testing/TEST_COVERAGE.md
 
 # Review property testing guide
 cat tests/PROPERTY_TESTING.md
@@ -325,7 +325,7 @@ This documentation provides everything needed to understand, run, maintain, and 
 4. `DOCUMENTATION_NEWS_FILTER_TESTING.md` (this file)
 
 ### Updated Documentation
-1. `docs/testing/TEST_COVERAGE.md`
+1. `../testing/TEST_COVERAGE.md`
 2. `README.md`
 3. `tests/PROPERTY_TESTING.md`
 4. `.kiro/specs/news-page/tasks.md`

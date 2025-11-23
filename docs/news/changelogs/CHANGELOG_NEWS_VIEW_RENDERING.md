@@ -45,7 +45,7 @@ Comprehensive documentation added for the News View Rendering property-based tes
    - Added links to view rendering docs
    - Expanded documentation structure diagram
 
-4. **`docs/testing/TEST_COVERAGE.md`**
+4. **`../../testing/TEST_COVERAGE.md`**
    - Added documentation link for news-card component
    - Updated View Components section
 
@@ -153,7 +153,7 @@ Comprehensive documentation added for the News View Rendering property-based tes
 - `tests/Unit/NEWS_VIEW_RENDERING_TESTING.md` (NEW)
 - `tests/Unit/NEWS_VIEW_RENDERING_QUICK_REFERENCE.md` (existing)
 - `tests/PROPERTY_TESTING.md` (updated)
-- `docs/testing/TEST_COVERAGE.md` (updated)
+- `../../testing/TEST_COVERAGE.md` (updated)
 
 ### Code
 - `tests/Unit/NewsViewRenderingPropertyTest.php` (new test file)
@@ -239,7 +239,7 @@ Comprehensive documentation added for the News View Rendering property-based tes
 
 - [Property-Based Testing Guide](tests/PROPERTY_TESTING.md)
 - [News Feature Requirements](.kiro/specs/news-page/requirements.md)
-- [Test Coverage Inventory](docs/testing/TEST_COVERAGE.md)
+- [Test Coverage Inventory](../../testing/TEST_COVERAGE.md)
 - [News Filter Options Testing](tests/Unit/NEWS_FILTER_OPTIONS_TESTING.md)
 - [Laravel Testing Documentation](https://laravel.com/docs/testing)
 - [Laravel Blade Components](https://laravel.com/docs/blade#components)

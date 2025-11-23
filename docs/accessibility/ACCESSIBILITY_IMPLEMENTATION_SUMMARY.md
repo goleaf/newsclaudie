@@ -188,14 +188,14 @@ The following accessibility features were already present in the codebase:
 ## Files Created
 
 1. `resources/views/components/admin/skip-links.blade.php` - Skip links component
-2. `docs/accessibility/ACCESSIBILITY_ENHANCEMENTS.md` - Detailed implementation documentation
-3. `docs/accessibility/ACCESSIBILITY_TESTING_GUIDE.md` - Testing procedures and tools
-4. `docs/accessibility/ACCESSIBILITY_AUDIT_CHECKLIST.md` - Comprehensive audit checklist
-5. `docs/accessibility/ACCESSIBILITY_IMPLEMENTATION_SUMMARY.md` - This summary document
+2. `ACCESSIBILITY_ENHANCEMENTS.md` - Detailed implementation documentation
+3. `ACCESSIBILITY_TESTING_GUIDE.md` - Testing procedures and tools
+4. `ACCESSIBILITY_AUDIT_CHECKLIST.md` - Comprehensive audit checklist
+5. `ACCESSIBILITY_IMPLEMENTATION_SUMMARY.md` - This summary document
 
 ## Files Updated
 
-1. `docs/admin/ADMIN_DOCUMENTATION_INDEX.md` - Added accessibility documentation links
+1. `../admin/ADMIN_DOCUMENTATION_INDEX.md` - Added accessibility documentation links
 
 ## Next Steps
 
@@ -228,7 +228,7 @@ The following accessibility features were already present in the codebase:
 ## Support
 
 For accessibility questions or issues:
-1. Review the documentation in `docs/ACCESSIBILITY_*.md`
+1. Review the documentation in `ACCESSIBILITY_*.md`
 2. Check the testing guide for common issues
 3. Use the audit checklist for systematic review
 4. Consult WCAG guidelines for specific criteria

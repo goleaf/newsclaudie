@@ -38,7 +38,7 @@ Comprehensive documentation added for the News Filter Options property-based tes
 
 ### Updated Project Documentation
 
-3. **`docs/testing/TEST_COVERAGE.md`**
+3. **`../../testing/TEST_COVERAGE.md`**
    - Added `NewsController` to Controllers section
    - Added `NewsFilterService` to new Services section
    - Updated Post model coverage notes
@@ -152,7 +152,7 @@ Comprehensive documentation added for the News Filter Options property-based tes
 ### Documentation
 - `tests/Unit/NEWS_FILTER_OPTIONS_TESTING.md` (NEW)
 - `tests/PROPERTY_TESTING.md` (referenced)
-- `docs/testing/TEST_COVERAGE.md` (updated)
+- `../../testing/TEST_COVERAGE.md` (updated)
 - `README.md` (updated)
 
 ### Code
@@ -238,6 +238,6 @@ Comprehensive documentation added for the News Filter Options property-based tes
 
 - [Property-Based Testing Guide](tests/PROPERTY_TESTING.md)
 - [News Feature Requirements](.kiro/specs/news-page/requirements.md)
-- [Test Coverage Inventory](docs/testing/TEST_COVERAGE.md)
+- [Test Coverage Inventory](../../testing/TEST_COVERAGE.md)
 - [Laravel Testing Documentation](https://laravel.com/docs/testing)
 - [PestPHP Documentation](https://pestphp.com)

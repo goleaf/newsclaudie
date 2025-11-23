@@ -25,7 +25,7 @@
 
 4. **Missing documentation**  
    - *Finding:* No artifact described component hierarchy nor pagination contracts.  
-   - *Resolution:* This report plus `docs/interface/interface-migration-guide.md` document the architecture and forward expectations.
+   - *Resolution:* This report plus `interface-migration-guide.md` document the architecture and forward expectations.
 
 5. **Limited type coverage in the JS entry**  
    - *Finding:* `resources/js/app.ts` (previously `.js`) relied on implicit `any` access, causing editor noise and runtime guards sprinkled throughout the Blade templates.  

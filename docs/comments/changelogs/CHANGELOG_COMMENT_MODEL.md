@@ -52,9 +52,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `deleted_at` - Soft delete performance
 
 #### Documentation
-- Complete API reference (`docs/comments/COMMENT_MODEL_API.md`)
-- Practical usage guide (`docs/comments/COMMENT_MODEL_USAGE_GUIDE.md`)
-- Comprehensive architecture documentation (`docs/comments/COMMENT_MODEL_ARCHITECTURE.md`)
+- Complete API reference (`../COMMENT_MODEL_API.md`)
+- Practical usage guide (`../COMMENT_MODEL_USAGE_GUIDE.md`)
+- Comprehensive architecture documentation (`../COMMENT_MODEL_ARCHITECTURE.md`)
 - Updated quick reference card
 - Database schema diagram
 - Expert analysis report
@@ -340,7 +340,7 @@ This project is licensed under the MIT License.
 ---
 
 **For detailed documentation, see**:
-- API Reference: `docs/comments/COMMENT_MODEL_API.md`
-- Usage Guide: `docs/comments/COMMENT_MODEL_USAGE_GUIDE.md`
-- Architecture: `docs/comments/COMMENT_MODEL_ARCHITECTURE.md`
+- API Reference: `../COMMENT_MODEL_API.md`
+- Usage Guide: `../COMMENT_MODEL_USAGE_GUIDE.md`
+- Architecture: `../COMMENT_MODEL_ARCHITECTURE.md`
 - Quick Reference: `COMMENT_MODEL_QUICK_REFERENCE.md`

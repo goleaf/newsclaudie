@@ -36,7 +36,7 @@ Comprehensive documentation created for the News Locale-Aware Navigation propert
 
 ### Updated Files
 
-1. **`docs/testing/TEST_COVERAGE.md`**
+1. **`../../testing/TEST_COVERAGE.md`**
    - Added entry for `NewsLocaleAwareNavigationPropertyTest`
    - Documented 4 property-based tests with 115 assertions
    - Added link to comprehensive documentation
@@ -258,7 +258,7 @@ Sets application locale from session on each request.
 
 - [Property Testing Guide](../PROPERTY_TESTING.md)
 - [News Property Tests Index](../tests/Unit/NEWS_PROPERTY_TESTS_INDEX.md)
-- [Test Coverage](../docs/testing/TEST_COVERAGE.md)
+- [Test Coverage](../../../testing/TEST_COVERAGE.md)
 - [News Requirements](../.kiro/specs/news-page/requirements.md)
 - [News Tasks](../.kiro/specs/news-page/tasks.md)
 

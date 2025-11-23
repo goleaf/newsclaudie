@@ -44,7 +44,7 @@ Added detailed documentation to the `baseQuery()` method explaining:
 
 #### 1. Created ADMIN_COMMENTS_EAGER_LOADING.md
 
-**Location:** `docs/admin/ADMIN_COMMENTS_EAGER_LOADING.md`
+**Location:** `../ADMIN_COMMENTS_EAGER_LOADING.md`
 
 **Contents:**
 - Overview of eager loading strategy
@@ -253,12 +253,12 @@ Monitor these metrics after deployment:
 
 ### Files Created
 
-1. `docs/admin/ADMIN_COMMENTS_EAGER_LOADING.md` - Comprehensive eager loading guide
+1. `../ADMIN_COMMENTS_EAGER_LOADING.md` - Comprehensive eager loading guide
 2. `CHANGELOG_ADMIN_COMMENTS_EAGER_LOADING.md` - This changelog
 
 ### Files Updated
 
-1. `docs/admin/ADMIN_DOCUMENTATION_INDEX.md` - Added reference to new documentation
+1. `../ADMIN_DOCUMENTATION_INDEX.md` - Added reference to new documentation
 2. `resources/views/livewire/admin/comments/index.blade.php` - Added DocBlock
 
 ## References

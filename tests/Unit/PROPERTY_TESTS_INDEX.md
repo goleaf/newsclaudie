@@ -313,7 +313,7 @@ public function test_property_name(): void
 ## Related Documentation
 
 - [Property Testing Guide](../PROPERTY_TESTING.md) - Complete guide to property-based testing
-- [Test Coverage](../../docs/testing/TEST_COVERAGE.md) - Overall test coverage inventory
+- [Test Coverage](../../../../docs/testing/TEST_COVERAGE.md) - Overall test coverage inventory
 - [Admin CRUD Design](../../.kiro/specs/admin-livewire-crud/design.md) - Design with all properties
 - [Admin CRUD Requirements](../../.kiro/specs/admin-livewire-crud/requirements.md) - Requirements document
 - [Admin CRUD Tasks](../../.kiro/specs/admin-livewire-crud/tasks.md) - Implementation tasks
@@ -327,7 +327,7 @@ When adding new property-based tests:
 3. Write full documentation in `*_TESTING.md`
 4. Create quick reference in `*_QUICK_REFERENCE.md`
 5. Update this index
-6. Update `docs/testing/TEST_COVERAGE.md`
+6. Update `../../docs/testing/TEST_COVERAGE.md`
 7. Mark as documented in `tasks.md`
 
 ## Changelog

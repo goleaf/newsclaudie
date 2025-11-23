@@ -467,9 +467,9 @@ Comment::approved()
 
 ## 📚 Related Documentation
 
-- **API Reference**: `docs/comments/COMMENT_MODEL_API.md`
-- **Architecture**: `docs/comments/COMMENT_MODEL_ARCHITECTURE.md`
-- **Usage Guide**: `docs/comments/COMMENT_MODEL_USAGE_GUIDE.md`
+- **API Reference**: `COMMENT_MODEL_API.md`
+- **Architecture**: `COMMENT_MODEL_ARCHITECTURE.md`
+- **Usage Guide**: `COMMENT_MODEL_USAGE_GUIDE.md`
 - **Schema Diagram**: `COMMENT_MODEL_SCHEMA_DIAGRAM.md`
 
 ---

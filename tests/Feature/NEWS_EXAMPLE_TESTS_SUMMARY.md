@@ -148,7 +148,7 @@ php artisan test --filter=News
 - **Requirements**: `.kiro/specs/news-page/requirements.md`
 - **Design**: `.kiro/specs/news-page/design.md`
 - **Tasks**: `.kiro/specs/news-page/tasks.md`
-- **Test Coverage**: `docs/testing/TEST_COVERAGE.md`
+- **Test Coverage**: `../../docs/testing/TEST_COVERAGE.md`
 
 ## Conclusion
 

@@ -917,9 +917,9 @@ $comments = Comment::withTrashed()->approved()->get();
 
 ## Related Documentation
 
-- **API Reference**: `docs/comments/COMMENT_MODEL_API.md`
+- **API Reference**: `COMMENT_MODEL_API.md`
 - **Quick Reference**: `COMMENT_MODEL_QUICK_REFERENCE.md`
-- **Architecture**: `docs/comments/COMMENT_MODEL_ARCHITECTURE.md`
+- **Architecture**: `COMMENT_MODEL_ARCHITECTURE.md`
 
 ---
 

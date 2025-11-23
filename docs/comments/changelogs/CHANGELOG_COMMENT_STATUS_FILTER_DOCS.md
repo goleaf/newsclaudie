@@ -30,7 +30,7 @@ Comprehensive documentation created for the Comment Status Filter property-based
 
 ### Updated Files
 
-1. **`docs/testing/TEST_COVERAGE.md`**
+1. **`../../testing/TEST_COVERAGE.md`**
    - Added new "Property-Based Tests" section
    - Added entry for `CommentStatusFilterPropertyTest`
    - Added entry for `CommentInlineEditPropertyTest`
@@ -272,7 +272,7 @@ Uses status filtering for comment moderation interface.
 ## Related Documentation
 
 - [Property Testing Guide](../tests/PROPERTY_TESTING.md)
-- [Test Coverage](../docs/testing/TEST_COVERAGE.md)
+- [Test Coverage](../../../testing/TEST_COVERAGE.md)
 - [Admin CRUD Requirements](../.kiro/specs/admin-livewire-crud/requirements.md)
 - [Admin CRUD Tasks](../.kiro/specs/admin-livewire-crud/tasks.md)
 
@@ -291,6 +291,6 @@ The Comment Status Filter feature now has comprehensive documentation covering a
 
 - [Full Testing Guide](tests/Unit/COMMENT_STATUS_FILTER_TESTING.md)
 - [Quick Reference](tests/Unit/COMMENT_STATUS_FILTER_QUICK_REFERENCE.md)
-- [Test Coverage](docs/testing/TEST_COVERAGE.md)
+- [Test Coverage](../../testing/TEST_COVERAGE.md)
 - [Property Testing Guide](tests/PROPERTY_TESTING.md)
 - [Admin CRUD Requirements](.kiro/specs/admin-livewire-crud/requirements.md)

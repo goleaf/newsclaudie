@@ -756,7 +756,7 @@ composer require spatie/laravel-permission
 
 **Created**:
 1. ✅ `DESIGN_TOKENS_SECURITY_AUDIT.md` - This audit report
-2. ✅ `docs/design-tokens/DESIGN_TOKENS_SECURITY.md` - Security guide
+2. ✅ `DESIGN_TOKENS_SECURITY.md` - Security guide
 3. ✅ `tests/Unit/DesignTokensSecurityTest.php` - Security tests
 4. ✅ `app/Support/helpers.php` - CSP nonce helper
 
@@ -777,7 +777,7 @@ composer require spatie/laravel-permission
 ## Questions?
 
 For security questions:
-- Review [Security Guide](docs/design-tokens/DESIGN_TOKENS_SECURITY.md)
+- Review [Security Guide](DESIGN_TOKENS_SECURITY.md)
 - Check [OWASP Guidelines](https://owasp.org)
 - Contact security team
 - Report vulnerabilities responsibly

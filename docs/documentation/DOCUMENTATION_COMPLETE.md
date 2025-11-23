@@ -49,7 +49,7 @@ Comprehensive documentation has been created for the News Filter Options propert
 
 ### 📝 Documentation Files Updated: 5
 
-1. **`docs/testing/TEST_COVERAGE.md`**
+1. **`../testing/TEST_COVERAGE.md`**
    - Added NewsController coverage
    - Added Services section
    - Updated priority targets
@@ -302,7 +302,7 @@ docs/
 6. `DOCUMENTATION_COMPLETE.md`
 
 ### Updated Documentation (5 files)
-1. `docs/testing/TEST_COVERAGE.md`
+1. `../testing/TEST_COVERAGE.md`
 2. `README.md`
 3. `tests/PROPERTY_TESTING.md`
 4. `.kiro/specs/news-page/tasks.md`

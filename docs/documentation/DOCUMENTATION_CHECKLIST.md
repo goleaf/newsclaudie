@@ -155,9 +155,9 @@
 ## File Checklist
 
 ### Created Files
-- [x] `docs/query-scopes/POST_QUERY_SCOPES.md` (400+ lines)
-- [x] `docs/query-scopes/POST_QUERY_SCOPES_QUICK_REFERENCE.md` (100+ lines)
-- [x] `docs/query-scopes/POST_QUERY_SCOPES_ONBOARDING.md` (200+ lines)
+- [x] `../query-scopes/POST_QUERY_SCOPES.md` (400+ lines)
+- [x] `../query-scopes/POST_QUERY_SCOPES_QUICK_REFERENCE.md` (100+ lines)
+- [x] `../query-scopes/POST_QUERY_SCOPES_ONBOARDING.md` (200+ lines)
 - [x] `CHANGELOG_QUERY_SCOPES.md` (300+ lines)
 - [x] `DOCUMENTATION_SUMMARY.md` (400+ lines)
 - [x] `DOCUMENTATION_CHECKLIST.md` (this file)

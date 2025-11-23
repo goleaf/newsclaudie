@@ -30,9 +30,9 @@ All security recommendations from the audit have been successfully implemented f
 ### 📄 Files Created
 
 1. ✅ `tests/Feature/NewsControllerSecurityTest.php` - Comprehensive security tests
-2. ✅ `docs/news/security/SECURITY_IMPLEMENTATION.md` - Full implementation guide
-3. ✅ `docs/news/security/SECURITY_CHECKLIST.md` - Deployment and maintenance checklist
-4. ✅ `docs/news/security/SECURITY_QUICK_START.md` - Developer quick reference
+2. ✅ `SECURITY_IMPLEMENTATION.md` - Full implementation guide
+3. ✅ `SECURITY_CHECKLIST.md` - Deployment and maintenance checklist
+4. ✅ `SECURITY_QUICK_START.md` - Developer quick reference
 5. ✅ `SECURITY_AUDIT_SUMMARY.md` - Executive summary
 6. ✅ `IMPLEMENTATION_COMPLETE.md` - This file
 

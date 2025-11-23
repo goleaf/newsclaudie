@@ -13,8 +13,8 @@ This review analyzed the recent changes to `app/Models/Comment.php` and implemen
 - COMMENT_MODEL_IMPROVEMENTS_SUMMARY.md
 - COMMENT_MODEL_ANALYSIS.md
 - CHANGELOG_COMMENT_MODEL.md
-- docs/comments/COMMENT_MODEL_API.md
-- docs/comments/COMMENT_MODEL_USAGE_GUIDE.md
+- COMMENT_MODEL_API.md
+- COMMENT_MODEL_USAGE_GUIDE.md
 
 ---
 

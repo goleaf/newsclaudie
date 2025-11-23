@@ -68,7 +68,7 @@ The component leverages the following design tokens:
 ## Documentation Created
 
 ### 1. Component Documentation ✅
-- **File:** `docs/design-tokens/SURFACE_COMPONENT.md`
+- **File:** `SURFACE_COMPONENT.md`
 - **Content:** Complete reference guide (1,200+ lines)
 - **Sections:**
   - Overview and features
@@ -82,7 +82,7 @@ The component leverages the following design tokens:
   - Testing guide
 
 ### 2. Quick Reference ✅
-- **File:** `docs/design-tokens/SURFACE_COMPONENT_QUICK_REFERENCE.md`
+- **File:** `SURFACE_COMPONENT_QUICK_REFERENCE.md`
 - **Content:** Fast lookup guide
 - **Sections:**
   - Props table
@@ -93,7 +93,7 @@ The component leverages the following design tokens:
   - Performance notes
 
 ### 3. API Reference ✅
-- **File:** `docs/design-tokens/COMPONENT_API_REFERENCE.md`
+- **File:** `COMPONENT_API_REFERENCE.md`
 - **Content:** Complete API documentation
 - **Sections:**
   - Synopsis and props
@@ -103,7 +103,7 @@ The component leverages the following design tokens:
   - Related components
 
 ### 4. Changelog ✅
-- **File:** `docs/design-tokens/CHANGELOG_SURFACE_COMPONENT.md`
+- **File:** `CHANGELOG_SURFACE_COMPONENT.md`
 - **Content:** Version history and migration guide
 - **Sections:**
   - Version 2.0.0 changes

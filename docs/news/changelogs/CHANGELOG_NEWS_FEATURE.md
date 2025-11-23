@@ -28,9 +28,9 @@
   - `sortByPublishedDate()` - Sort posts by publication date
 
 - **Documentation**
-  - `docs/news/NEWS_CONTROLLER_USAGE.md` - Comprehensive usage guide with examples
-  - `docs/api/NEWS_API.md` - Complete API documentation with request/response examples
-  - `docs/news/NEWS_CONTROLLER_REFACTORING.md` - Refactoring notes and service layer alternative
+  - `../NEWS_CONTROLLER_USAGE.md` - Comprehensive usage guide with examples
+  - `../../api/NEWS_API.md` - Complete API documentation with request/response examples
+  - `../NEWS_CONTROLLER_REFACTORING.md` - Refactoring notes and service layer alternative
   - Enhanced DocBlocks in NewsController with detailed explanations
   - Updated README.md with news feature documentation links
 
@@ -79,7 +79,7 @@
    - Included @see references to related classes
    - Documented design decisions and patterns
 
-2. **Usage Guide** (`docs/news/NEWS_CONTROLLER_USAGE.md`)
+2. **Usage Guide** (`../NEWS_CONTROLLER_USAGE.md`)
    - Basic usage examples
    - Filter parameter reference
    - Query examples for all filter combinations
@@ -88,7 +88,7 @@
    - Testing examples
    - Troubleshooting section
 
-3. **API Documentation** (`docs/api/NEWS_API.md`)
+3. **API Documentation** (`../../api/NEWS_API.md`)
    - Complete endpoint specification
    - Request/response examples
    - Error response documentation
@@ -97,7 +97,7 @@
    - Rate limiting information
    - Security considerations
 
-4. **Refactoring Guide** (`docs/news/NEWS_CONTROLLER_REFACTORING.md`)
+4. **Refactoring Guide** (`../NEWS_CONTROLLER_REFACTORING.md`)
    - Refactoring rationale
    - Before/after comparison
    - Service layer alternative

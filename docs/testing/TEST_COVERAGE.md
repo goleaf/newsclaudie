@@ -84,6 +84,7 @@ This document maps every PHP class under `app/` to its current automated coverag
 | `CommentStatusFilterPropertyTest` | 1 | ~495 | ~0.95s | ✅ | [Full Guide](../tests/Unit/COMMENT_STATUS_FILTER_TESTING.md) \| [Quick Ref](../tests/Unit/COMMENT_STATUS_FILTER_QUICK_REFERENCE.md) |
 | `CommentInlineEditPropertyTest` | 1 | ~1,100 | ~1.70s | ✅ | [Full Guide](../tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md) \| [Quick Ref](../tests/Unit/COMMENT_INLINE_EDIT_QUICK_REFERENCE.md) |
 | `PostPersistencePropertyTest` | 1 | ~55 | ~0.30s | ✅ | [Full Guide](../tests/Unit/POST_PERSISTENCE_PROPERTY_TESTING.md) \| [Quick Ref](../tests/Unit/POST_PERSISTENCE_QUICK_REFERENCE.md) |
+| `BulkSelectionDisplayPropertyTest` | 5 | ~4,300 | ~1.0s | ✅ | [Full Guide](../tests/Unit/BULK_SELECTION_DISPLAY_TESTING.md) \| [Quick Ref](../tests/Unit/BULK_SELECTION_DISPLAY_QUICK_REFERENCE.md) |
 
 ## Console Commands / Providers
 

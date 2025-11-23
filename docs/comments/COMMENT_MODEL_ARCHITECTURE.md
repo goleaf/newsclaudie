@@ -269,7 +269,7 @@ $suspiciousComments = Comment::fromIp($ipAddress)
 
 - **Quick Reference**: `COMMENT_MODEL_QUICK_REFERENCE.md`
 - **Refactoring Summary**: `REFACTORING_COMMENT_MODEL.md`
-- **API Documentation**: `docs/api/COMMENTS_API.md`
+- **API Documentation**: `../api/COMMENTS_API.md`
 - **Testing Guide**: `tests/Unit/Comment*PropertyTest.php`
 
 ---

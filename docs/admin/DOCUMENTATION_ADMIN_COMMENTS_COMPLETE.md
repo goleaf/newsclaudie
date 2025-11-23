@@ -45,7 +45,7 @@ This document summarizes the complete documentation created for the admin commen
 
 ### 2. Architecture Documentation
 
-**File:** `docs/admin/ADMIN_COMMENTS_EAGER_LOADING.md`
+**File:** `ADMIN_COMMENTS_EAGER_LOADING.md`
 
 **Contents:**
 - Overview of eager loading strategy
@@ -73,7 +73,7 @@ This document summarizes the complete documentation created for the admin commen
 
 ### 3. API Documentation
 
-**File:** `docs/api/ADMIN_COMMENTS_API.md`
+**File:** `../api/ADMIN_COMMENTS_API.md`
 
 **Contents:**
 - Complete API reference for admin comments component
@@ -136,7 +136,7 @@ This document summarizes the complete documentation created for the admin commen
 
 ### 5. Index Updates
 
-**File:** `docs/admin/ADMIN_DOCUMENTATION_INDEX.md`
+**File:** `ADMIN_DOCUMENTATION_INDEX.md`
 
 **Changes:**
 - Added reference to eager loading documentation in Architecture section
@@ -268,15 +268,15 @@ DOCUMENTATION_ADMIN_COMMENTS_COMPLETE.md    # This summary
    - Quick reference for what changed and why
 
 2. **Understanding the Architecture:**
-   - Read: `docs/admin/ADMIN_COMMENTS_EAGER_LOADING.md`
+   - Read: `ADMIN_COMMENTS_EAGER_LOADING.md`
    - Deep dive into eager loading strategy
 
 3. **Using the API:**
-   - Read: `docs/api/ADMIN_COMMENTS_API.md`
+   - Read: `../api/ADMIN_COMMENTS_API.md`
    - Complete method reference and examples
 
 4. **Finding Related Docs:**
-   - Start: `docs/admin/ADMIN_DOCUMENTATION_INDEX.md`
+   - Start: `ADMIN_DOCUMENTATION_INDEX.md`
    - Navigate to related documentation
 
 ### For Code Review
@@ -286,8 +286,8 @@ DOCUMENTATION_ADMIN_COMMENTS_COMPLETE.md    # This summary
    - Focus: `baseQuery()` method DocBlock
 
 2. **Review Documentation:**
-   - Architecture: `docs/admin/ADMIN_COMMENTS_EAGER_LOADING.md`
-   - API: `docs/api/ADMIN_COMMENTS_API.md`
+   - Architecture: `ADMIN_COMMENTS_EAGER_LOADING.md`
+   - API: `../api/ADMIN_COMMENTS_API.md`
    - Changelog: `CHANGELOG_ADMIN_COMMENTS_EAGER_LOADING.md`
 
 3. **Verify Standards:**
@@ -372,9 +372,9 @@ DOCUMENTATION_ADMIN_COMMENTS_COMPLETE.md    # This summary
 
 ### Internal Documentation
 
-- [Admin Documentation Index](docs/admin/ADMIN_DOCUMENTATION_INDEX.md)
-- [Admin Comments Eager Loading](docs/admin/ADMIN_COMMENTS_EAGER_LOADING.md)
-- [Admin Comments API](docs/api/ADMIN_COMMENTS_API.md)
+- [Admin Documentation Index](ADMIN_DOCUMENTATION_INDEX.md)
+- [Admin Comments Eager Loading](ADMIN_COMMENTS_EAGER_LOADING.md)
+- [Admin Comments API](../api/ADMIN_COMMENTS_API.md)
 - [Changelog](CHANGELOG_ADMIN_COMMENTS_EAGER_LOADING.md)
 
 ### External Resources

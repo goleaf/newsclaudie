@@ -248,8 +248,8 @@ php artisan route:list | grep news
 
 ## Need Help?
 
-- **Documentation:** See `docs/news/security/SECURITY_IMPLEMENTATION.md`
-- **Checklist:** See `docs/news/security/SECURITY_CHECKLIST.md`
+- **Documentation:** See `SECURITY_IMPLEMENTATION.md`
+- **Checklist:** See `SECURITY_CHECKLIST.md`
 - **Summary:** See `SECURITY_AUDIT_SUMMARY.md`
 - **Security Team:** security@yourdomain.com
 

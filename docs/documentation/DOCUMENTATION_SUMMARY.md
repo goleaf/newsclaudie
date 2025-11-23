@@ -49,7 +49,7 @@ This document summarizes the comprehensive documentation work completed for the 
 
 ### 2. Feature Documentation
 
-#### Main Documentation (`docs/query-scopes/POST_QUERY_SCOPES.md`)
+#### Main Documentation (`../query-scopes/POST_QUERY_SCOPES.md`)
 A comprehensive 400+ line guide covering:
 
 - **Overview** - Feature introduction and purpose
@@ -82,7 +82,7 @@ A comprehensive 400+ line guide covering:
 - **Changelog** - Version history
 - **Future Enhancements** - Potential improvements
 
-#### Quick Reference (`docs/query-scopes/POST_QUERY_SCOPES_QUICK_REFERENCE.md`)
+#### Quick Reference (`../query-scopes/POST_QUERY_SCOPES_QUICK_REFERENCE.md`)
 A concise lookup guide with:
 
 - **Scopes at a Glance** - Quick reference table
@@ -166,8 +166,8 @@ A detailed changelog following Keep a Changelog format:
 ## Files Created/Modified
 
 ### Created Files (5)
-1. `docs/query-scopes/POST_QUERY_SCOPES.md` - Main documentation (400+ lines)
-2. `docs/query-scopes/POST_QUERY_SCOPES_QUICK_REFERENCE.md` - Quick reference (100+ lines)
+1. `../query-scopes/POST_QUERY_SCOPES.md` - Main documentation (400+ lines)
+2. `../query-scopes/POST_QUERY_SCOPES_QUICK_REFERENCE.md` - Quick reference (100+ lines)
 3. `CHANGELOG_QUERY_SCOPES.md` - Feature changelog (300+ lines)
 4. `DOCUMENTATION_SUMMARY.md` - This summary document
 5. `tests/Unit/PostQueryScopesTest.php` - Unit tests with full documentation
@@ -245,8 +245,8 @@ This documentation covers features that validate these requirements:
 ## How to Use This Documentation
 
 ### For Developers
-1. Start with `docs/query-scopes/POST_QUERY_SCOPES_QUICK_REFERENCE.md` for quick lookup
-2. Read `docs/query-scopes/POST_QUERY_SCOPES.md` for comprehensive understanding
+1. Start with `../query-scopes/POST_QUERY_SCOPES_QUICK_REFERENCE.md` for quick lookup
+2. Read `../query-scopes/POST_QUERY_SCOPES.md` for comprehensive understanding
 3. Review `tests/Unit/PostQueryScopesTest.php` for usage examples
 4. Check `app/Models/Post.php` DocBlocks for API reference
 

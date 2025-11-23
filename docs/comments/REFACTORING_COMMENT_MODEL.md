@@ -514,7 +514,7 @@ php artisan migrate:rollback --step=2
 
 ### Files to Update (Recommended)
 
-1. `docs/testing/TEST_COVERAGE.md` - Add new test coverage
+1. `../testing/TEST_COVERAGE.md` - Add new test coverage
 2. `tests/Unit/ADMIN_CRUD_PROPERTY_TESTS_INDEX.md` - Add new properties
 3. `README.md` - Mention soft deletes feature
 4. API documentation (if applicable)

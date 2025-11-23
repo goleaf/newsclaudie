@@ -258,7 +258,7 @@ Duration: 1.70s
 - [Full Testing Guide](COMMENT_INLINE_EDIT_PROPERTY_TESTING.md)
 - [Comment Status Filter Testing](COMMENT_STATUS_FILTER_TESTING.md)
 - [Property Testing Guide](../PROPERTY_TESTING.md)
-- [Test Coverage](../../docs/testing/TEST_COVERAGE.md)
+- [Test Coverage](../../../../docs/testing/TEST_COVERAGE.md)
 
 ## Quick Tips
 

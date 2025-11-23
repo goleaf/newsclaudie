@@ -62,8 +62,8 @@ Alpine.start();
 
 ## 6. Documentation & Testing Hooks
 
-- `docs/interface/INTERFACE_AUDIT_REPORT.md` captures architectural decisions, anti-patterns, and follow-up tasks.
-- `docs/interface/INTERFACE_MIGRATION.md` (see companion file) explains how to adopt the pagination stack or TypeScript globals in future features.
+- `INTERFACE_AUDIT_REPORT.md` captures architectural decisions, anti-patterns, and follow-up tasks.
+- `INTERFACE_MIGRATION.md` (see companion file) explains how to adopt the pagination stack or TypeScript globals in future features.
 - `npm run typecheck` gates TypeScript regressions, while `php artisan test --parallel` (see `PROJECT_SUMMARY.md`) covers backend flows without modifying test fixtures.
 
 

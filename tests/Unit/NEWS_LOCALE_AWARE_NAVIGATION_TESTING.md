@@ -327,7 +327,7 @@ public function handle($request, Closure $next)
 - [Quick Reference](NEWS_LOCALE_AWARE_NAVIGATION_QUICK_REFERENCE.md) - Fast-access commands and tips
 - [Property Testing Guide](../PROPERTY_TESTING.md) - General property testing approach
 - [News Feature Requirements](../../.kiro/specs/news-page/requirements.md) - Feature requirements
-- [Test Coverage](../../docs/testing/TEST_COVERAGE.md) - Overall test coverage
+- [Test Coverage](../../../../docs/testing/TEST_COVERAGE.md) - Overall test coverage
 
 ## Maintenance Notes
 
@@ -435,5 +435,5 @@ When contributing to these tests:
 For questions about these tests, see:
 - [Quick Reference](NEWS_LOCALE_AWARE_NAVIGATION_QUICK_REFERENCE.md)
 - [Property Testing Guide](../PROPERTY_TESTING.md)
-- [Test Coverage Documentation](../../docs/testing/TEST_COVERAGE.md)
+- [Test Coverage Documentation](../../../../docs/testing/TEST_COVERAGE.md)
 - Project maintainers

@@ -91,7 +91,7 @@ Comprehensive documentation has been created for the Comment Inline Edit propert
 
 ### 5. Architecture Documentation ✅
 
-**File**: `docs/comments/COMMENT_INLINE_EDIT_ARCHITECTURE.md`
+**File**: `COMMENT_INLINE_EDIT_ARCHITECTURE.md`
 
 - **Lines**: 450+
 - **Sections**: 15+
@@ -125,7 +125,7 @@ Comprehensive documentation has been created for the Comment Inline Edit propert
 ### 7. Updated Project Documentation ✅
 
 **Files Updated**:
-- ✅ `docs/testing/TEST_COVERAGE.md` - Updated property test table
+- ✅ `../testing/TEST_COVERAGE.md` - Updated property test table
 - ✅ `.kiro/specs/admin-livewire-crud/tasks.md` - Marked task 5.4 as documented
 
 ### 8. Documentation Update Summary ✅
@@ -354,7 +354,7 @@ php artisan test tests/Unit/CommentInlineEditPropertyTest.php
 Documentation:
 - [Comment Property Tests Index](tests/Unit/COMMENT_PROPERTY_TESTS_INDEX.md)
 - [Comment Inline Edit Testing](tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md)
-- [Comment Inline Edit Architecture](docs/comments/COMMENT_INLINE_EDIT_ARCHITECTURE.md)
+- [Comment Inline Edit Architecture](COMMENT_INLINE_EDIT_ARCHITECTURE.md)
 ```
 
 ### Documentation Section
@@ -365,7 +365,7 @@ Documentation:
 - **Comment Tests**
   - [Property Tests Index](tests/Unit/COMMENT_PROPERTY_TESTS_INDEX.md)
   - [Inline Edit Testing](tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md)
-  - [Inline Edit Architecture](docs/comments/COMMENT_INLINE_EDIT_ARCHITECTURE.md)
+  - [Inline Edit Architecture](COMMENT_INLINE_EDIT_ARCHITECTURE.md)
 ```
 
 ## Files Created Summary
@@ -374,13 +374,13 @@ Documentation:
 2. ✅ `tests/Unit/COMMENT_INLINE_EDIT_PROPERTY_TESTING.md` - Full guide
 3. ✅ `tests/Unit/COMMENT_INLINE_EDIT_QUICK_REFERENCE.md` - Quick reference
 4. ✅ `tests/Unit/COMMENT_PROPERTY_TESTS_INDEX.md` - Index
-5. ✅ `docs/comments/COMMENT_INLINE_EDIT_ARCHITECTURE.md` - Architecture
+5. ✅ `COMMENT_INLINE_EDIT_ARCHITECTURE.md` - Architecture
 6. ✅ `DOCUMENTATION_UPDATE_COMMENT_INLINE_EDIT.md` - Update summary
 7. ✅ `COMMENT_INLINE_EDIT_DOCUMENTATION_COMPLETE.md` - This file
 
 ## Files Updated Summary
 
-1. ✅ `docs/testing/TEST_COVERAGE.md` - Property test table
+1. ✅ `../testing/TEST_COVERAGE.md` - Property test table
 2. ✅ `.kiro/specs/admin-livewire-crud/tasks.md` - Task 5.4 status
 
 ## Quality Checklist
@@ -417,8 +417,8 @@ This establishes a strong foundation for comment management testing and serves a
 For questions about this documentation:
 - Review the created documentation files
 - Check the [Property Testing Guide](tests/PROPERTY_TESTING.md)
-- See the [Test Coverage](docs/testing/TEST_COVERAGE.md)
-- Review the [Architecture Guide](docs/comments/COMMENT_INLINE_EDIT_ARCHITECTURE.md)
+- See the [Test Coverage](../testing/TEST_COVERAGE.md)
+- Review the [Architecture Guide](COMMENT_INLINE_EDIT_ARCHITECTURE.md)
 - Contact project maintainers
 
 ---

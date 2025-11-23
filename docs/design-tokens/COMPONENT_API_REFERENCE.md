@@ -165,8 +165,8 @@ All additional HTML attributes are passed through to the root `<div>` element vi
 
 ### Documentation
 
-- **Full Reference:** `docs/design-tokens/SURFACE_COMPONENT.md`
-- **Quick Reference:** `docs/design-tokens/SURFACE_COMPONENT_QUICK_REFERENCE.md`
+- **Full Reference:** `SURFACE_COMPONENT.md`
+- **Quick Reference:** `SURFACE_COMPONENT_QUICK_REFERENCE.md`
 - **Tests:** `tests/Unit/SurfaceComponentPropertyTest.php`
 
 ---

@@ -355,13 +355,13 @@ Each property test file should have:
 1. ✅ Full testing guide (e.g., `NEWS_*_TESTING.md`)
 2. ✅ Quick reference (e.g., `NEWS_*_QUICK_REFERENCE.md`)
 3. ✅ Entry in this index
-4. ✅ Entry in `docs/testing/TEST_COVERAGE.md`
+4. ✅ Entry in `../../docs/testing/TEST_COVERAGE.md`
 5. ✅ Task completion in `.kiro/specs/news-page/tasks.md`
 
 ## Related Documentation
 
 - [Property Testing Guide](../PROPERTY_TESTING.md) - General approach
-- [Test Coverage](../../docs/testing/TEST_COVERAGE.md) - Overall coverage
+- [Test Coverage](../../../../docs/testing/TEST_COVERAGE.md) - Overall coverage
 - [News Requirements](../../.kiro/specs/news-page/requirements.md) - Feature requirements
 - [News Design](../../.kiro/specs/news-page/design.md) - Design decisions
 - [News Tasks](../../.kiro/specs/news-page/tasks.md) - Implementation tasks
@@ -386,5 +386,5 @@ When adding new property tests:
 For questions about property testing:
 - See [Property Testing Guide](../PROPERTY_TESTING.md)
 - Review individual test documentation
-- Check [Test Coverage](../../docs/testing/TEST_COVERAGE.md)
+- Check [Test Coverage](../../../../docs/testing/TEST_COVERAGE.md)
 - Contact project maintainers

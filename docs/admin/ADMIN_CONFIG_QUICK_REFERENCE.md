@@ -150,5 +150,5 @@ ADMIN_OPTIMISTIC_UI=false
 
 - Configuration: `config/interface.php`
 - Helper Class: `app/Support/AdminConfig.php`
-- Full Documentation: `docs/admin/ADMIN_CONFIGURATION.md`
+- Full Documentation: `ADMIN_CONFIGURATION.md`
 

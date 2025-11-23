@@ -330,7 +330,7 @@ php artisan test --group=news-page
 
 ### Updated Documentation (6 files)
 1. `tests/Unit/NEWS_FILTER_OPTIONS_INDEX.md`
-2. `docs/testing/TEST_COVERAGE.md`
+2. `../testing/TEST_COVERAGE.md`
 3. `README.md`
 4. `tests/PROPERTY_TESTING.md`
 5. `.kiro/specs/news-page/tasks.md`
