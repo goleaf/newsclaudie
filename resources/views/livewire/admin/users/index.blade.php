@@ -2,6 +2,7 @@
 
 use App\Livewire\Concerns\ManagesPerPage;
 use App\Livewire\Concerns\ManagesSearch;
+use App\Livewire\Concerns\ManagesSorting;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
@@ -22,6 +23,7 @@ new class extends Component {
     use AuthorizesRequests;
     use ManagesPerPage;
     use ManagesSearch;
+    use ManagesSorting;
     use WithPagination;
 
     #[Url(except: 1)]
@@ -51,12 +53,42 @@ new class extends Component {
     protected $queryString = [
         'perPage' => ['except' => 20],
         'search' => ['except' => ''],
+        'sortField' => ['as' => 'sort', 'except' => 'name'],
+        'sortDirection' => ['as' => 'direction', 'except' => 'asc'],
     ];
 
     public function mount(int $page = 1): void
     {
         $requestedPage = request()->query('page', $page);
         $this->setPage(max(1, (int) $requestedPage));
+        [$this->sortField, $this->sortDirection] = $this->resolvedSort();
+    }
+
+    protected function defaultSortField(): string
+    {
+        return 'name';
+    }
+
+    protected function defaultSortDirection(): string
+    {
+        return 'asc';
+    }
+
+    protected function sortableColumns(): array
+    {
+        return ['name', 'email', 'created_at', 'posts_count'];
+    }
+
+    protected function resolvedSort(): array
+    {
+        $field = $this->sortField ?: $this->defaultSortField();
+        $direction = $this->sortDirection ?: $this->defaultSortDirection();
+
+        if (!in_array($field, $this->sortableColumns(), true)) {
+            $field = $this->defaultSortField();
+        }
+
+        return [$field, $direction];
     }
 
     public function applySearchShortcut(): void
@@ -246,8 +278,9 @@ new class extends Component {
     public function with(): array
     {
         $search = trim((string) $this->search);
+        [$sortField, $sortDirection] = $this->resolvedSort();
 
-        $users = User::query()
+        $query = User::query()
             ->withCount([
                 'posts as posts_count' => fn ($query) => $query->withoutGlobalScopes(),
                 'comments',
@@ -257,12 +290,23 @@ new class extends Component {
                     $inner->where('name', 'like', '%'.$search.'%')
                         ->orWhere('email', 'like', '%'.$search.'%');
                 });
-            })
-            ->orderByDesc('is_admin')
-            ->orderByDesc('is_author')
-            ->orderBy('name')
-            ->paginate($this->perPage)
-            ->withQueryString();
+            });
+
+        // Apply sorting
+        match ($sortField) {
+            'name' => $query->orderBy('name', $sortDirection),
+            'email' => $query->orderBy('email', $sortDirection),
+            'created_at' => $query->orderBy('created_at', $sortDirection),
+            'posts_count' => $query->orderBy('posts_count', $sortDirection),
+            default => $query->orderBy('name', $sortDirection),
+        };
+
+        // Add secondary sorting for consistency
+        if ($sortField !== 'name') {
+            $query->orderBy('name');
+        }
+
+        $users = $query->paginate($this->perPage)->withQueryString();
 
         return [
             'users' => $users,
@@ -403,8 +447,27 @@ new class extends Component {
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <flux:button color="primary" icon="user-plus" wire:click="openCreateModal" data-admin-create-trigger>
-                        {{ __('admin.users.create_button') }}
+                    <label for="user-sort-field" class="sr-only">{{ __('admin.users.sort.label') }}</label>
+                    <select
+                        id="user-sort-field"
+                        wire:model.live="sortField"
+                        class="w-full rounded-xl border border-slate-200 bg-white/80 px-3 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100 md:w-44"
+                    >
+                        <option value="name">{{ __('admin.users.sort.name') }}</option>
+                        <option value="email">{{ __('admin.users.sort.email') }}</option>
+                        <option value="created_at">{{ __('admin.users.sort.joined') }}</option>
+                        <option value="posts_count">{{ __('admin.users.sort.posts') }}</option>
+                    </select>
+
+                    <flux:button
+                        type="button"
+                        size="sm"
+                        variant="ghost"
+                        icon="arrows-up-down"
+                        wire:click="sortBy('{{ $sortField }}')"
+                        aria-label="{{ $sortDirection === 'asc' ? __('admin.users.sort.asc') : __('admin.users.sort.desc') }}"
+                    >
+                        {{ $sortDirection === 'asc' ? __('admin.users.sort.asc') : __('admin.users.sort.desc') }}
                     </flux:button>
                 </div>
             </div>
